@@ -12,3 +12,8 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Bird {
+  id Int @id @default(autoincrement())
+  common_name String @unique
+}
