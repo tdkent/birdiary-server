@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  create(usersServiceDto: { email: string; password: string }) {
-    const { email, password } = usersServiceDto;
-    return `email: ${email}, password: ${password}`;
+  create(createUserDto: Prisma.UserCreateInput) {
+    return createUserDto;
   }
 }
