@@ -14,6 +14,15 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  password String
+  name String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
 model Bird {
   id Int @id @default(autoincrement())
   common_name String @unique
