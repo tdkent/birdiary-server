@@ -8,9 +8,9 @@ import {
   Post,
   ValidationPipe,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -39,11 +39,12 @@ export class UsersController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateUserDto: Prisma.UserUpdateInput,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.update(+id, updateUserDto);
   }
 
+  // DELETE /users/:id
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);
