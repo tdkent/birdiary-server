@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { hash as bcryptHash } from 'bcrypt';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 
@@ -8,16 +9,21 @@ export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   // Create a new user
-  create(createUserDto: CreateUserDto) {
-    const { email } = createUserDto;
+  async create(createUserDto: CreateUserDto) {
+    const { email, password } = createUserDto;
 
-    const findExistingEmail = this.findByEmail(email);
+    const findExistingEmail = await this.findByEmail(email);
 
     if (findExistingEmail) {
       throw new BadRequestException(`${email} is already registed!`);
     }
 
-    return this.databaseService.user.create({ data: createUserDto });
+    const saltRounds = 10;
+    const hashedPassword = await bcryptHash(password, saltRounds);
+
+    return this.databaseService.user.create({
+      data: { ...createUserDto, password: hashedPassword },
+    });
   }
 
   // Find a user by their id
