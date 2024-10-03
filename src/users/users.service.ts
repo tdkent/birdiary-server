@@ -74,6 +74,15 @@ export class UsersService {
 
   // Remove a user from the database
   async remove(id: number) {
-    return this.databaseService.user.delete({ where: { id } });
+    const findUser = await this.findById(id);
+
+    if (!findUser) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.databaseService.user.delete({
+      where: { id },
+      select: { id: true },
+    });
   }
 }

@@ -117,3 +117,41 @@ Response object
 ```
 { id, email, name, created_at, update_at }
 ```
+
+#### Update user
+
+```
+PATCH base_url + '/users/:id'
+
+Request object:
+
+{ email, name }
+```
+
+Validation
+
+- `id`: Route parameter. Must parse to integer type.
+- `email`: Optional. Must be a valid email.
+- `name`: Optional. Maximum 36 character string.
+
+Response object
+
+```
+{ id, email, name, created_at, update_at}
+```
+
+#### Delete user
+
+```
+DELETE base_url + '/users/:id'
+```
+
+Validation
+
+- `id`: Route parameter. Must parse to integer type.
+
+Response object
+
+```
+{ id }
+```
