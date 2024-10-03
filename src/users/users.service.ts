@@ -3,7 +3,7 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { hash as bcryptHash } from 'bcrypt';
+import { hash } from 'bcrypt';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
@@ -23,7 +23,7 @@ export class UsersService {
     }
 
     const saltRounds = 10;
-    const hashedPassword = await bcryptHash(password, saltRounds);
+    const hashedPassword = await hash(password, saltRounds);
 
     return this.databaseService.user.create({
       data: { ...createUserDto, password: hashedPassword },
