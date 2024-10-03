@@ -3,10 +3,10 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { hash as bcryptHash } from 'bcrypt';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -41,7 +41,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new NotFoundException('The requested user does not exist!');
+      throw new NotFoundException('User not found');
     }
 
     return user;
@@ -58,10 +58,17 @@ export class UsersService {
   }
 
   // Update a user
-  async update(id: number, updateUserDto: Prisma.UserUpdateInput) {
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const findUser = await this.findById(id);
+
+    if (!findUser) {
+      throw new NotFoundException('User not found');
+    }
+
     return this.databaseService.user.update({
       where: { id },
       data: updateUserDto,
+      omit: { password: true },
     });
   }
 
