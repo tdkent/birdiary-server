@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   ValidationPipe,
@@ -31,8 +32,8 @@ export class UsersController {
 
   // GET /users/:id
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findById(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findById(id);
   }
 
   // PATCH /users/:id

@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { hash as bcryptHash } from 'bcrypt';
 import { DatabaseService } from 'src/database/database.service';
@@ -30,8 +34,17 @@ export class UsersService {
   }
 
   // Find a user by their id
-  findById(id: number) {
-    return this.databaseService.user.findUnique({ where: { id } });
+  async findById(id: number) {
+    const user = await this.databaseService.user.findUnique({
+      where: { id },
+      omit: { password: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('The requested user does not exist!');
+    }
+
+    return user;
   }
 
   // Find a user by their email
