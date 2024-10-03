@@ -58,8 +58,6 @@ Use either the `npm run start` or `npm run start:dev` scripts to initiate a loca
 http://localhost:3000
 ```
 
-Heroku -- how to hit this endpoint instead?
-
 #### Headers
 
 All requests that include a request object should include `Content-Type: application/json` in the header.

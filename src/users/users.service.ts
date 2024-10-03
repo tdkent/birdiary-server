@@ -23,6 +23,9 @@ export class UsersService {
 
     return this.databaseService.user.create({
       data: { ...createUserDto, password: hashedPassword },
+      omit: {
+        password: true,
+      },
     });
   }
 

@@ -9,6 +9,8 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT, () => {
+    console.log('Birdiary API is listening! Port:', process.env.PORT);
+  });
 }
 bootstrap();
