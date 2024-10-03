@@ -54,7 +54,7 @@ export class UsersService {
 
   // Find all users
   findAll() {
-    return this.databaseService.user.findMany();
+    return this.databaseService.user.findMany({ omit: { password: true } });
   }
 
   // Update a user

@@ -87,5 +87,33 @@ Validation
 Response object
 
 ```
-{ id, email, name }
+{ id, email, name, created_at, update_at}
+```
+
+#### Find all users
+
+```
+GET base_url + '/users/'
+```
+
+Response object
+
+```
+{ id, email, name, created_at, update_at }
+```
+
+#### Find user by id
+
+```
+GET base_url + '/users/:id'
+```
+
+Validation
+
+- `id`: Route parameter. Must parse to integer type.
+
+Response object
+
+```
+{ id, email, name, created_at, update_at }
 ```
