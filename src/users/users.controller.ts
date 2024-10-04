@@ -3,8 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Param,
-  ParseIntPipe,
   Patch,
   Post,
   UseGuards,
@@ -20,32 +18,34 @@ import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post() // POST '/users'
+  @Post()
   create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  @Get() // GET '/users'
+  @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
   @UseGuards(AuthGuard)
-  @Get('/profile') // GET '/users/profile'
+  @Get('/profile')
   findOne(@CurrentUser('id') id: number) {
     return this.usersService.findById(id);
   }
 
-  @Patch('/profile') // PATCH '/users/profile'
+  @UseGuards(AuthGuard)
+  @Patch('/profile')
   update(
-    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') id: number,
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
   ) {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete('/profile') // DELETE '/users/profile'
-  remove(@Param('id', ParseIntPipe) id: number) {
+  @UseGuards(AuthGuard)
+  @Delete('/profile')
+  remove(@CurrentUser('id') id: number) {
     return this.usersService.remove(id);
   }
 }
