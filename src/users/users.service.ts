@@ -33,7 +33,7 @@ export class UsersService {
     });
   }
 
-  // Find a user by their id
+  // Find a user by id
   async findById(id: number) {
     const user = await this.databaseService.user.findUnique({
       where: { id },
@@ -47,7 +47,7 @@ export class UsersService {
     return user;
   }
 
-  // Find a user by their email
+  // Find a user by email
   findByEmail(email: string) {
     return this.databaseService.user.findUnique({ where: { email } });
   }

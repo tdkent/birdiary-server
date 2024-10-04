@@ -14,6 +14,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -30,12 +31,12 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard)
-  @Get(':id') // GET '/users/:id'
-  findOne(@Param('id', ParseIntPipe) id: number) {
+  @Get('/profile') // GET '/users/profile'
+  findOne(@CurrentUser('id') id: number) {
     return this.usersService.findById(id);
   }
 
-  @Patch(':id') // PATCH '/users/:id'
+  @Patch('/profile') // PATCH '/users/profile'
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
@@ -43,7 +44,7 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @Delete(':id') // DELETE '/users/:id'
+  @Delete('/profile') // DELETE '/users/profile'
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.remove(id);
   }
