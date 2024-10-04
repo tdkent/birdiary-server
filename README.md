@@ -62,9 +62,38 @@ http://localhost:3000
 
 All requests that include a request object should include `Content-Type: application/json` in the header.
 
+All protected routes require a JWT token in the `Authorization` header of the request:
+
+```
+Authorization: Bearer <token>
+```
+
 #### Errors
 
 Validation errors will return an error object with code `400 Bad Request` and a custom error message.
+
+### Auth
+
+#### Sign in user
+
+```
+POST base_url + '/auth/signin'
+
+Request object:
+
+{ email, password }
+```
+
+Validation
+
+- `email`: Required. Must match a stored email.
+- `password`: Required. Must match the stored email's password.
+
+Response object
+
+```
+{ id, email, token}
+```
 
 ### Users
 
@@ -105,12 +134,12 @@ Response object
 #### Find user by id
 
 ```
-GET base_url + '/users/:id'
+GET base_url + '/users/profile'
 ```
 
-Validation
+Authorization
 
-- `id`: Route parameter. Must parse to integer type.
+- Protected route. Requires token in `Authorization` header.
 
 Response object
 
@@ -121,18 +150,21 @@ Response object
 #### Update user
 
 ```
-PATCH base_url + '/users/:id'
+PATCH base_url + '/users/profile'
 
 Request object:
 
 { email, name }
 ```
 
+Authorization
+
+- Protected route. Requires token in `Authorization` header.
+
 Validation
 
-- `id`: Route parameter. Must parse to integer type.
-- `email`: Optional. Must be a valid email.
-- `name`: Optional. Maximum 36 character string.
+- `email`: Must be a valid email. May be the same as the user's current email if the value is not being updated.
+- `name`: Maximum 36 character string. May be the same as the user's current name if the value is not being updated.
 
 Response object
 
@@ -143,12 +175,12 @@ Response object
 #### Delete user
 
 ```
-DELETE base_url + '/users/:id'
+DELETE base_url + '/users/profile'
 ```
 
-Validation
+Authorization
 
-- `id`: Route parameter. Must parse to integer type.
+- Protected route. Requires token in `Authorization` header.
 
 Response object
 
