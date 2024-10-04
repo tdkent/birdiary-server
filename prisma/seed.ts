@@ -6,7 +6,6 @@ async function main() {
   await prisma.user.create({
     data: {
       email: 'tim@tim.me',
-      name: 'Tim',
       password: 'password',
     },
   });
@@ -14,7 +13,6 @@ async function main() {
   await prisma.user.create({
     data: {
       email: 'emily@emily.me',
-      name: 'Emily',
       password: 'password',
     },
   });

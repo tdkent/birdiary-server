@@ -19,12 +19,24 @@ model User {
   id Int @id @default(autoincrement())
   email String @unique
   password String
-  name String?
+  profile Profile?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
 
+model Profile {
+  name String
+  location String
+  user_id Int @unique
+  bird Bird?
+  user User @relation(fields: [user_id], references: [id])
+}
+
 model Bird {
   id Int @id @default(autoincrement())
-  common_name String @unique
+  comm_name String @unique
+  sci_name String @unique
+  type String
+  status String
+  profile Profile @relation(fields:[id], references:[user_id])
 }
