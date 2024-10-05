@@ -111,7 +111,8 @@ Validation
 
 - `email`: Required. Must be a valid email.
 - `password`: Required. Must be an 8-36 character string.
-- `name`: Optional. Maximum 36 character string.
+
+Behavior: A new row will be added to `User` and a related row to `Profile` representing the user's profile data.
 
 Response object
 
@@ -122,13 +123,25 @@ Response object
 #### Find all users
 
 ```
-GET base_url + '/users/'
+GET base_url + '/users'
 ```
 
 Response object
 
 ```
-{ id, email, name, created_at, update_at }
+[
+  {
+    id,
+    email,
+    profile: {
+      name,
+      string,
+      user_id
+      },
+    created_at,
+    update_at
+  }
+]
 ```
 
 #### Find user by id
@@ -144,7 +157,17 @@ Authorization
 Response object
 
 ```
-{ id, email, name, created_at, update_at }
+{
+  id,
+  email,
+  profile: {
+    name,
+    string,
+    user_id
+    },
+  created_at,
+  update_at
+}
 ```
 
 #### Update user
@@ -154,7 +177,7 @@ PATCH base_url + '/users/profile'
 
 Request object:
 
-{ email, name }
+{ name, location }
 ```
 
 Authorization
@@ -163,13 +186,13 @@ Authorization
 
 Validation
 
-- `email`: Must be a valid email. May be the same as the user's current email if the value is not being updated.
-- `name`: Maximum 36 character string. May be the same as the user's current name if the value is not being updated.
+- `name`: Maximum 36 character string. Should be the same as the user's current name if the value is not being updated.
+- `location`: Maximum 60 character string. Should be the same as the user's current location if the value is not being updated.
 
 Response object
 
 ```
-{ id, email, name, created_at, update_at}
+{ user_id, name, location }
 ```
 
 #### Delete user
@@ -181,6 +204,8 @@ DELETE base_url + '/users/profile'
 Authorization
 
 - Protected route. Requires token in `Authorization` header.
+
+Behavior: Deletes `User` and related `Profile` table rows.
 
 Response object
 
