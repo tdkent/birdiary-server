@@ -6,7 +6,7 @@ import {
 import { hash } from 'bcrypt';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
+import { UpdateProfileDto } from './dtos/update-profile.dto';
 
 @Injectable()
 export class UsersService {
@@ -54,21 +54,23 @@ export class UsersService {
 
   // Find all users
   findAll() {
-    return this.databaseService.user.findMany({ omit: { password: true } });
+    return this.databaseService.user.findMany({
+      include: { profile: true },
+      omit: { password: true },
+    });
   }
 
   // Update a user
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateProfileDto: UpdateProfileDto) {
     const findUser = await this.findById(id);
 
     if (!findUser) {
       throw new NotFoundException('User not found');
     }
 
-    return this.databaseService.user.update({
-      where: { id },
-      data: updateUserDto,
-      omit: { password: true },
+    return this.databaseService.profile.update({
+      where: { user_id: id },
+      data: updateProfileDto,
     });
   }
 

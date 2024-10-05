@@ -9,10 +9,4 @@ export class CreateUserDto {
     message: 'Password must be between 8 and 36 characters.',
   })
   readonly password: string;
-
-  @IsString()
-  @Length(0, 36, {
-    message: 'Name cannot be longer than 36 characters.',
-  })
-  readonly name: string;
 }

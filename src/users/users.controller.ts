@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from './dtos/update-user.dto';
+import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
 
@@ -38,9 +38,9 @@ export class UsersController {
   @Patch('/profile')
   update(
     @CurrentUser('id') id: number,
-    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
+    @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,
   ) {
-    return this.usersService.update(id, updateUserDto);
+    return this.usersService.update(id, updateProfileDto);
   }
 
   @UseGuards(AuthGuard)
