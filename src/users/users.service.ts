@@ -3,10 +3,10 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { hash } from 'bcrypt';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { hashPassword } from 'src/auth/auth.helpers';
 
 @Injectable()
 export class UsersService {
@@ -22,8 +22,7 @@ export class UsersService {
       throw new BadRequestException(`${email} is already registed!`);
     }
 
-    const saltRounds = 10;
-    const hashedPassword = await hash(password, saltRounds);
+    const hashedPassword = await hashPassword(password);
 
     return this.databaseService.user.create({
       data: { ...createUserDto, password: hashedPassword },
