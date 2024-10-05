@@ -3,10 +3,10 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { DatabaseService } from 'src/database/database.service';
+import { DatabaseService } from '../database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
-import { hashPassword } from 'src/auth/auth.helpers';
+import { hashPassword } from '../auth/auth.helpers';
 
 @Injectable()
 export class UsersService {
