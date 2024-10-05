@@ -1,10 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../src/auth/auth.helpers';
+import { TEST_USER_PASSWORD } from '../src/auth/auth.constants';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const hashedPassword = await hashPassword(process.env.SEED_USER_PW);
+  const hashedPassword = await hashPassword(TEST_USER_PASSWORD);
 
   await prisma.user.create({
     data: {
