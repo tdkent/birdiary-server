@@ -24,18 +24,29 @@ export class UsersService {
 
     const hashedPassword = await hashPassword(password);
 
-    return this.databaseService.user.create({
-      data: { ...createUserDto, password: hashedPassword },
-      omit: {
-        password: true,
+    const newUser = await this.databaseService.user.create({
+      data: {
+        email,
+        password: hashedPassword,
+        profile: {
+          create: {
+            name: '',
+            location: '',
+          },
+        },
       },
+      omit: { password: true },
+      include: { profile: true },
     });
+
+    return newUser;
   }
 
   // Find a user by id
   async findById(id: number) {
     const user = await this.databaseService.user.findUnique({
       where: { id },
+      include: { profile: true },
       omit: { password: true },
     });
 
@@ -54,8 +65,8 @@ export class UsersService {
   // Find all users
   findAll() {
     return this.databaseService.user.findMany({
-      include: { profile: true },
       omit: { password: true },
+      include: { profile: true },
     });
   }
 
