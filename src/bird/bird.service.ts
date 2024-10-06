@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { CreateBirdDto } from './dto/create-bird.dto';
 import { UpdateBirdDto } from './dto/update-bird.dto';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class BirdService {
+  constructor(private readonly databaseService: DatabaseService) {}
   create(createBirdDto: CreateBirdDto) {
     return 'This action adds a new bird';
   }
 
   findAll() {
-    return `This action returns all bird`;
+    return this.databaseService.bird.findMany({
+      include: { images: true },
+    });
   }
 
   findOne(id: number) {
