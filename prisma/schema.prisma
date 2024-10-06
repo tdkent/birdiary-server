@@ -19,9 +19,9 @@ model User {
 }
 
 model Profile {
+  id Int @id @default(autoincrement())
   name String
   location String
-  bird Bird?
   user_id Int @unique
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
@@ -32,5 +32,12 @@ model Bird {
   sci_name String @unique
   type String
   status String
-  profile Profile @relation(fields:[id], references:[user_id])
+  images Image[]
+}
+
+model Image {
+  id Int @id @default(autoincrement())
+  img_url String
+  bird Bird @relation(fields:[bird_name], references: [comm_name])
+  bird_name String
 }

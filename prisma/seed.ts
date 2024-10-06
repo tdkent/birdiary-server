@@ -21,6 +21,23 @@ async function main() {
       location: 'Alameda, CA',
     },
   });
+
+  await prisma.bird.create({
+    data: {
+      comm_name: 'Brown Pelican',
+      sci_name: 'Pelecanus occidentalis',
+      type: 'Cormorants, Pelicans',
+      status: 'LC',
+    },
+  });
+
+  await prisma.image.create({
+    data: {
+      img_url:
+        'https://en.wikipedia.org/wiki/Brown_pelican#/media/File:Brown_Pelican21K.jpg',
+      bird_name: 'Brown Pelican',
+    },
+  });
 }
 
 main()
