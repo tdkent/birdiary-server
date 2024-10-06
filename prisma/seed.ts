@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../src/auth/auth.helpers';
 import { TEST_USER_PASSWORD } from '../src/auth/auth.constants';
+import { birds } from '../db/birds.json';
 
 const prisma = new PrismaClient();
 
@@ -22,21 +23,9 @@ async function main() {
     },
   });
 
-  await prisma.bird.create({
-    data: {
-      comm_name: 'Brown Pelican',
-      sci_name: 'Pelecanus occidentalis',
-      type: 'Cormorants, Pelicans',
-      status: 'LC',
-    },
-  });
-
-  await prisma.image.create({
-    data: {
-      img_url:
-        'https://en.wikipedia.org/wiki/Brown_pelican#/media/File:Brown_Pelican21K.jpg',
-      bird_name: 'Brown Pelican',
-    },
+  await prisma.bird.createMany({
+    data: birds,
+    skipDuplicates: true,
   });
 }
 
