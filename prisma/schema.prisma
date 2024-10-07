@@ -30,9 +30,16 @@ model Bird {
   id Int @id @default(autoincrement())
   comm_name String @unique
   sci_name String @unique
-  type String
-  status String
+  rarity Int
+  species Species @relation(fields: [spec_id], references: [id])
+  spec_id Int
   images Image[]
+}
+
+model Species {
+  id Int @unique
+  name String
+  birds Bird[]
 }
 
 model Image {
