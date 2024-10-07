@@ -7,7 +7,9 @@ export class BirdService {
 
   findAll() {
     return this.databaseService.bird.findMany({
-      include: { images: true },
+      include: { images: true, species: true },
+      omit: { spec_id: true },
+      take: 50,
     });
   }
 

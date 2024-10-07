@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../src/auth/auth.helpers';
 import { TEST_USER_PASSWORD } from '../src/auth/auth.constants';
 import { birds } from '../db/birds.json';
+import { species } from '../db/species.json';
 
 const prisma = new PrismaClient();
 
@@ -23,9 +24,12 @@ async function main() {
     },
   });
 
+  await prisma.species.createMany({
+    data: species,
+  });
+
   await prisma.bird.createMany({
     data: birds,
-    skipDuplicates: true,
   });
 }
 
