@@ -16,6 +16,7 @@ model User {
   profile Profile?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  fav_bird Favorite?
 }
 
 model Profile {
@@ -26,6 +27,13 @@ model Profile {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
+model Favorite {
+  user_id Int @id @unique
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  bird_id Int
+  bird Bird @relation(fields:[bird_id], references: [id])
+}
+
 model Bird {
   id Int @id @default(autoincrement())
   comm_name String @unique
@@ -34,6 +42,7 @@ model Bird {
   species Species @relation(fields: [spec_id], references: [id])
   spec_id Int
   images Image[]
+  favorites Favorite[]
 }
 
 model Species {

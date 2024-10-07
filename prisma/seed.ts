@@ -8,6 +8,16 @@ const prisma = new PrismaClient();
 
 async function main() {
   const hashedPassword = await hashPassword(TEST_USER_PASSWORD);
+  //! limit birds to 50 records
+  const slicedBirds = birds.slice(0, 50);
+
+  await prisma.species.createMany({
+    data: species,
+  });
+
+  await prisma.bird.createMany({
+    data: slicedBirds,
+  });
 
   await prisma.user.create({
     data: {
@@ -24,12 +34,11 @@ async function main() {
     },
   });
 
-  await prisma.species.createMany({
-    data: species,
-  });
-
-  await prisma.bird.createMany({
-    data: birds,
+  await prisma.favorite.create({
+    data: {
+      user_id: 1,
+      bird_id: 8,
+    },
   });
 }
 

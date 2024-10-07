@@ -46,7 +46,13 @@ export class UsersService {
   async findById(id: number) {
     const user = await this.databaseService.user.findUnique({
       where: { id },
-      include: { profile: true },
+      include: {
+        profile: true,
+        fav_bird: {
+          include: { bird: true },
+          omit: { user_id: true, bird_id: true },
+        },
+      },
       omit: { password: true },
     });
 
