@@ -32,12 +32,13 @@ export class UsersService {
     });
   }
 
-  // Find a user by email
+  //---- UTILITY: FIND USER BY EMAIL
+  //!--- REDUNDANT WITH ERROR HANDLING
   findByEmail(email: string) {
     return this.databaseService.user.findUnique({ where: { email } });
   }
 
-  // Find all users
+  //---- FETCH ALL USERS
   findAll() {
     return this.databaseService.user.findMany({
       omit: { password: true },

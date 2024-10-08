@@ -28,7 +28,7 @@ export class ProfileService {
   }
 
   //---- UPDATE USER PROFILE
-  async update(id: number, updateProfileDto: UpdateProfileDto) {
+  async updateProfile(id: number, updateProfileDto: UpdateProfileDto) {
     const updateUser = await this.databaseService.profile.update({
       where: { user_id: id },
       data: updateProfileDto,
@@ -39,5 +39,18 @@ export class ProfileService {
     }
 
     return updateUser;
+  }
+
+  //---- UPSERT FAVORITE BIRD
+  upsertFavoriteBird(id: number, birdId: number) {
+    //TODO: error handling for out of range bird ids
+    return this.databaseService.favorite.upsert({
+      where: { user_id: id },
+      update: { bird_id: birdId },
+      create: {
+        user_id: id,
+        bird_id: birdId,
+      },
+    });
   }
 }

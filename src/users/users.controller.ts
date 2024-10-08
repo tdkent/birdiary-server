@@ -3,8 +3,11 @@ import {
   Controller,
   Delete,
   Get,
+  ParseIntPipe,
   Patch,
   Post,
+  Put,
+  Query,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -50,6 +53,15 @@ export class UsersController {
     @CurrentUser('id') id: number,
     @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,
   ) {
-    return this.profileService.update(id, updateProfileDto);
+    return this.profileService.updateProfile(id, updateProfileDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @Put('/profile/fav')
+  upsertFavoriteBird(
+    @CurrentUser('id') id: number,
+    @Query('birdid', ParseIntPipe) birdId: number,
+  ) {
+    return this.profileService.upsertFavoriteBird(id, birdId);
   }
 }
