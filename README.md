@@ -3,7 +3,7 @@
 
 ## Description
 
-A Node.js REST API built with TypeScript, NestJS and Prisma.
+This is a Node.js REST API built with TypeScript, NestJS and Prisma. The server handles requests to create and authenticate users and their birdwatching activities. The database stores user and bird sighting records, and general information about more than 800 North American bird species. The API routes, validates, and processes a variety of requests and queries to support the Birdiary client application.
 
 ## Important Scripts
 
@@ -68,32 +68,11 @@ All protected routes require a JWT token in the `Authorization` header of the re
 Authorization: Bearer <token>
 ```
 
+The user's ID is extracted from the token to complete the request.
+
 #### Errors
 
 Validation errors will return an error object with code `400 Bad Request` and a custom error message.
-
-### Auth
-
-#### Sign in user
-
-```
-POST base_url + '/auth/signin'
-
-Request object:
-
-{ email, password }
-```
-
-Validation
-
-- `email`: Required. Must match a stored email.
-- `password`: Required. Must match the stored email's password.
-
-Response object
-
-```
-{ id, email, token}
-```
 
 ### Users
 
@@ -142,6 +121,45 @@ Response object
     update_at
   }
 ]
+```
+
+#### Delete user
+
+```
+DELETE base_url + '/users'
+```
+
+Authorization
+
+- Protected route. Requires token in `Authorization` header.
+
+Behavior: Deletes `User` and related `Profile` table rows.
+
+Response object
+
+```
+{ id }
+```
+
+#### Sign in user
+
+```
+POST base_url + '/users/auth/signin'
+
+Request object:
+
+{ email, password }
+```
+
+Validation
+
+- `email`: Required. Must match a stored email.
+- `password`: Required. Must match the stored email's password.
+
+Response object
+
+```
+{ id, email, token}
 ```
 
 #### Find user by id
@@ -195,20 +213,54 @@ Response object
 { user_id, name, location }
 ```
 
-#### Delete user
+#### Create/update favorite bird
 
 ```
-DELETE base_url + '/users/profile'
+PUT base_url + '/users/profile/fav?birdid=:id'
 ```
 
 Authorization
 
 - Protected route. Requires token in `Authorization` header.
 
-Behavior: Deletes `User` and related `Profile` table rows.
+Validation
+
+- `birdid`:
 
 Response object
 
 ```
-{ id }
+{ user_id, bird_id }
 ```
+
+## Dependencies
+
+- TypeScript
+- Node.js
+- NestJS
+- ESLint
+- Prettier
+- Jest
+- Supertest
+
+#### Packages
+
+- @nestjs/platform-express
+  - NestJS uses Express under the hood as an HTTP platform
+- @nestjs/jwt
+- @nestjs/swagger
+- bcrypt
+- rxjs
+- class-transformer
+- class-validator
+- jest-mock
+- ts-jest
+- ts-node
+
+#### Required Types Packages
+
+- @types/bcrypt
+- @types/express
+- @types/jest
+- @types/node
+- @types/supertest
