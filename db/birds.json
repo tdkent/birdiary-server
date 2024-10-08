@@ -1,0 +1,5032 @@
+{
+  "birds": [
+    {
+      "comm_name": "Short-tailed Albatross",
+      "sci_name": "Phoebastria albatrus",
+      "rarity": 3,
+      "spec_id": 1
+    },
+    {
+      "comm_name": "Laysan Albatross",
+      "sci_name": "Phoebastria immutabilis",
+      "rarity": 2,
+      "spec_id": 1
+    },
+    {
+      "comm_name": "Black-footed Albatross",
+      "sci_name": "Phoebastria nigripes",
+      "rarity": 1,
+      "spec_id": 1
+    },
+    {
+      "comm_name": "Guadalupe Murrelet",
+      "sci_name": "Synthliboramphus hypoleucus",
+      "rarity": 3,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Dovekie",
+      "sci_name": "Alle alle",
+      "rarity": 2,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Kittlitz's Murrelet",
+      "sci_name": "Brachyramphus brevirostris",
+      "rarity": 2,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Scripps's Murrelet",
+      "sci_name": "Synthliboramphus scrippsi",
+      "rarity": 2,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Craveri's Murrelet",
+      "sci_name": "Synthliboramphus craveri",
+      "rarity": 2,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Ancient Murrelet",
+      "sci_name": "Synthliboramphus antiquus",
+      "rarity": 2,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Parakeet Auklet",
+      "sci_name": "Aethia psittacula",
+      "rarity": 2,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Least Auklet",
+      "sci_name": "Aethia pusilla",
+      "rarity": 2,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Whiskered Auklet",
+      "sci_name": "Aethia pygmaea",
+      "rarity": 2,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Crested Auklet",
+      "sci_name": "Aethia cristatella",
+      "rarity": 2,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Common Murre",
+      "sci_name": "Uria aalge",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Thick-billed Murre",
+      "sci_name": "Uria lomvia",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Razorbill",
+      "sci_name": "Alca torda",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Black Guillemot",
+      "sci_name": "Cepphus grylle",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Pigeon Guillemot",
+      "sci_name": "Cepphus columba",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Marbled Murrelet",
+      "sci_name": "Brachyramphus marmoratus",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Cassin's Auklet",
+      "sci_name": "Ptychoramphus aleuticus",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Rhinoceros Auklet",
+      "sci_name": "Cerorhinca monocerata",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Atlantic Puffin",
+      "sci_name": "Fratercula arctica",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Horned Puffin",
+      "sci_name": "Fratercula corniculata",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Tufted Puffin",
+      "sci_name": "Fratercula cirrhata",
+      "rarity": 1,
+      "spec_id": 2
+    },
+    {
+      "comm_name": "Rose-throated Becard",
+      "sci_name": "Pachyramphus aglaiae",
+      "rarity": 3,
+      "spec_id": 3
+    },
+    {
+      "comm_name": "Least Bittern",
+      "sci_name": "Botaurus exilis",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "American Bittern",
+      "sci_name": "Botaurus lentiginosus",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Little Blue Heron",
+      "sci_name": "Egretta caerulea",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Tricolored Heron",
+      "sci_name": "Egretta tricolor",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Reddish Egret",
+      "sci_name": "Egretta rufescens",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Snowy Egret",
+      "sci_name": "Egretta thula",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Black-crowned Night Heron",
+      "sci_name": "Nycticorax nycticorax",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Yellow-crowned Night Heron",
+      "sci_name": "Nyctanassa violacea",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Green Heron",
+      "sci_name": "Butorides virescens",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Great Egret",
+      "sci_name": "Ardea alba",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Western Cattle Egret",
+      "sci_name": "Bubulcus ibis",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Great Blue Heron",
+      "sci_name": "Ardea herodias",
+      "rarity": 1,
+      "spec_id": 4
+    },
+    {
+      "comm_name": "Shiny Cowbird",
+      "sci_name": "Molothrus bonariensis",
+      "rarity": 3,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Spot-breasted Oriole",
+      "sci_name": "Icterus pectoralis",
+      "rarity": 2,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Altamira Oriole",
+      "sci_name": "Icterus gularis",
+      "rarity": 2,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Audubon's Oriole",
+      "sci_name": "Icterus graduacauda",
+      "rarity": 2,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Tricolored Blackbird",
+      "sci_name": "Agelaius tricolor",
+      "rarity": 2,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Yellow-headed Blackbird",
+      "sci_name": "Xanthocephalus xanthocephalus",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Bobolink",
+      "sci_name": "Dolichonyx oryzivorus",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Chihuahuan Meadowlark",
+      "sci_name": "Sturnella lilianae",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Eastern Meadowlark",
+      "sci_name": "Sturnella magna",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Western Meadowlark",
+      "sci_name": "Sturnella neglecta",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Orchard Oriole",
+      "sci_name": "Icterus spurius",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Hooded Oriole",
+      "sci_name": "Icterus cucullatus",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Bullock's Oriole",
+      "sci_name": "Icterus bullockii",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Baltimore Oriole",
+      "sci_name": "Icterus galbula",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Scott's Oriole",
+      "sci_name": "Icterus parisorum",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Red-winged Blackbird",
+      "sci_name": "Agelaius phoeniceus",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Bronzed Cowbird",
+      "sci_name": "Molothrus aeneus",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Brown-headed Cowbird",
+      "sci_name": "Molothrus ater",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Rusty Blackbird",
+      "sci_name": "Euphagus carolinus",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Brewer's Blackbird",
+      "sci_name": "Euphagus cyanocephalus",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Common Grackle",
+      "sci_name": "Quiscalus quiscula",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Boat-tailed Grackle",
+      "sci_name": "Quiscalus major",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Great-tailed Grackle",
+      "sci_name": "Quiscalus mexicanus",
+      "rarity": 1,
+      "spec_id": 5
+    },
+    {
+      "comm_name": "Nazca Booby",
+      "sci_name": "Sula granti",
+      "rarity": 3,
+      "spec_id": 6
+    },
+    {
+      "comm_name": "Masked Booby",
+      "sci_name": "Sula dactylatra",
+      "rarity": 2,
+      "spec_id": 6
+    },
+    {
+      "comm_name": "Brown Booby",
+      "sci_name": "Sula leucogaster",
+      "rarity": 2,
+      "spec_id": 6
+    },
+    {
+      "comm_name": "Cocos Booby",
+      "sci_name": "Sula brewsteri",
+      "rarity": 2,
+      "spec_id": 6
+    },
+    {
+      "comm_name": "Red-footed Booby",
+      "sci_name": "Sula sula",
+      "rarity": 2,
+      "spec_id": 6
+    },
+    {
+      "comm_name": "Northern Gannet",
+      "sci_name": "Morus bassanus",
+      "rarity": 1,
+      "spec_id": 6
+    },
+    {
+      "comm_name": "Red-vented Bulbul",
+      "sci_name": "Pycnonotus cafer",
+      "rarity": 2,
+      "spec_id": 7
+    },
+    {
+      "comm_name": "Red-whiskered Bulbul",
+      "sci_name": "Pycnonotus jocosus",
+      "rarity": 2,
+      "spec_id": 7
+    },
+    {
+      "comm_name": "Japanese Bush Warbler",
+      "sci_name": "Horornis diphone",
+      "rarity": 2,
+      "spec_id": 8
+    },
+    {
+      "comm_name": "Bushtit",
+      "sci_name": "Psaltriparus minimus",
+      "rarity": 1,
+      "spec_id": 9
+    },
+    {
+      "comm_name": "Aplomado Falcon",
+      "sci_name": "Falco femoralis",
+      "rarity": 3,
+      "spec_id": 10
+    },
+    {
+      "comm_name": "Crested Caracara",
+      "sci_name": "Caracara plancus",
+      "rarity": 2,
+      "spec_id": 10
+    },
+    {
+      "comm_name": "Gyrfalcon",
+      "sci_name": "Falco rusticolus",
+      "rarity": 2,
+      "spec_id": 10
+    },
+    {
+      "comm_name": "American Kestrel",
+      "sci_name": "Falco sparverius",
+      "rarity": 1,
+      "spec_id": 10
+    },
+    {
+      "comm_name": "Merlin",
+      "sci_name": "Falco columbarius",
+      "rarity": 1,
+      "spec_id": 10
+    },
+    {
+      "comm_name": "Peregrine Falcon",
+      "sci_name": "Falco peregrinus",
+      "rarity": 1,
+      "spec_id": 10
+    },
+    {
+      "comm_name": "Prairie Falcon",
+      "sci_name": "Falco mexicanus",
+      "rarity": 1,
+      "spec_id": 10
+    },
+    {
+      "comm_name": "Flame-colored Tanager",
+      "sci_name": "Piranga bidentata",
+      "rarity": 3,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Hepatic Tanager",
+      "sci_name": "Piranga flava",
+      "rarity": 2,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Varied Bunting",
+      "sci_name": "Passerina versicolor",
+      "rarity": 2,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Summer Tanager",
+      "sci_name": "Piranga rubra",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Scarlet Tanager",
+      "sci_name": "Piranga olivacea",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Western Tanager",
+      "sci_name": "Piranga ludoviciana",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Northern Cardinal",
+      "sci_name": "Cardinalis cardinalis",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Pyrrhuloxia",
+      "sci_name": "Cardinalis sinuatus",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Rose-breasted Grosbeak",
+      "sci_name": "Pheucticus ludovicianus",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Black-headed Grosbeak",
+      "sci_name": "Pheucticus melanocephalus",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Blue Grosbeak",
+      "sci_name": "Passerina caerulea",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Lazuli Bunting",
+      "sci_name": "Passerina amoena",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Indigo Bunting",
+      "sci_name": "Passerina cyanea",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Painted Bunting",
+      "sci_name": "Passerina ciris",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Dickcissel",
+      "sci_name": "Spiza americana",
+      "rarity": 1,
+      "spec_id": 11
+    },
+    {
+      "comm_name": "Gray-headed Chickadee",
+      "sci_name": "Poecile cinctus",
+      "rarity": 3,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Mexican Chickadee",
+      "sci_name": "Poecile sclateri",
+      "rarity": 2,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Bridled Titmouse",
+      "sci_name": "Baeolophus wollweberi",
+      "rarity": 2,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Black-crested Titmouse",
+      "sci_name": "Baeolophus atricristatus",
+      "rarity": 2,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Carolina Chickadee",
+      "sci_name": "Poecile carolinensis",
+      "rarity": 1,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Black-capped Chickadee",
+      "sci_name": "Poecile atricapillus",
+      "rarity": 1,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Mountain Chickadee",
+      "sci_name": "Poecile gambeli",
+      "rarity": 1,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Chestnut-backed Chickadee",
+      "sci_name": "Poecile rufescens",
+      "rarity": 1,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Boreal Chickadee",
+      "sci_name": "Poecile hudsonicus",
+      "rarity": 1,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Oak Titmouse",
+      "sci_name": "Baeolophus inornatus",
+      "rarity": 1,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Juniper Titmouse",
+      "sci_name": "Baeolophus ridgwayi",
+      "rarity": 1,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Tufted Titmouse",
+      "sci_name": "Baeolophus bicolor",
+      "rarity": 1,
+      "spec_id": 12
+    },
+    {
+      "comm_name": "Red-faced Cormorant",
+      "sci_name": "Urile urile",
+      "rarity": 2,
+      "spec_id": 13
+    },
+    {
+      "comm_name": "Brandt's Cormorant",
+      "sci_name": "Urile penicillatus",
+      "rarity": 1,
+      "spec_id": 13
+    },
+    {
+      "comm_name": "Pelagic Cormorant",
+      "sci_name": "Urile pelagicus",
+      "rarity": 1,
+      "spec_id": 13
+    },
+    {
+      "comm_name": "Great Cormorant",
+      "sci_name": "Phalacrocorax carbo",
+      "rarity": 1,
+      "spec_id": 13
+    },
+    {
+      "comm_name": "Double-crested Cormorant",
+      "sci_name": "Nannopterum auritum",
+      "rarity": 1,
+      "spec_id": 13
+    },
+    {
+      "comm_name": "Neotropic Cormorant",
+      "sci_name": "Nannopterum brasilianum",
+      "rarity": 1,
+      "spec_id": 13
+    },
+    {
+      "comm_name": "Whooping Crane",
+      "sci_name": "Grus americana",
+      "rarity": 2,
+      "spec_id": 14
+    },
+    {
+      "comm_name": "Sandhill Crane",
+      "sci_name": "Antigone canadensis",
+      "rarity": 1,
+      "spec_id": 14
+    },
+    {
+      "comm_name": "Brown Creeper",
+      "sci_name": "Certhia americana",
+      "rarity": 1,
+      "spec_id": 15
+    },
+    {
+      "comm_name": "Smooth-billed Ani",
+      "sci_name": "Crotophaga ani",
+      "rarity": 3,
+      "spec_id": 16
+    },
+    {
+      "comm_name": "Common Cuckoo",
+      "sci_name": "Cuculus canorus",
+      "rarity": 3,
+      "spec_id": 16
+    },
+    {
+      "comm_name": "Groove-billed Ani",
+      "sci_name": "Crotophaga sulcirostris",
+      "rarity": 2,
+      "spec_id": 16
+    },
+    {
+      "comm_name": "Mangrove Cuckoo",
+      "sci_name": "Coccyzus minor",
+      "rarity": 2,
+      "spec_id": 16
+    },
+    {
+      "comm_name": "Greater Roadrunner",
+      "sci_name": "Geococcyx californianus",
+      "rarity": 1,
+      "spec_id": 16
+    },
+    {
+      "comm_name": "Yellow-billed Cuckoo",
+      "sci_name": "Coccyzus americanus",
+      "rarity": 1,
+      "spec_id": 16
+    },
+    {
+      "comm_name": "Black-billed Cuckoo",
+      "sci_name": "Coccyzus erythropthalmus",
+      "rarity": 1,
+      "spec_id": 16
+    },
+    {
+      "comm_name": "Plain Chachalaca",
+      "sci_name": "Ortalis vetula",
+      "rarity": 2,
+      "spec_id": 17
+    },
+    {
+      "comm_name": "Anhinga",
+      "sci_name": "Anhinga anhinga",
+      "rarity": 1,
+      "spec_id": 18
+    },
+    {
+      "comm_name": "American Dipper",
+      "sci_name": "Cinclus mexicanus",
+      "rarity": 1,
+      "spec_id": 19
+    },
+    {
+      "comm_name": "Taiga Bean-Goose",
+      "sci_name": "Anser fabalis",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Tundra Bean-Goose",
+      "sci_name": "Anser serrirostris",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Pink-footed Goose",
+      "sci_name": "Anser brachyrhynchus",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Barnacle Goose",
+      "sci_name": "Branta leucopsis",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Whooper Swan",
+      "sci_name": "Cygnus cygnus",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Laysan Duck",
+      "sci_name": "Anas laysanensis",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Common Pochard",
+      "sci_name": "Aythya ferina",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Tufted Duck",
+      "sci_name": "Aythya fuligula",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Stejneger's Scoter",
+      "sci_name": "Melanitta stejnegeri",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Smew",
+      "sci_name": "Mergellus albellus",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Masked Duck",
+      "sci_name": "Nomonyx dominicus",
+      "rarity": 3,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Emperor Goose",
+      "sci_name": "Anser canagicus",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Hawaiian Goose",
+      "sci_name": "Branta sandvicensis",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Egyptian Goose",
+      "sci_name": "Alopochen aegyptiaca",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Muscovy Duck",
+      "sci_name": "Cairina moschata",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Eurasian Wigeon",
+      "sci_name": "Mareca penelope",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Hawaiian Duck",
+      "sci_name": "Anas wyvilliana",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Mexican Duck",
+      "sci_name": "Anas diazi",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Steller's Eider",
+      "sci_name": "Polysticta stelleri",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Spectacled Eider",
+      "sci_name": "Somateria fischeri",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "King Eider",
+      "sci_name": "Somateria spectabilis",
+      "rarity": 2,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Black-bellied Whistling-Duck",
+      "sci_name": "Dendrocygna autumnalis",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Fulvous Whistling-Duck",
+      "sci_name": "Dendrocygna bicolor",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Snow Goose",
+      "sci_name": "Anser caerulescens",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Ross's Goose",
+      "sci_name": "Anser rossii",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Greater White-fronted Goose",
+      "sci_name": "Anser albifrons",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Brant",
+      "sci_name": "Branta bernicla",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Cackling Goose",
+      "sci_name": "Branta hutchinsii",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Canada Goose",
+      "sci_name": "Branta canadensis",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Mute Swan",
+      "sci_name": "Cygnus olor",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Trumpeter Swan",
+      "sci_name": "Cygnus buccinator",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Tundra Swan",
+      "sci_name": "Cygnus columbianus",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Wood Duck",
+      "sci_name": "Aix sponsa",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Blue-winged Teal",
+      "sci_name": "Spatula discors",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Cinnamon Teal",
+      "sci_name": "Spatula cyanoptera",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Northern Shoveler",
+      "sci_name": "Spatula clypeata",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Gadwall",
+      "sci_name": "Mareca strepera",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "American Wigeon",
+      "sci_name": "Mareca americana",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Mallard",
+      "sci_name": "Anas platyrhynchos",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "American Black Duck",
+      "sci_name": "Anas rubripes",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Mottled Duck",
+      "sci_name": "Anas fulvigula",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Northern Pintail",
+      "sci_name": "Anas acuta",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Green-winged Teal",
+      "sci_name": "Anas crecca",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Canvasback",
+      "sci_name": "Aythya valisineria",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Redhead",
+      "sci_name": "Aythya americana",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Ring-necked Duck",
+      "sci_name": "Aythya collaris",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Greater Scaup",
+      "sci_name": "Aythya marila",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Lesser Scaup",
+      "sci_name": "Aythya affinis",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Common Eider",
+      "sci_name": "Somateria mollissima",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Harlequin Duck",
+      "sci_name": "Histrionicus histrionicus",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Surf Scoter",
+      "sci_name": "Melanitta perspicillata",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "White-winged Scoter",
+      "sci_name": "Melanitta deglandi",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Black Scoter",
+      "sci_name": "Melanitta americana",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Long-tailed Duck",
+      "sci_name": "Clangula hyemalis",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Bufflehead",
+      "sci_name": "Bucephala albeola",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Common Goldeneye",
+      "sci_name": "Bucephala clangula",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Barrow's Goldeneye",
+      "sci_name": "Bucephala islandica",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Hooded Merganser",
+      "sci_name": "Lophodytes cucullatus",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Common Merganser",
+      "sci_name": "Mergus merganser",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Red-breasted Merganser",
+      "sci_name": "Mergus serrator",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Ruddy Duck",
+      "sci_name": "Oxyura jamaicensis",
+      "rarity": 1,
+      "spec_id": 20
+    },
+    {
+      "comm_name": "Rustic Bunting",
+      "sci_name": "Emberiza rustica",
+      "rarity": 3,
+      "spec_id": 21
+    },
+    {
+      "comm_name": "American Flamingo",
+      "sci_name": "Phoenicopterus ruber",
+      "rarity": 3,
+      "spec_id": 22
+    },
+    {
+      "comm_name": "Great Frigatebird",
+      "sci_name": "Fregata minor",
+      "rarity": 2,
+      "spec_id": 23
+    },
+    {
+      "comm_name": "Magnificent Frigatebird",
+      "sci_name": "Fregata magnificens",
+      "rarity": 1,
+      "spec_id": 23
+    },
+    {
+      "comm_name": "Brambling",
+      "sci_name": "Fringilla montifringilla",
+      "rarity": 3,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Laysan Finch",
+      "sci_name": "Telespiza cantans",
+      "rarity": 3,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Nihoa Finch",
+      "sci_name": "Telespiza ultima",
+      "rarity": 3,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Island Canary",
+      "sci_name": "Serinus canaria",
+      "rarity": 3,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Akikiki",
+      "sci_name": "Oreomystis bairdi",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Maui Alauahio",
+      "sci_name": "Paroreomyza montana",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Palila",
+      "sci_name": "Loxioides bailleui",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Akohekohe",
+      "sci_name": "Palmeria dolei",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Apapane",
+      "sci_name": "Himatione sanguinea",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Iiwi",
+      "sci_name": "Drepanis coccinea",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Maui Parrotbill",
+      "sci_name": "Pseudonestor xanthophrys",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Akiapolaau",
+      "sci_name": "Hemignathus wilsoni",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Anianiau",
+      "sci_name": "Magumma parva",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Hawaii Amakihi",
+      "sci_name": "Chlorodrepanis virens",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Oahu Amakihi",
+      "sci_name": "Chlorodrepanis flava",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Kauai Amakihi",
+      "sci_name": "Chlorodrepanis stejnegeri",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Hawaii Creeper",
+      "sci_name": "Loxops mana",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Akekee",
+      "sci_name": "Loxops caeruleirostris",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Hawaii Akepa",
+      "sci_name": "Loxops coccineus",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Black Rosy-Finch",
+      "sci_name": "Leucosticte atrata",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Brown-capped Rosy-Finch",
+      "sci_name": "Leucosticte australis",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Yellow-fronted Canary",
+      "sci_name": "Crithagra mozambica",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Cassia Crossbill",
+      "sci_name": "Loxia sinesciuris",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "White-winged Crossbill",
+      "sci_name": "Loxia leucoptera",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "European Goldfinch",
+      "sci_name": "Carduelis carduelis",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Lawrence's Goldfinch",
+      "sci_name": "Spinus lawrencei",
+      "rarity": 2,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Evening Grosbeak",
+      "sci_name": "Coccothraustes vespertinus",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Pine Grosbeak",
+      "sci_name": "Pinicola enucleator",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Gray-crowned Rosy-Finch",
+      "sci_name": "Leucosticte tephrocotis",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "House Finch",
+      "sci_name": "Haemorhous mexicanus",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Purple Finch",
+      "sci_name": "Haemorhous purpureus",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Cassin's Finch",
+      "sci_name": "Haemorhous cassinii",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Common Redpoll (Redpoll)",
+      "sci_name": "Acanthis flammea",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Red Crossbill",
+      "sci_name": "Loxia curvirostra",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Pine Siskin",
+      "sci_name": "Spinus pinus",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Lesser Goldfinch",
+      "sci_name": "Spinus psaltria",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "American Goldfinch",
+      "sci_name": "Spinus tristis",
+      "rarity": 1,
+      "spec_id": 24
+    },
+    {
+      "comm_name": "Black-capped Gnatcatcher",
+      "sci_name": "Polioptila nigriceps",
+      "rarity": 3,
+      "spec_id": 25
+    },
+    {
+      "comm_name": "California Gnatcatcher",
+      "sci_name": "Polioptila californica",
+      "rarity": 2,
+      "spec_id": 25
+    },
+    {
+      "comm_name": "Blue-gray Gnatcatcher",
+      "sci_name": "Polioptila caerulea",
+      "rarity": 1,
+      "spec_id": 25
+    },
+    {
+      "comm_name": "Black-tailed Gnatcatcher",
+      "sci_name": "Polioptila melanura",
+      "rarity": 1,
+      "spec_id": 25
+    },
+    {
+      "comm_name": "Buff-collared Nightjar",
+      "sci_name": "Antrostomus ridgwayi",
+      "rarity": 3,
+      "spec_id": 26
+    },
+    {
+      "comm_name": "Antillean Nighthawk",
+      "sci_name": "Chordeiles gundlachii",
+      "rarity": 2,
+      "spec_id": 26
+    },
+    {
+      "comm_name": "Common Pauraque",
+      "sci_name": "Nyctidromus albicollis",
+      "rarity": 2,
+      "spec_id": 26
+    },
+    {
+      "comm_name": "Mexican Whip-poor-will",
+      "sci_name": "Antrostomus arizonae",
+      "rarity": 2,
+      "spec_id": 26
+    },
+    {
+      "comm_name": "Lesser Nighthawk",
+      "sci_name": "Chordeiles acutipennis",
+      "rarity": 1,
+      "spec_id": 26
+    },
+    {
+      "comm_name": "Common Nighthawk",
+      "sci_name": "Chordeiles minor",
+      "rarity": 1,
+      "spec_id": 26
+    },
+    {
+      "comm_name": "Common Poorwill",
+      "sci_name": "Phalaenoptilus nuttallii",
+      "rarity": 1,
+      "spec_id": 26
+    },
+    {
+      "comm_name": "Chuck-will's-widow",
+      "sci_name": "Antrostomus carolinensis",
+      "rarity": 1,
+      "spec_id": 26
+    },
+    {
+      "comm_name": "Eastern Whip-poor-will",
+      "sci_name": "Antrostomus vociferus",
+      "rarity": 1,
+      "spec_id": 26
+    },
+    {
+      "comm_name": "Least Grebe",
+      "sci_name": "Tachybaptus dominicus",
+      "rarity": 2,
+      "spec_id": 27
+    },
+    {
+      "comm_name": "Pied-billed Grebe",
+      "sci_name": "Podilymbus podiceps",
+      "rarity": 1,
+      "spec_id": 27
+    },
+    {
+      "comm_name": "Horned Grebe",
+      "sci_name": "Podiceps auritus",
+      "rarity": 1,
+      "spec_id": 27
+    },
+    {
+      "comm_name": "Red-necked Grebe",
+      "sci_name": "Podiceps grisegena",
+      "rarity": 1,
+      "spec_id": 27
+    },
+    {
+      "comm_name": "Eared Grebe",
+      "sci_name": "Podiceps nigricollis",
+      "rarity": 1,
+      "spec_id": 27
+    },
+    {
+      "comm_name": "Western Grebe",
+      "sci_name": "Aechmophorus occidentalis",
+      "rarity": 1,
+      "spec_id": 27
+    },
+    {
+      "comm_name": "Clark's Grebe",
+      "sci_name": "Aechmophorus clarkii",
+      "rarity": 1,
+      "spec_id": 27
+    },
+    {
+      "comm_name": "Ivory Gull",
+      "sci_name": "Pagophila eburnea",
+      "rarity": 3,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Ross's Gull",
+      "sci_name": "Rhodostethia rosea",
+      "rarity": 3,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Common Gull",
+      "sci_name": "Larus canus",
+      "rarity": 3,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Slaty-backed Gull",
+      "sci_name": "Larus schistisagus",
+      "rarity": 3,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Blue-gray Noddy",
+      "sci_name": "Anous ceruleus",
+      "rarity": 3,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Red-legged Kittiwake",
+      "sci_name": "Rissa brevirostris",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Black-headed Gull",
+      "sci_name": "Chroicocephalus ridibundus",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Little Gull",
+      "sci_name": "Hydrocoloeus minutus",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Yellow-footed Gull",
+      "sci_name": "Larus livens",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Lesser Black-backed Gull",
+      "sci_name": "Larus fuscus",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Brown Noddy",
+      "sci_name": "Anous stolidus",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Black Noddy",
+      "sci_name": "Anous minutus",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "White Tern",
+      "sci_name": "Gygis alba",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Sooty Tern",
+      "sci_name": "Onychoprion fuscatus",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Gray-backed Tern",
+      "sci_name": "Onychoprion lunatus",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Bridled Tern",
+      "sci_name": "Onychoprion anaethetus",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Aleutian Tern",
+      "sci_name": "Onychoprion aleuticus",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Roseate Tern",
+      "sci_name": "Sterna dougallii",
+      "rarity": 2,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Black-legged Kittiwake",
+      "sci_name": "Rissa tridactyla",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Sabine's Gull",
+      "sci_name": "Xema sabini",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Bonaparte's Gull",
+      "sci_name": "Chroicocephalus philadelphia",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Laughing Gull",
+      "sci_name": "Leucophaeus atricilla",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Franklin's Gull",
+      "sci_name": "Leucophaeus pipixcan",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Heermann's Gull",
+      "sci_name": "Larus heermanni",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Short-billed Gull",
+      "sci_name": "Larus brachyrhynchus",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Ring-billed Gull",
+      "sci_name": "Larus delawarensis",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Western Gull",
+      "sci_name": "Larus occidentalis",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "California Gull",
+      "sci_name": "Larus californicus",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Herring Gull",
+      "sci_name": "Larus argentatus",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Iceland Gull",
+      "sci_name": "Larus glaucoides",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Glaucous-winged Gull",
+      "sci_name": "Larus glaucescens",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Glaucous Gull",
+      "sci_name": "Larus hyperboreus",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Great Black-backed Gull",
+      "sci_name": "Larus marinus",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Least Tern",
+      "sci_name": "Sternula antillarum",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Gull-billed Tern",
+      "sci_name": "Gelochelidon nilotica",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Caspian Tern",
+      "sci_name": "Hydroprogne caspia",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Black Tern",
+      "sci_name": "Chlidonias niger",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Common Tern",
+      "sci_name": "Sterna hirundo",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Arctic Tern",
+      "sci_name": "Sterna paradisaea",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Forster's Tern",
+      "sci_name": "Sterna forsteri",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Royal Tern",
+      "sci_name": "Thalasseus maximus",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Sandwich Tern",
+      "sci_name": "Thalasseus sandvicensis",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Elegant Tern",
+      "sci_name": "Thalasseus elegans",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Black Skimmer",
+      "sci_name": "Rynchops niger",
+      "rarity": 1,
+      "spec_id": 28
+    },
+    {
+      "comm_name": "Hook-billed Kite",
+      "sci_name": "Chondrohierax uncinatus",
+      "rarity": 3,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Snail Kite",
+      "sci_name": "Rostrhamus sociabilis",
+      "rarity": 2,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Common Black Hawk",
+      "sci_name": "Buteogallus anthracinus",
+      "rarity": 2,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "White-tailed Hawk",
+      "sci_name": "Geranoaetus albicaudatus",
+      "rarity": 2,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Gray Hawk",
+      "sci_name": "Buteo plagiatus",
+      "rarity": 2,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Hawaiian Hawk",
+      "sci_name": "Buteo solitarius",
+      "rarity": 2,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Short-tailed Hawk",
+      "sci_name": "Buteo brachyurus",
+      "rarity": 2,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Zone-tailed Hawk",
+      "sci_name": "Buteo albonotatus",
+      "rarity": 2,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "White-tailed Kite",
+      "sci_name": "Elanus leucurus",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Swallow-tailed Kite",
+      "sci_name": "Elanoides forficatus",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Golden Eagle",
+      "sci_name": "Aquila chrysaetos",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Northern Harrier",
+      "sci_name": "Circus hudsonius",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Sharp-shinned Hawk",
+      "sci_name": "Accipiter striatus",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Cooper's Hawk",
+      "sci_name": "Accipiter cooperii",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "American Goshawk",
+      "sci_name": "Accipiter atricapillus",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Bald Eagle",
+      "sci_name": "Haliaeetus leucocephalus",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Mississippi Kite",
+      "sci_name": "Ictinia mississippiensis",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Harris's Hawk",
+      "sci_name": "Parabuteo unicinctus",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Red-shouldered Hawk",
+      "sci_name": "Buteo lineatus",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Broad-winged Hawk",
+      "sci_name": "Buteo platypterus",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Swainson's Hawk",
+      "sci_name": "Buteo swainsoni",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Red-tailed Hawk",
+      "sci_name": "Buteo jamaicensis",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Rough-legged Hawk",
+      "sci_name": "Buteo lagopus",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Ferruginous Hawk",
+      "sci_name": "Buteo regalis",
+      "rarity": 1,
+      "spec_id": 29
+    },
+    {
+      "comm_name": "Mexican Violetear",
+      "sci_name": "Colibri thalassinus",
+      "rarity": 3,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "White-eared Hummingbird",
+      "sci_name": "Basilinna leucotis",
+      "rarity": 3,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Berylline Hummingbird",
+      "sci_name": "Saucerottia beryllina",
+      "rarity": 3,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Rivoli's Hummingbird",
+      "sci_name": "Eugenes fulgens",
+      "rarity": 2,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Blue-throated Mountain-gem",
+      "sci_name": "Lampornis clemenciae",
+      "rarity": 2,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Lucifer Hummingbird",
+      "sci_name": "Calothorax lucifer",
+      "rarity": 2,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Broad-billed Hummingbird",
+      "sci_name": "Cynanthus latirostris",
+      "rarity": 2,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Violet-crowned Hummingbird",
+      "sci_name": "Ramosomyia violiceps",
+      "rarity": 2,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Buff-bellied Hummingbird",
+      "sci_name": "Amazilia yucatanensis",
+      "rarity": 2,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Ruby-throated Hummingbird",
+      "sci_name": "Archilochus colubris",
+      "rarity": 1,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Black-chinned Hummingbird",
+      "sci_name": "Archilochus alexandri",
+      "rarity": 1,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Anna's Hummingbird",
+      "sci_name": "Calypte anna",
+      "rarity": 1,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Costa's Hummingbird",
+      "sci_name": "Calypte costae",
+      "rarity": 1,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Calliope Hummingbird",
+      "sci_name": "Selasphorus calliope",
+      "rarity": 1,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Rufous Hummingbird",
+      "sci_name": "Selasphorus rufus",
+      "rarity": 1,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Allen's Hummingbird",
+      "sci_name": "Selasphorus sasin",
+      "rarity": 1,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "Broad-tailed Hummingbird",
+      "sci_name": "Selasphorus platycercus",
+      "rarity": 1,
+      "spec_id": 30
+    },
+    {
+      "comm_name": "White Ibis",
+      "sci_name": "Eudocimus albus",
+      "rarity": 1,
+      "spec_id": 31
+    },
+    {
+      "comm_name": "Glossy Ibis",
+      "sci_name": "Plegadis falcinellus",
+      "rarity": 1,
+      "spec_id": 31
+    },
+    {
+      "comm_name": "White-faced Ibis",
+      "sci_name": "Plegadis chihi",
+      "rarity": 1,
+      "spec_id": 31
+    },
+    {
+      "comm_name": "Roseate Spoonbill",
+      "sci_name": "Platalea ajaja",
+      "rarity": 1,
+      "spec_id": 31
+    },
+    {
+      "comm_name": "Green Jay",
+      "sci_name": "Cyanocorax yncas",
+      "rarity": 2,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Florida Scrub-Jay",
+      "sci_name": "Aphelocoma coerulescens",
+      "rarity": 2,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Island Scrub-Jay",
+      "sci_name": "Aphelocoma insularis",
+      "rarity": 2,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Mexican Jay",
+      "sci_name": "Aphelocoma wollweberi",
+      "rarity": 2,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Yellow-billed Magpie",
+      "sci_name": "Pica nuttalli",
+      "rarity": 2,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Canada Jay",
+      "sci_name": "Perisoreus canadensis",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Pinyon Jay",
+      "sci_name": "Gymnorhinus cyanocephalus",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Steller's Jay",
+      "sci_name": "Cyanocitta stelleri",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Blue Jay",
+      "sci_name": "Cyanocitta cristata",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "California Scrub-Jay",
+      "sci_name": "Aphelocoma californica",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Woodhouse's Scrub-Jay",
+      "sci_name": "Aphelocoma woodhouseii",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Clark's Nutcracker",
+      "sci_name": "Nucifraga columbiana",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Black-billed Magpie",
+      "sci_name": "Pica hudsonia",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "American Crow",
+      "sci_name": "Corvus brachyrhynchos",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Fish Crow",
+      "sci_name": "Corvus ossifragus",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Chihuahuan Raven",
+      "sci_name": "Corvus cryptoleucus",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Common Raven",
+      "sci_name": "Corvus corax",
+      "rarity": 1,
+      "spec_id": 32
+    },
+    {
+      "comm_name": "Ringed Kingfisher",
+      "sci_name": "Megaceryle torquata",
+      "rarity": 2,
+      "spec_id": 33
+    },
+    {
+      "comm_name": "Green Kingfisher",
+      "sci_name": "Chloroceryle americana",
+      "rarity": 2,
+      "spec_id": 33
+    },
+    {
+      "comm_name": "Belted Kingfisher",
+      "sci_name": "Megaceryle alcyon",
+      "rarity": 1,
+      "spec_id": 33
+    },
+    {
+      "comm_name": "Ruby-crowned Kinglet",
+      "sci_name": "Corthylio calendula",
+      "rarity": 1,
+      "spec_id": 34
+    },
+    {
+      "comm_name": "Golden-crowned Kinglet",
+      "sci_name": "Regulus satrapa",
+      "rarity": 1,
+      "spec_id": 34
+    },
+    {
+      "comm_name": "Common Ringed Plover",
+      "sci_name": "Charadrius hiaticula",
+      "rarity": 3,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Siberian Sand-Plover",
+      "sci_name": "Anarhynchus mongolus",
+      "rarity": 3,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Pacific Golden-Plover",
+      "sci_name": "Pluvialis fulva",
+      "rarity": 2,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Piping Plover",
+      "sci_name": "Charadrius melodus",
+      "rarity": 2,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Mountain Plover",
+      "sci_name": "Anarhynchu montanus",
+      "rarity": 2,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Black-bellied Plover",
+      "sci_name": "Pluvialis squatarola",
+      "rarity": 1,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "American Golden-Plover",
+      "sci_name": "Pluvialis dominica",
+      "rarity": 1,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Killdeer",
+      "sci_name": "Charadrius vociferus",
+      "rarity": 1,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Semipalmated Plover",
+      "sci_name": "Charadrius semipalmatus",
+      "rarity": 1,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Wilson's Plover",
+      "sci_name": "Anarhynchus wilsonia",
+      "rarity": 1,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Snowy Plover",
+      "sci_name": "Anarhynchus nivosus",
+      "rarity": 1,
+      "spec_id": 35
+    },
+    {
+      "comm_name": "Eurasian Skylark",
+      "sci_name": "Alauda arvensis",
+      "rarity": 2,
+      "spec_id": 36
+    },
+    {
+      "comm_name": "Horned Lark",
+      "sci_name": "Eremophila alpestris",
+      "rarity": 1,
+      "spec_id": 36
+    },
+    {
+      "comm_name": "Greater Necklaced Laughingthrush",
+      "sci_name": "Pterorhinus (Garrulax) pectoralis",
+      "rarity": 2,
+      "spec_id": 37
+    },
+    {
+      "comm_name": "Chinese Hwamei (Hwamei)",
+      "sci_name": "Garrulax canorus",
+      "rarity": 2,
+      "spec_id": 37
+    },
+    {
+      "comm_name": "Red-billed Leiothrix",
+      "sci_name": "Leiothrix lutea",
+      "rarity": 2,
+      "spec_id": 37
+    },
+    {
+      "comm_name": "Arctic Warbler",
+      "sci_name": "Phylloscopus borealis",
+      "rarity": 2,
+      "spec_id": 38
+    },
+    {
+      "comm_name": "Limpkin",
+      "sci_name": "Aramus guarauna",
+      "rarity": 2,
+      "spec_id": 39
+    },
+    {
+      "comm_name": "McKay's Bunting",
+      "sci_name": "Plectrophenax hyperboreus",
+      "rarity": 3,
+      "spec_id": 40
+    },
+    {
+      "comm_name": "Smith's Longspur",
+      "sci_name": "Calcarius pictus",
+      "rarity": 2,
+      "spec_id": 40
+    },
+    {
+      "comm_name": "Thick-billed Longspur",
+      "sci_name": "Rhynchophanes mccownii",
+      "rarity": 2,
+      "spec_id": 40
+    },
+    {
+      "comm_name": "Lapland Longspur",
+      "sci_name": "Calcarius lapponicus",
+      "rarity": 1,
+      "spec_id": 40
+    },
+    {
+      "comm_name": "Chestnut-collared Longspur",
+      "sci_name": "Calcarius ornatus",
+      "rarity": 1,
+      "spec_id": 40
+    },
+    {
+      "comm_name": "Snow Bunting",
+      "sci_name": "Plectrophenax nivalis",
+      "rarity": 1,
+      "spec_id": 40
+    },
+    {
+      "comm_name": "Arctic Loon",
+      "sci_name": "Gavia arctica",
+      "rarity": 3,
+      "spec_id": 41
+    },
+    {
+      "comm_name": "Yellow-billed Loon",
+      "sci_name": "Gavia adamsii",
+      "rarity": 2,
+      "spec_id": 41
+    },
+    {
+      "comm_name": "Red-throated Loon",
+      "sci_name": "Gavia stellata",
+      "rarity": 1,
+      "spec_id": 41
+    },
+    {
+      "comm_name": "Pacific Loon",
+      "sci_name": "Gavia pacifica",
+      "rarity": 1,
+      "spec_id": 41
+    },
+    {
+      "comm_name": "Common Loon",
+      "sci_name": "Gavia immer",
+      "rarity": 1,
+      "spec_id": 41
+    },
+    {
+      "comm_name": "Rose-ringed Parakeet",
+      "sci_name": "Psittacula krameri",
+      "rarity": 2,
+      "spec_id": 42
+    },
+    {
+      "comm_name": "Rosy-faced Lovebird",
+      "sci_name": "Agapornis roseicollis",
+      "rarity": 2,
+      "spec_id": 42
+    },
+    {
+      "comm_name": "Long-billed Thrasher",
+      "sci_name": "Toxostoma longirostre",
+      "rarity": 2,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "Bendire's Thrasher",
+      "sci_name": "Toxostoma bendirei",
+      "rarity": 2,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "California Thrasher",
+      "sci_name": "Toxostoma redivivum",
+      "rarity": 2,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "LeConte's Thrasher",
+      "sci_name": "Toxostoma lecontei",
+      "rarity": 2,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "Crissal Thrasher",
+      "sci_name": "Toxostoma crissale",
+      "rarity": 2,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "Gray Catbird",
+      "sci_name": "Dumetella carolinensis",
+      "rarity": 1,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "Curve-billed Thrasher",
+      "sci_name": "Toxostoma curvirostre",
+      "rarity": 1,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "Brown Thrasher",
+      "sci_name": "Toxostoma rufum",
+      "rarity": 1,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "Sage Thrasher",
+      "sci_name": "Oreoscoptes montanus",
+      "rarity": 1,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "Northern Mockingbird",
+      "sci_name": "Mimus polyglottos",
+      "rarity": 1,
+      "spec_id": 43
+    },
+    {
+      "comm_name": "Kauai Elepaio",
+      "sci_name": "Chasiempis sclateri",
+      "rarity": 2,
+      "spec_id": 44
+    },
+    {
+      "comm_name": "Oahu Elepaio",
+      "sci_name": "Chasiempis ibidis",
+      "rarity": 2,
+      "spec_id": 44
+    },
+    {
+      "comm_name": "Hawaii Elepaio",
+      "sci_name": "Chasiempis sandwichensis",
+      "rarity": 2,
+      "spec_id": 44
+    },
+    {
+      "comm_name": "Montezuma Quail",
+      "sci_name": "Cyrtonyx montezumae",
+      "rarity": 2,
+      "spec_id": 45
+    },
+    {
+      "comm_name": "Mountain Quail",
+      "sci_name": "Oreortyx pictus",
+      "rarity": 1,
+      "spec_id": 45
+    },
+    {
+      "comm_name": "Northern Bobwhite",
+      "sci_name": "Colinus virginianus",
+      "rarity": 1,
+      "spec_id": 45
+    },
+    {
+      "comm_name": "Scaled Quail",
+      "sci_name": "Callipepla squamata",
+      "rarity": 1,
+      "spec_id": 45
+    },
+    {
+      "comm_name": "California Quail",
+      "sci_name": "Callipepla californica",
+      "rarity": 1,
+      "spec_id": 45
+    },
+    {
+      "comm_name": "Gambel's Quail",
+      "sci_name": "Callipepla gambelii",
+      "rarity": 1,
+      "spec_id": 45
+    },
+    {
+      "comm_name": "Townsend's Storm-Petrel",
+      "sci_name": "Hydrobates socorroensis",
+      "rarity": 3,
+      "spec_id": 46
+    },
+    {
+      "comm_name": "Tristram's Storm-Petrel",
+      "sci_name": "Hydrobates tristrami",
+      "rarity": 3,
+      "spec_id": 46
+    },
+    {
+      "comm_name": "Fork-tailed Storm-Petrel",
+      "sci_name": "Hydrobates furcatus",
+      "rarity": 2,
+      "spec_id": 46
+    },
+    {
+      "comm_name": "Ashy Storm-Petrel",
+      "sci_name": "Hydrobates homochroa",
+      "rarity": 2,
+      "spec_id": 46
+    },
+    {
+      "comm_name": "Band-rumped Storm-Petrel",
+      "sci_name": "Hydrobates castro",
+      "rarity": 2,
+      "spec_id": 46
+    },
+    {
+      "comm_name": "Least Storm-Petrel",
+      "sci_name": "Hydrobates microsoma",
+      "rarity": 2,
+      "spec_id": 46
+    },
+    {
+      "comm_name": "Leach's Storm-Petrel",
+      "sci_name": "Hydrobates leucorhous",
+      "rarity": 1,
+      "spec_id": 46
+    },
+    {
+      "comm_name": "Black Storm-Petrel",
+      "sci_name": "Hydrobates melania",
+      "rarity": 1,
+      "spec_id": 46
+    },
+    {
+      "comm_name": "Red-breasted Nuthatch",
+      "sci_name": "Sitta canadensis",
+      "rarity": 1,
+      "spec_id": 47
+    },
+    {
+      "comm_name": "White-breasted Nuthatch",
+      "sci_name": "Sitta carolinensis",
+      "rarity": 1,
+      "spec_id": 47
+    },
+    {
+      "comm_name": "Pygmy Nuthatch",
+      "sci_name": "Sitta pygmaea",
+      "rarity": 1,
+      "spec_id": 47
+    },
+    {
+      "comm_name": "Brown-headed Nuthatch",
+      "sci_name": "Sitta pusilla",
+      "rarity": 1,
+      "spec_id": 47
+    },
+    {
+      "comm_name": "Siberian Rubythroat",
+      "sci_name": "Calliope calliope",
+      "rarity": 3,
+      "spec_id": 48
+    },
+    {
+      "comm_name": "White-rumped Shama",
+      "sci_name": "Copsychus malabaricus",
+      "rarity": 2,
+      "spec_id": 48
+    },
+    {
+      "comm_name": "Bluethroat",
+      "sci_name": "Luscinia (Cyanecula) svecica",
+      "rarity": 2,
+      "spec_id": 48
+    },
+    {
+      "comm_name": "Northern Wheatear",
+      "sci_name": "Oenanthe oenanthe",
+      "rarity": 2,
+      "spec_id": 48
+    },
+    {
+      "comm_name": "Eurasian Tree Sparrow",
+      "sci_name": "Passer montanus",
+      "rarity": 2,
+      "spec_id": 49
+    },
+    {
+      "comm_name": "House Sparrow",
+      "sci_name": "Passer domesticus",
+      "rarity": 1,
+      "spec_id": 49
+    },
+    {
+      "comm_name": "Olive Warbler",
+      "sci_name": "Peucedramus taeniatus",
+      "rarity": 2,
+      "spec_id": 50
+    },
+    {
+      "comm_name": "Osprey",
+      "sci_name": "Pandion haliaetus",
+      "rarity": 1,
+      "spec_id": 51
+    },
+    {
+      "comm_name": "Ferruginous Pygmy-Owl",
+      "sci_name": "Glaucidium brasilianum",
+      "rarity": 3,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Flammulated Owl",
+      "sci_name": "Psiloscops flammeolus",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Whiskered Screech-Owl",
+      "sci_name": "Megascops trichopsis",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Snowy Owl",
+      "sci_name": "Bubo scandiacus",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Northern Hawk Owl",
+      "sci_name": "Surnia ulula",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Northern Pygmy-Owl",
+      "sci_name": "Glaucidium gnoma",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Elf Owl",
+      "sci_name": "Micrathene whitneyi",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Spotted Owl",
+      "sci_name": "Strix occidentalis",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Great Gray Owl",
+      "sci_name": "Strix nebulosa",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Long-eared Owl",
+      "sci_name": "Asio otus",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Boreal Owl",
+      "sci_name": "Aegolius funereus",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Northern Saw-whet Owl",
+      "sci_name": "Aegolius acadicus",
+      "rarity": 2,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "(American) Barn Owl",
+      "sci_name": "Tyto furcata",
+      "rarity": 1,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Western Screech-Owl",
+      "sci_name": "Megascops kennicottii",
+      "rarity": 1,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Eastern Screech-Owl",
+      "sci_name": "Megascops asio",
+      "rarity": 1,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Great Horned Owl",
+      "sci_name": "Bubo virginianus",
+      "rarity": 1,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Burrowing Owl",
+      "sci_name": "Athene cunicularia",
+      "rarity": 1,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Barred Owl",
+      "sci_name": "Strix varia",
+      "rarity": 1,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "Short-eared Owl",
+      "sci_name": "Asio flammeus",
+      "rarity": 1,
+      "spec_id": 52
+    },
+    {
+      "comm_name": "American Oystercatcher",
+      "sci_name": "Haematopus palliatus",
+      "rarity": 1,
+      "spec_id": 53
+    },
+    {
+      "comm_name": "Black Oystercatcher",
+      "sci_name": "Haematopus bachmani",
+      "rarity": 1,
+      "spec_id": 53
+    },
+    {
+      "comm_name": "Monk Parakeet",
+      "sci_name": "Myiopsitta monachus",
+      "rarity": 2,
+      "spec_id": 54
+    },
+    {
+      "comm_name": "Nanday Parakeet",
+      "sci_name": "Aratinga nenday",
+      "rarity": 2,
+      "spec_id": 54
+    },
+    {
+      "comm_name": "Green Parakeet",
+      "sci_name": "Psittacara holochlorus",
+      "rarity": 2,
+      "spec_id": 54
+    },
+    {
+      "comm_name": "Mitred Parakeet",
+      "sci_name": "Psittacara mitratus",
+      "rarity": 2,
+      "spec_id": 54
+    },
+    {
+      "comm_name": "Red-masked Parakeet",
+      "sci_name": "Psittacara erythrogenys",
+      "rarity": 2,
+      "spec_id": 54
+    },
+    {
+      "comm_name": "White-winged Parakeet",
+      "sci_name": "Brotogeris versicolurus",
+      "rarity": 2,
+      "spec_id": 54
+    },
+    {
+      "comm_name": "Yellow-chevroned Parakeet",
+      "sci_name": "Brotogeris chiriri",
+      "rarity": 2,
+      "spec_id": 54
+    },
+    {
+      "comm_name": "Red-crowned Parrot",
+      "sci_name": "Amazona viridigenalis",
+      "rarity": 2,
+      "spec_id": 54
+    },
+    {
+      "comm_name": "Lilac-crowned Parrot",
+      "sci_name": "Amazona finschi",
+      "rarity": 2,
+      "spec_id": 54
+    },
+    {
+      "comm_name": "Spruce Grouse",
+      "sci_name": "Canachites canadensis",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Willow Ptarmigan",
+      "sci_name": "Lagopus lagopus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Rock Ptarmigan",
+      "sci_name": "Lagopus muta",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "White-tailed Ptarmigan",
+      "sci_name": "Lagopus leucura",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Gunnison Sage-Grouse",
+      "sci_name": "Centrocercus minimus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Dusky Grouse",
+      "sci_name": "Dendragapus obscurus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Sooty Grouse",
+      "sci_name": "Dendragapus fuliginosus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Sharp-tailed Grouse",
+      "sci_name": "Tympanuchus phasianellus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Greater Prairie-Chicken",
+      "sci_name": "Tympanuchus cupido",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Lesser Prairie-Chicken",
+      "sci_name": "Tympanuchus pallidicinctus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Gray Partridge",
+      "sci_name": "Perdix perdix",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Kalij Pheasant",
+      "sci_name": "Lophura leucomelanos",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Indian Peafowl",
+      "sci_name": "Pavo cristatus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Gray Francolin",
+      "sci_name": "Ortygornis pondicerianus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Black Francolin",
+      "sci_name": "Francolinus francolinus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Red Junglefowl",
+      "sci_name": "Gallus gallus",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Himalayan Snowcock",
+      "sci_name": "Tetraogallus himalayensis",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Chukar",
+      "sci_name": "Alectoris chukar",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Erckel's Spurfowl (Francolin)",
+      "sci_name": "Pternistis erckelii",
+      "rarity": 2,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Wild Turkey",
+      "sci_name": "Meleagris gallopavo",
+      "rarity": 1,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Ruffed Grouse",
+      "sci_name": "Bonasa umbellus",
+      "rarity": 1,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Greater Sage-Grouse",
+      "sci_name": "Centrocercus urophasianus",
+      "rarity": 1,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "Ring-necked Pheasant",
+      "sci_name": "Phasianus colchicus",
+      "rarity": 1,
+      "spec_id": 55
+    },
+    {
+      "comm_name": "American White Pelican",
+      "sci_name": "Pelecanus erythrorhynchos",
+      "rarity": 1,
+      "spec_id": 56
+    },
+    {
+      "comm_name": "Brown Pelican",
+      "sci_name": "Pelecanus occidentalis",
+      "rarity": 1,
+      "spec_id": 56
+    },
+    {
+      "comm_name": "Ruddy Ground Dove",
+      "sci_name": "Columbina talpacoti",
+      "rarity": 3,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "White-crowned Pigeon",
+      "sci_name": "Patagioenas leucocephala",
+      "rarity": 2,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Red-billed Pigeon",
+      "sci_name": "Patagioenas flavirostris",
+      "rarity": 2,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Spotted Dove",
+      "sci_name": "Streptopelia chinensis",
+      "rarity": 2,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Zebra Dove",
+      "sci_name": "Geopelia striata",
+      "rarity": 2,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "White-tipped Dove",
+      "sci_name": "Leptotila verreauxi",
+      "rarity": 2,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Rock Pigeon",
+      "sci_name": "Columba livia",
+      "rarity": 1,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Band-tailed Pigeon",
+      "sci_name": "Patagioenas fasciata",
+      "rarity": 1,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Eurasian Collared-Dove",
+      "sci_name": "Streptopelia decaocto",
+      "rarity": 1,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Inca Dove",
+      "sci_name": "Columbina inca",
+      "rarity": 1,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Common Ground Dove",
+      "sci_name": "Columbina passerina",
+      "rarity": 1,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "White-winged Dove",
+      "sci_name": "Zenaida asiatica",
+      "rarity": 1,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Mourning Dove",
+      "sci_name": "Zenaida macroura",
+      "rarity": 1,
+      "spec_id": 57
+    },
+    {
+      "comm_name": "Ridgway's Rail",
+      "sci_name": "Rallus obsoletus",
+      "rarity": 2,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Hawaiian Coot",
+      "sci_name": "Fulica alai",
+      "rarity": 2,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Gray-headed (Purple) Swamphen",
+      "sci_name": "Porphyrio poliocephalus (porphyrio)",
+      "rarity": 2,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Yellow Rail",
+      "sci_name": "Coturnicops noveboracensis",
+      "rarity": 2,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Black Rail",
+      "sci_name": "Laterallus jamaicensis",
+      "rarity": 2,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "King Rail",
+      "sci_name": "Rallus elegans",
+      "rarity": 1,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Clapper Rail",
+      "sci_name": "Rallus crepitans",
+      "rarity": 1,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Virginia Rail",
+      "sci_name": "Rallus limicola",
+      "rarity": 1,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Sora",
+      "sci_name": "Porzana carolina",
+      "rarity": 1,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Common Gallinule",
+      "sci_name": "Gallinula galeata",
+      "rarity": 1,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "American Coot",
+      "sci_name": "Fulica americana",
+      "rarity": 1,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Purple Gallinule",
+      "sci_name": "Porphyrio martinica (martinicus)",
+      "rarity": 1,
+      "spec_id": 58
+    },
+    {
+      "comm_name": "Millerbird",
+      "sci_name": "Acrocephalus familiaris",
+      "rarity": 3,
+      "spec_id": 59
+    },
+    {
+      "comm_name": "Chestnut-bellied Sandgrouse",
+      "sci_name": "Pterocles exustus",
+      "rarity": 3,
+      "spec_id": 60
+    },
+    {
+      "comm_name": "Black-tailed Godwit",
+      "sci_name": "Limosa limosa",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Ruff",
+      "sci_name": "Calidris pugnax",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Sharp-tailed Sandpiper",
+      "sci_name": "Calidris acuminata",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Curlew Sandpiper",
+      "sci_name": "Calidris ferruginea",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Temminck's Stint",
+      "sci_name": "Calidris temminckii",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Long-toed Stint",
+      "sci_name": "Calidris subminuta",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Red-necked Stint",
+      "sci_name": "Calidris ruficollis",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Little Stint",
+      "sci_name": "Calidris minuta",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Common Snipe",
+      "sci_name": "Gallinago gallinago",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Terek Sandpiper",
+      "sci_name": "Xenus cinereus",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Common Sandpiper",
+      "sci_name": "Actitis hypoleucos",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Gray-tailed Tattler",
+      "sci_name": "Tringa brevipes",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Common Greenshank",
+      "sci_name": "Tringa nebularia",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Wood Sandpiper",
+      "sci_name": "Tringa glareola",
+      "rarity": 3,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Bristle-thighed Curlew",
+      "sci_name": "Numenius tahitiensis",
+      "rarity": 2,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Bar-tailed Godwit",
+      "sci_name": "Limosa lapponica",
+      "rarity": 2,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Rock Sandpiper",
+      "sci_name": "Calidris ptilocnemis",
+      "rarity": 2,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Upland Sandpiper",
+      "sci_name": "Bartramia longicauda",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Whimbrel",
+      "sci_name": "Numenius phaeopus",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Long-billed Curlew",
+      "sci_name": "Numenius americanus",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Hudsonian Godwit",
+      "sci_name": "Limosa haemastica",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Marbled Godwit",
+      "sci_name": "Limosa fedoa",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Ruddy Turnstone",
+      "sci_name": "Arenaria interpres",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Black Turnstone",
+      "sci_name": "Arenaria melanocephala",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Red Knot",
+      "sci_name": "Calidris canutus",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Surfbird",
+      "sci_name": "Calidris virgata",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Stilt Sandpiper",
+      "sci_name": "Calidris himantopus",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Sanderling",
+      "sci_name": "Calidris alba",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Dunlin",
+      "sci_name": "Calidris alpina",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Purple Sandpiper",
+      "sci_name": "Calidris maritima",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Baird's Sandpiper",
+      "sci_name": "Calidris bairdii",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Least Sandpiper",
+      "sci_name": "Calidris minutilla",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "White-rumped Sandpiper",
+      "sci_name": "Calidris fuscicollis",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Buff-breasted Sandpiper",
+      "sci_name": "Calidris subruficollis",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Pectoral Sandpiper",
+      "sci_name": "Calidris melanotos",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Semipalmated Sandpiper",
+      "sci_name": "Calidris pusilla",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Western Sandpiper",
+      "sci_name": "Calidris mauri",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Short-billed Dowitcher",
+      "sci_name": "Limnodromus griseus",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Long-billed Dowitcher",
+      "sci_name": "Limnodromus scolopaceus",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "American Woodcock",
+      "sci_name": "Scolopax minor",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Wilson's Snipe",
+      "sci_name": "Gallinago delicata",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Spotted Sandpiper",
+      "sci_name": "Actitis macularius",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Solitary Sandpiper",
+      "sci_name": "Tringa solitaria",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Wandering Tattler",
+      "sci_name": "Tringa incana",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Lesser Yellowlegs",
+      "sci_name": "Tringa flavipes",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Willet",
+      "sci_name": "Tringa semipalmata",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Greater Yellowlegs",
+      "sci_name": "Tringa melanoleuca",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Wilson's Phalarope",
+      "sci_name": "Phalaropus tricolor",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Red-necked Phalarope",
+      "sci_name": "Phalaropus lobatus",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Red Phalarope",
+      "sci_name": "Phalaropus fulicarius",
+      "rarity": 1,
+      "spec_id": 61
+    },
+    {
+      "comm_name": "Trindade Petrel",
+      "sci_name": "Pterodroma arminjoniana",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Murphy's Petrel",
+      "sci_name": "Pterodroma ultima",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Bermuda Petrel",
+      "sci_name": "Pterodroma cahow",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Juan Fernandez Petrel",
+      "sci_name": "Pterodroma externa",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "White-necked Petrel",
+      "sci_name": "Pterodroma cervicalis",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Bonin Petrel",
+      "sci_name": "Pterodroma hypoleuca",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Black-winged Petrel",
+      "sci_name": "Pterodroma nigripennis",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Fea's Petrel",
+      "sci_name": "Pterodroma feae",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Cook's Petrel",
+      "sci_name": "Pterodroma cookii",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Bulwer's Petrel",
+      "sci_name": "Bulweria bulwerii",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Flesh-footed Shearwater",
+      "sci_name": "Ardenna carneipes",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Christmas Shearwater",
+      "sci_name": "Puffinus nativitatis",
+      "rarity": 3,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Mottled Petrel",
+      "sci_name": "Pterodroma inexpectata",
+      "rarity": 2,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Black-capped Petrel",
+      "sci_name": "Pterodroma hasitata",
+      "rarity": 2,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Hawaiian Petrel",
+      "sci_name": "Pterodroma sandwichensis",
+      "rarity": 2,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Scopoli's Shearwater",
+      "sci_name": "Calonectris diomedea",
+      "rarity": 2,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Wedge-tailed Shearwater",
+      "sci_name": "Ardenna pacifica",
+      "rarity": 2,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Buller's Shearwater",
+      "sci_name": "Ardenna bulleri",
+      "rarity": 2,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Short-tailed Shearwater",
+      "sci_name": "Ardenna tenuirostris",
+      "rarity": 2,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Manx Shearwater",
+      "sci_name": "Puffinus puffinus",
+      "rarity": 2,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Newell's Shearwater",
+      "sci_name": "Puffinus newelli",
+      "rarity": 2,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Northern Fulmar",
+      "sci_name": "Fulmarus glacialis",
+      "rarity": 1,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Cory's Shearwater",
+      "sci_name": "Calonectris borealis",
+      "rarity": 1,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Sooty Shearwater",
+      "sci_name": "Ardenna grisea",
+      "rarity": 1,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Great Shearwater",
+      "sci_name": "Ardenna gravis",
+      "rarity": 1,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Pink-footed Shearwater",
+      "sci_name": "Ardenna creatopus",
+      "rarity": 1,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Black-vented Shearwater",
+      "sci_name": "Puffinus opisthomelas",
+      "rarity": 1,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Sargasso Shearwater",
+      "sci_name": "Puffinus lherminieri",
+      "rarity": 1,
+      "spec_id": 62
+    },
+    {
+      "comm_name": "Loggerhead Shrike",
+      "sci_name": "Lanius ludovicianus",
+      "rarity": 1,
+      "spec_id": 63
+    },
+    {
+      "comm_name": "Northern Shrike",
+      "sci_name": "Lanius borealis",
+      "rarity": 1,
+      "spec_id": 63
+    },
+    {
+      "comm_name": "Phainopepla",
+      "sci_name": "Phainopepla nitens",
+      "rarity": 1,
+      "spec_id": 64
+    },
+    {
+      "comm_name": "Great Skua",
+      "sci_name": "Stercorarius skua",
+      "rarity": 3,
+      "spec_id": 65
+    },
+    {
+      "comm_name": "South Polar Skua",
+      "sci_name": "Stercorarius maccormicki",
+      "rarity": 2,
+      "spec_id": 65
+    },
+    {
+      "comm_name": "Pomarine Jaeger",
+      "sci_name": "Stercorarius pomarinus",
+      "rarity": 1,
+      "spec_id": 65
+    },
+    {
+      "comm_name": "Parasitic Jaeger",
+      "sci_name": "Stercorarius parasiticus",
+      "rarity": 1,
+      "spec_id": 65
+    },
+    {
+      "comm_name": "Long-tailed Jaeger",
+      "sci_name": "Stercorarius longicaudus",
+      "rarity": 1,
+      "spec_id": 65
+    },
+    {
+      "comm_name": "White-faced Storm-Petrel",
+      "sci_name": "Pelagodroma marina",
+      "rarity": 3,
+      "spec_id": 66
+    },
+    {
+      "comm_name": "Wilson's Storm-Petrel",
+      "sci_name": "Oceanites oceanicus",
+      "rarity": 1,
+      "spec_id": 66
+    },
+    {
+      "comm_name": "Western Spindalis",
+      "sci_name": "Spindalis zena",
+      "rarity": 3,
+      "spec_id": 67
+    },
+    {
+      "comm_name": "Common Myna",
+      "sci_name": "Acridotheres tristis",
+      "rarity": 2,
+      "spec_id": 68
+    },
+    {
+      "comm_name": "European Starling",
+      "sci_name": "Sturnus vulgaris",
+      "rarity": 1,
+      "spec_id": 68
+    },
+    {
+      "comm_name": "Black-necked Stilt",
+      "sci_name": "Himantopus mexicanus",
+      "rarity": 1,
+      "spec_id": 69
+    },
+    {
+      "comm_name": "American Avocet",
+      "sci_name": "Recurvirostra americana",
+      "rarity": 1,
+      "spec_id": 69
+    },
+    {
+      "comm_name": "Wood Stork",
+      "sci_name": "Mycteria americana",
+      "rarity": 1,
+      "spec_id": 70
+    },
+    {
+      "comm_name": "Bank Swallow",
+      "sci_name": "Riparia riparia",
+      "rarity": 1,
+      "spec_id": 71
+    },
+    {
+      "comm_name": "Tree Swallow",
+      "sci_name": "Tachycineta bicolor",
+      "rarity": 1,
+      "spec_id": 71
+    },
+    {
+      "comm_name": "Violet-green Swallow",
+      "sci_name": "Tachycineta thalassina",
+      "rarity": 1,
+      "spec_id": 71
+    },
+    {
+      "comm_name": "Northern Rough-winged Swallow",
+      "sci_name": "Stelgidopteryx serripennis",
+      "rarity": 1,
+      "spec_id": 71
+    },
+    {
+      "comm_name": "Purple Martin",
+      "sci_name": "Progne subis",
+      "rarity": 1,
+      "spec_id": 71
+    },
+    {
+      "comm_name": "Barn Swallow",
+      "sci_name": "Hirundo rustica",
+      "rarity": 1,
+      "spec_id": 71
+    },
+    {
+      "comm_name": "Cliff Swallow",
+      "sci_name": "Petrochelidon pyrrhonota",
+      "rarity": 1,
+      "spec_id": 71
+    },
+    {
+      "comm_name": "Cave Swallow",
+      "sci_name": "Petrochelidon fulva",
+      "rarity": 1,
+      "spec_id": 71
+    },
+    {
+      "comm_name": "Black Swift",
+      "sci_name": "Cypseloides niger",
+      "rarity": 2,
+      "spec_id": 72
+    },
+    {
+      "comm_name": "Mariana Swiftlet",
+      "sci_name": "Aerodramus bartschi",
+      "rarity": 2,
+      "spec_id": 72
+    },
+    {
+      "comm_name": "Chimney Swift",
+      "sci_name": "Chaetura pelagica",
+      "rarity": 1,
+      "spec_id": 72
+    },
+    {
+      "comm_name": "Vaux's Swift",
+      "sci_name": "Chaetura vauxi",
+      "rarity": 1,
+      "spec_id": 72
+    },
+    {
+      "comm_name": "White-throated Swift",
+      "sci_name": "Aeronautes saxatalis",
+      "rarity": 1,
+      "spec_id": 72
+    },
+    {
+      "comm_name": "Wrentit",
+      "sci_name": "Chamaea fasciata",
+      "rarity": 1,
+      "spec_id": 73
+    },
+    {
+      "comm_name": "Yellow-faced Grassquit",
+      "sci_name": "Tiaris olivaceus",
+      "rarity": 3,
+      "spec_id": 74
+    },
+    {
+      "comm_name": "Morelet's Seedeater",
+      "sci_name": "Sporophila morelleti",
+      "rarity": 3,
+      "spec_id": 74
+    },
+    {
+      "comm_name": "Red-crested Cardinal",
+      "sci_name": "Paroaria coronata",
+      "rarity": 2,
+      "spec_id": 74
+    },
+    {
+      "comm_name": "Yellow-billed Cardinal",
+      "sci_name": "Paroaria capitata",
+      "rarity": 2,
+      "spec_id": 74
+    },
+    {
+      "comm_name": "Saffron Finch",
+      "sci_name": "Sicalis flaveola",
+      "rarity": 2,
+      "spec_id": 74
+    },
+    {
+      "comm_name": "Eyebrowed Thrush",
+      "sci_name": "Turdus obscurus",
+      "rarity": 3,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Rufous-backed Robin",
+      "sci_name": "Turdus rufopalliatus",
+      "rarity": 3,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Omao",
+      "sci_name": "Myadestes obscurus",
+      "rarity": 2,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Puaiohi",
+      "sci_name": "Myadestes palmeri",
+      "rarity": 2,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Bicknell's Thrush",
+      "sci_name": "Catharus bicknelli",
+      "rarity": 2,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Clay-colored Thrush",
+      "sci_name": "Turdus grayi",
+      "rarity": 2,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Eastern Bluebird",
+      "sci_name": "Sialia sialis",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Western Bluebird",
+      "sci_name": "Sialia mexicana",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Mountain Bluebird",
+      "sci_name": "Sialia currucoides",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Townsend's Solitaire",
+      "sci_name": "Myadestes townsendi",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Veery",
+      "sci_name": "Catharus fuscescens",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Gray-cheeked Thrush",
+      "sci_name": "Catharus minimus",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Swainson's Thrush",
+      "sci_name": "Catharus ustulatus",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Hermit Thrush",
+      "sci_name": "Catharus guttatus",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Wood Thrush",
+      "sci_name": "Hylocichla mustelina",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "American Robin",
+      "sci_name": "Turdus migratorius",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Varied Thrush",
+      "sci_name": "Ixoreus naevius",
+      "rarity": 1,
+      "spec_id": 75
+    },
+    {
+      "comm_name": "Rufous-winged Sparrow",
+      "sci_name": "Peucaea carpalis",
+      "rarity": 2,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Botteri's Sparrow",
+      "sci_name": "Peucaea botterii",
+      "rarity": 2,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Olive Sparrow",
+      "sci_name": "Arremonops rufivirgatus",
+      "rarity": 2,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Five-striped Sparrow",
+      "sci_name": "Amphispizopsis quinquestriata",
+      "rarity": 2,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Yellow-eyed Junco",
+      "sci_name": "Junco phaeonotus",
+      "rarity": 2,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Baird's Sparrow",
+      "sci_name": "Centronyx bairdii",
+      "rarity": 2,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Henslow's Sparrow",
+      "sci_name": "Centronyx henslowii",
+      "rarity": 2,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Cassin's Sparrow",
+      "sci_name": "Peucaea cassinii",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Bachman's Sparrow",
+      "sci_name": "Peucaea aestivalis",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Grasshopper Sparrow",
+      "sci_name": "Ammodramus savannarum",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Black-throated Sparrow",
+      "sci_name": "Amphispiza bilineata",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Lark Sparrow",
+      "sci_name": "Chondestes grammacus",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Lark Bunting",
+      "sci_name": "Calamospiza melanocorys",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Chipping Sparrow",
+      "sci_name": "Spizella passerina",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Clay-colored Sparrow",
+      "sci_name": "Spizella pallida",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Black-chinned Sparrow",
+      "sci_name": "Spizella atrogularis",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Field Sparrow",
+      "sci_name": "Spizella pusilla",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Brewer's Sparrow",
+      "sci_name": "Spizella breweri",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Fox Sparrow",
+      "sci_name": "Passerella iliaca",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "American Tree Sparrow",
+      "sci_name": "Spizelloides arborea",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Dark-eyed Junco",
+      "sci_name": "Junco hyemalis",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "White-crowned Sparrow",
+      "sci_name": "Zonotrichia leucophrys",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Golden-crowned Sparrow",
+      "sci_name": "Zonotrichia atricapilla",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Harris's Sparrow",
+      "sci_name": "Zonotrichia querula",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "White-throated Sparrow",
+      "sci_name": "Zonotrichia albicollis",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Bell's Sparrow",
+      "sci_name": "Artemisiospiza belli",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Sagebrush Sparrow",
+      "sci_name": "Artemisiospiza nevadensis",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Vesper Sparrow",
+      "sci_name": "Pooecetes gramineus",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "LeConte's Sparrow",
+      "sci_name": "Ammospiza leconteii",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Seaside Sparrow",
+      "sci_name": "Ammospiza maritima",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Nelson's Sparrow",
+      "sci_name": "Ammospiza nelsoni",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Saltmarsh Sparrow",
+      "sci_name": "Ammospiza caudacuta",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Savannah Sparrow",
+      "sci_name": "Passerculus sandwichensis",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Song Sparrow",
+      "sci_name": "Melospiza melodia",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Lincoln's Sparrow",
+      "sci_name": "Melospiza lincolnii",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Swamp Sparrow",
+      "sci_name": "Melospiza georgiana",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Canyon Towhee",
+      "sci_name": "Melozone fusca",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Abert's Towhee",
+      "sci_name": "Melozone aberti",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "California Towhee",
+      "sci_name": "Melozone crissalis",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Rufous-crowned Sparrow",
+      "sci_name": "Aimophila ruficeps",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Green-tailed Towhee",
+      "sci_name": "Pipilo chlorurus",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Spotted Towhee",
+      "sci_name": "Pipilo maculatus",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Eastern Towhee",
+      "sci_name": "Pipilo erythrophthalmus",
+      "rarity": 1,
+      "spec_id": 76
+    },
+    {
+      "comm_name": "Elegant Trogon",
+      "sci_name": "Trogon elegans",
+      "rarity": 2,
+      "spec_id": 77
+    },
+    {
+      "comm_name": "Red-billed Tropicbird",
+      "sci_name": "Phaethon aethereus",
+      "rarity": 3,
+      "spec_id": 78
+    },
+    {
+      "comm_name": "White-tailed Tropicbird",
+      "sci_name": "Phaethon lepturus",
+      "rarity": 2,
+      "spec_id": 78
+    },
+    {
+      "comm_name": "Red-tailed Tropicbird",
+      "sci_name": "Phaethon rubricauda",
+      "rarity": 2,
+      "spec_id": 78
+    },
+    {
+      "comm_name": "La Sagra's Flycatcher",
+      "sci_name": "Myiarchus sagrae",
+      "rarity": 3,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Fork-tailed Flycatcher",
+      "sci_name": "Tyrannus savana",
+      "rarity": 3,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Northern Beardless-Tyrannulet",
+      "sci_name": "Camptostoma imberbe",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Dusky-capped Flycatcher",
+      "sci_name": "Myiarchus tuberculifer",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Great Kiskadee",
+      "sci_name": "Pitangus sulphuratus",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Sulphur-bellied Flycatcher",
+      "sci_name": "Myiodynastes luteiventris",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Tropical Kingbird",
+      "sci_name": "Tyrannus melancholicus",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Couch's Kingbird",
+      "sci_name": "Tyrannus couchii",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Thick-billed Kingbird",
+      "sci_name": "Tyrannus crassirostris",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Gray Kingbird",
+      "sci_name": "Tyrannus dominicensis",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Greater Pewee",
+      "sci_name": "Contopus pertinax",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Buff-breasted Flycatcher",
+      "sci_name": "Empidonax fulvifrons",
+      "rarity": 2,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Ash-throated Flycatcher",
+      "sci_name": "Myiarchus cinerascens",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Great Crested Flycatcher",
+      "sci_name": "Myiarchus crinitus",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Brown-crested Flycatcher",
+      "sci_name": "Myiarchus tyrannulus",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Cassin's Kingbird",
+      "sci_name": "Tyrannus vociferans",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Western Kingbird",
+      "sci_name": "Tyrannus verticalis",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Eastern Kingbird",
+      "sci_name": "Tyrannus tyrannus",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Scissor-tailed Flycatcher",
+      "sci_name": "Tyrannus forficatus",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Olive-sided Flycatcher",
+      "sci_name": "Contopus cooperi",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Western Wood-Pewee",
+      "sci_name": "Contopus sordidulus",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Eastern Wood-Pewee",
+      "sci_name": "Contopus virens",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Yellow-bellied Flycatcher",
+      "sci_name": "Empidonax flaviventris",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Acadian Flycatcher",
+      "sci_name": "Empidonax virescens",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Alder Flycatcher",
+      "sci_name": "Empidonax alnorum",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Willow Flycatcher",
+      "sci_name": "Empidonax traillii",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Least Flycatcher",
+      "sci_name": "Empidonax minimus",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Hammond's Flycatcher",
+      "sci_name": "Empidonax hammondii",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Gray Flycatcher",
+      "sci_name": "Empidonax wrightii",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Dusky Flycatcher",
+      "sci_name": "Empidonax oberholseri",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Western Flycatcher",
+      "sci_name": "Empidonax difficilis",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Black Phoebe",
+      "sci_name": "Sayornis nigricans",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Eastern Phoebe",
+      "sci_name": "Sayornis phoebe",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Say's Phoebe",
+      "sci_name": "Sayornis saya",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Vermilion Flycatcher",
+      "sci_name": "Pyrocephalus rubinus",
+      "rarity": 1,
+      "spec_id": 79
+    },
+    {
+      "comm_name": "Verdin",
+      "sci_name": "Auriparus flaviceps",
+      "rarity": 1,
+      "spec_id": 80
+    },
+    {
+      "comm_name": "Yellow-green Vireo",
+      "sci_name": "Vireo flavoviridis",
+      "rarity": 3,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Black-capped Vireo",
+      "sci_name": "Vireo atricapilla",
+      "rarity": 2,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Gray Vireo",
+      "sci_name": "Vireo vicinior",
+      "rarity": 2,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Black-whiskered Vireo",
+      "sci_name": "Vireo altiloquus",
+      "rarity": 2,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "White-eyed Vireo",
+      "sci_name": "Vireo griseus",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Bell's Vireo",
+      "sci_name": "Vireo bellii",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Hutton's Vireo",
+      "sci_name": "Vireo huttoni",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Yellow-throated Vireo",
+      "sci_name": "Vireo flavifrons",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Cassin's Vireo",
+      "sci_name": "Vireo cassinii",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Blue-headed Vireo",
+      "sci_name": "Vireo solitarius",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Plumbeous Vireo",
+      "sci_name": "Vireo plumbeus",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Philadelphia Vireo",
+      "sci_name": "Vireo philadelphicus",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Warbling Vireo",
+      "sci_name": "Vireo gilvus",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "Red-eyed Vireo",
+      "sci_name": "Vireo olivaceus",
+      "rarity": 1,
+      "spec_id": 81
+    },
+    {
+      "comm_name": "California Condor",
+      "sci_name": "Gymnogyps californianus",
+      "rarity": 2,
+      "spec_id": 82
+    },
+    {
+      "comm_name": "Black Vulture",
+      "sci_name": "Coragyps atratus",
+      "rarity": 1,
+      "spec_id": 82
+    },
+    {
+      "comm_name": "Turkey Vulture",
+      "sci_name": "Cathartes aura",
+      "rarity": 1,
+      "spec_id": 82
+    },
+    {
+      "comm_name": "White Wagtail",
+      "sci_name": "Motacilla alba",
+      "rarity": 3,
+      "spec_id": 83
+    },
+    {
+      "comm_name": "Olive-backed Pipit",
+      "sci_name": "Anthus hodgsoni",
+      "rarity": 3,
+      "spec_id": 83
+    },
+    {
+      "comm_name": "Red-throated Pipit",
+      "sci_name": "Anthus cervinus",
+      "rarity": 3,
+      "spec_id": 83
+    },
+    {
+      "comm_name": "Siberian Pipit",
+      "sci_name": "Anthus japonicus",
+      "rarity": 3,
+      "spec_id": 83
+    },
+    {
+      "comm_name": "Eastern Yellow Wagtail",
+      "sci_name": "Motacilla tschutschensis",
+      "rarity": 2,
+      "spec_id": 83
+    },
+    {
+      "comm_name": "Sprague's Pipit",
+      "sci_name": "Anthus spragueii",
+      "rarity": 2,
+      "spec_id": 83
+    },
+    {
+      "comm_name": "American Pipit",
+      "sci_name": "Anthus rubescens",
+      "rarity": 1,
+      "spec_id": 83
+    },
+    {
+      "comm_name": "African Silverbill",
+      "sci_name": "Euodice cantans",
+      "rarity": 2,
+      "spec_id": 84
+    },
+    {
+      "comm_name": "Java Sparrow",
+      "sci_name": "Padda oryzivora",
+      "rarity": 2,
+      "spec_id": 84
+    },
+    {
+      "comm_name": "Scaly-breasted Munia",
+      "sci_name": "Lonchura punctulata",
+      "rarity": 2,
+      "spec_id": 84
+    },
+    {
+      "comm_name": "Chestnut Munia",
+      "sci_name": "Lonchura atricapilla",
+      "rarity": 2,
+      "spec_id": 84
+    },
+    {
+      "comm_name": "Red Avadavat",
+      "sci_name": "Amandava amandava",
+      "rarity": 2,
+      "spec_id": 84
+    },
+    {
+      "comm_name": "Lavender Waxbill ",
+      "sci_name": "Glaucestrilda caerulescens",
+      "rarity": 2,
+      "spec_id": 84
+    },
+    {
+      "comm_name": "Common Waxbill",
+      "sci_name": "Estrilda astrild",
+      "rarity": 2,
+      "spec_id": 84
+    },
+    {
+      "comm_name": "Bohemian Waxwing",
+      "sci_name": "Bombycilla garrulus",
+      "rarity": 2,
+      "spec_id": 85
+    },
+    {
+      "comm_name": "Cedar Waxwing",
+      "sci_name": "Bombycilla cedrorum",
+      "rarity": 1,
+      "spec_id": 85
+    },
+    {
+      "comm_name": "Warbling White-eye",
+      "sci_name": "Zosterops japonicus",
+      "rarity": 2,
+      "spec_id": 86
+    },
+    {
+      "comm_name": "Tropical Parula",
+      "sci_name": "Setophaga pitiayumi",
+      "rarity": 3,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Rufous-capped Warbler",
+      "sci_name": "Basileuterus rufifrons",
+      "rarity": 3,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Golden-winged Warbler",
+      "sci_name": "Vermivora chrysoptera",
+      "rarity": 2,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Swainson's Warbler",
+      "sci_name": "Limnothlypis swainsonii",
+      "rarity": 2,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Colima Warbler",
+      "sci_name": "Leiothlypis crissalis",
+      "rarity": 2,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Connecticut Warbler",
+      "sci_name": "Oporornis agilis",
+      "rarity": 2,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Kirtland's Warbler",
+      "sci_name": "Setophaga kirtlandii",
+      "rarity": 2,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Cerulean Warbler",
+      "sci_name": "Setophaga cerulea",
+      "rarity": 2,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Golden-cheeked Warbler",
+      "sci_name": "Setophaga chrysoparia",
+      "rarity": 2,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Red-faced Warbler",
+      "sci_name": "Cardellina rubrifrons",
+      "rarity": 2,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Painted Redstart",
+      "sci_name": "Myioborus pictus",
+      "rarity": 2,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Ovenbird",
+      "sci_name": "Seiurus aurocapilla",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Worm-eating Warbler",
+      "sci_name": "Helmitheros vermivorum",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Louisiana Waterthrush",
+      "sci_name": "Parkesia motacilla",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Northern Waterthrush",
+      "sci_name": "Parkesia noveboracensis",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Blue-winged Warbler",
+      "sci_name": "Vermivora cyanoptera",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Black-and-white Warbler",
+      "sci_name": "Mniotilta varia",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Prothonotary Warbler",
+      "sci_name": "Protonotaria citrea",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Tennessee Warbler",
+      "sci_name": "Leiothlypis peregrina",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Orange-crowned Warbler",
+      "sci_name": "Leiothlypis celata",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Lucy's Warbler",
+      "sci_name": "Leiothlypis luciae",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Nashville Warbler",
+      "sci_name": "Leiothlypis ruficapilla",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Virginia's Warbler",
+      "sci_name": "Leiothlypis virginiae",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "MacGillivray's Warbler",
+      "sci_name": "Geothlypis tolmiei",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Mourning Warbler",
+      "sci_name": "Geothlypis philadelphia",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Kentucky Warbler",
+      "sci_name": "Geothlypis formosa",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Common Yellowthroat",
+      "sci_name": "Geothlypis trichas",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Hooded Warbler",
+      "sci_name": "Setophaga citrina",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "American Redstart",
+      "sci_name": "Setophaga ruticilla",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Cape May Warbler",
+      "sci_name": "Setophaga tigrina",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Northern Parula",
+      "sci_name": "Setophaga americana",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Magnolia Warbler",
+      "sci_name": "Setophaga magnolia",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Bay-breasted Warbler",
+      "sci_name": "Setophaga castanea",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Blackburnian Warbler",
+      "sci_name": "Setophaga fusca",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Yellow Warbler",
+      "sci_name": "Setophaga petechia",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Chestnut-sided Warbler",
+      "sci_name": "Setophaga pensylvanica",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Blackpoll Warbler",
+      "sci_name": "Setophaga striata",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Black-throated Blue Warbler",
+      "sci_name": "Setophaga caerulescens",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Palm Warbler",
+      "sci_name": "Setophaga palmarum",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Pine Warbler",
+      "sci_name": "Setophaga pinus",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Yellow-rumped Warbler",
+      "sci_name": "Setophaga coronata",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Yellow-throated Warbler",
+      "sci_name": "Setophaga dominica",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Prairie Warbler",
+      "sci_name": "Setophaga discolor",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Grace's Warbler",
+      "sci_name": "Setophaga graciae",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Black-throated Gray Warbler",
+      "sci_name": "Setophaga nigrescens",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Townsend's Warbler",
+      "sci_name": "Setophaga townsendi",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Hermit Warbler",
+      "sci_name": "Setophaga occidentalis",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Black-throated Green Warbler",
+      "sci_name": "Setophaga virens",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Canada Warbler",
+      "sci_name": "Cardellina canadensis",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "Wilson's Warbler",
+      "sci_name": "Cardellina pusilla",
+      "rarity": 1,
+      "spec_id": 87
+    },
+    {
+      "comm_name": "American Three-toed Woodpecker",
+      "sci_name": "Picoides dorsalis",
+      "rarity": 2,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Black-backed Woodpecker",
+      "sci_name": "Picoides arcticus",
+      "rarity": 2,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Red-cockaded Woodpecker",
+      "sci_name": "Dryobates borealis",
+      "rarity": 2,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Arizona Woodpecker",
+      "sci_name": "Dryobates arizonae",
+      "rarity": 2,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Gilded Flicker",
+      "sci_name": "Colaptes chrysoides",
+      "rarity": 2,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Lewis's Woodpecker",
+      "sci_name": "Melanerpes lewis",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Red-headed Woodpecker",
+      "sci_name": "Melanerpes erythrocephalus",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Acorn Woodpecker",
+      "sci_name": "Melanerpes formicivorus",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Gila Woodpecker",
+      "sci_name": "Melanerpes uropygialis",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Golden-fronted Woodpecker",
+      "sci_name": "Melanerpes aurifrons",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Red-bellied Woodpecker",
+      "sci_name": "Melanerpes carolinus",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Williamson's Sapsucker",
+      "sci_name": "Sphyrapicus thyroideus",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Yellow-bellied Sapsucker",
+      "sci_name": "Sphyrapicus varius",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Red-naped Sapsucker",
+      "sci_name": "Sphyrapicus nuchalis",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Red-breasted Sapsucker",
+      "sci_name": "Sphyrapicus ruber",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Downy Woodpecker",
+      "sci_name": "Dryobates pubescens",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Nuttall's Woodpecker",
+      "sci_name": "Dryobates nuttallii",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Ladder-backed Woodpecker",
+      "sci_name": "Dryobates scalaris",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Hairy Woodpecker",
+      "sci_name": "Dryobates villosus",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "White-headed Woodpecker",
+      "sci_name": "Dryobates albolarvatus",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Northern Flicker",
+      "sci_name": "Colaptes auratus",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Pileated Woodpecker",
+      "sci_name": "Dryocopus pileatus",
+      "rarity": 1,
+      "spec_id": 88
+    },
+    {
+      "comm_name": "Rock Wren",
+      "sci_name": "Salpinctes obsoletus",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "Canyon Wren",
+      "sci_name": "Catherpes mexicanus",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "Cactus Wren",
+      "sci_name": "Campylorhynchus brunneicapillus",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "Bewick's Wren",
+      "sci_name": "Thryomanes bewickii",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "Carolina Wren",
+      "sci_name": "Thryothorus ludovicianus",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "(Northern) House Wren",
+      "sci_name": "Troglodytes aedon",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "Pacific Wren",
+      "sci_name": "Troglodytes pacificus",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "Winter Wren",
+      "sci_name": "Troglodytes hiemalis",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "Sedge Wren",
+      "sci_name": "Cistothorus stellaris",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "Marsh Wren",
+      "sci_name": "Cistothorus palustris",
+      "rarity": 1,
+      "spec_id": 89
+    },
+    {
+      "comm_name": "Yellow-breasted Chat",
+      "sci_name": "Icteria virens",
+      "rarity": 1,
+      "spec_id": 90
+    }
+  ]
+}
