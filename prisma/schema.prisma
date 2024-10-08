@@ -21,8 +21,8 @@ model User {
 
 model Profile {
   id Int @id @default(autoincrement())
-  name String
-  location String
+  name String @default("")
+  location String @default("")
   user_id Int @unique
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }

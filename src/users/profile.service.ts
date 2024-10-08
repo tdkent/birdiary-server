@@ -6,7 +6,7 @@ import { UpdateProfileDto } from './dtos/update-profile.dto';
 export class ProfileService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  // ---- FIND USER BY ID
+  //---- FIND USER BY ID
   async findById(id: number) {
     const user = await this.databaseService.user.findUnique({
       where: { id },

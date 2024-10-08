@@ -1,18 +1,13 @@
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { hashPassword } from '../auth/auth.helpers';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  //---- CREATE A NEW USER
+  //---- CREATE A NEW USER W/DEFAULT PROFILE
   async create(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
 
@@ -24,22 +19,17 @@ export class UsersService {
 
     const hashedPassword = await hashPassword(password);
 
-    const newUser = await this.databaseService.user.create({
+    return await this.databaseService.user.create({
       data: {
         email,
         password: hashedPassword,
         profile: {
-          create: {
-            name: '',
-            location: '',
-          },
+          create: {},
         },
       },
       omit: { password: true },
       include: { profile: true },
     });
-
-    return newUser;
   }
 
   // Find a user by email
