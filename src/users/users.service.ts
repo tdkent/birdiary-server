@@ -12,7 +12,7 @@ import { hashPassword } from '../auth/auth.helpers';
 export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  // Create a new user
+  //---- CREATE A NEW USER
   async create(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
 
@@ -42,27 +42,6 @@ export class UsersService {
     return newUser;
   }
 
-  // Find a user by id
-  async findById(id: number) {
-    const user = await this.databaseService.user.findUnique({
-      where: { id },
-      include: {
-        profile: true,
-        fav_bird: {
-          include: { bird: true },
-          omit: { user_id: true, bird_id: true },
-        },
-      },
-      omit: { password: true },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    return user;
-  }
-
   // Find a user by email
   findByEmail(email: string) {
     return this.databaseService.user.findUnique({ where: { email } });
@@ -72,32 +51,11 @@ export class UsersService {
   findAll() {
     return this.databaseService.user.findMany({
       omit: { password: true },
-      include: { profile: true },
     });
   }
 
-  // Update a user
-  async update(id: number, updateProfileDto: UpdateProfileDto) {
-    const findUser = await this.findById(id);
-
-    if (!findUser) {
-      throw new NotFoundException('User not found');
-    }
-
-    return this.databaseService.profile.update({
-      where: { user_id: id },
-      data: updateProfileDto,
-    });
-  }
-
-  // Remove a user from the database
+  //---- DELETE USER (CASCADES PROFILE, FAVORITE)
   async remove(id: number) {
-    const findUser = await this.findById(id);
-
-    if (!findUser) {
-      throw new NotFoundException('User not found');
-    }
-
     return this.databaseService.user.delete({
       where: { id },
       select: { id: true },

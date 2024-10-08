@@ -9,6 +9,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { ProfileService } from './profile.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { AuthGuard } from '../auth/auth.guard';
@@ -16,7 +17,10 @@ import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly profileService: ProfileService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post()
   create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
@@ -29,9 +33,15 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard)
+  @Delete()
+  remove(@CurrentUser('id') id: number) {
+    return this.usersService.remove(id);
+  }
+
+  @UseGuards(AuthGuard)
   @Get('/profile')
   findOne(@CurrentUser('id') id: number) {
-    return this.usersService.findById(id);
+    return this.profileService.findById(id);
   }
 
   @UseGuards(AuthGuard)
@@ -40,12 +50,6 @@ export class UsersController {
     @CurrentUser('id') id: number,
     @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,
   ) {
-    return this.usersService.update(id, updateProfileDto);
-  }
-
-  @UseGuards(AuthGuard)
-  @Delete('/profile')
-  remove(@CurrentUser('id') id: number) {
-    return this.usersService.remove(id);
+    return this.profileService.update(id, updateProfileDto);
   }
 }

@@ -11,10 +11,17 @@ import { AuthModule } from './auth/auth.module';
 import { BirdModule } from './bird/bird.module';
 import { BirdController } from './bird/bird.controller';
 import { BirdService } from './bird/bird.service';
+import { ProfileService } from './users/profile.service';
 
 @Module({
   imports: [UsersModule, DatabaseModule, AuthModule, BirdModule],
   controllers: [AppController, UsersController, AuthController, BirdController],
-  providers: [AppService, UsersService, AuthService, BirdService],
+  providers: [
+    AppService,
+    UsersService,
+    AuthService,
+    BirdService,
+    ProfileService,
+  ],
 })
 export class AppModule {}
