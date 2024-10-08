@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { LoginUserDto } from './dtos/login-user.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
 import { UsersService } from '../users/users.service';
 
 @Injectable()
@@ -14,8 +14,10 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
-  async signin(loginUserDto: LoginUserDto) {
-    const { email, password } = loginUserDto;
+
+  //---- SIGN IN A USER. ERROR ON FAIL, TOKEN ON SUCCESS.
+  async signin(loginUser: CreateUserDto) {
+    const { email, password } = loginUser;
 
     const user = await this.usersService.findByEmail(email);
 

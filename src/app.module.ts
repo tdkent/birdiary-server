@@ -5,17 +5,15 @@ import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
-import { AuthService } from './auth/auth.service';
-import { AuthController } from './auth/auth.controller';
-import { AuthModule } from './auth/auth.module';
+import { AuthService } from './users/auth.service';
 import { BirdModule } from './bird/bird.module';
 import { BirdController } from './bird/bird.controller';
 import { BirdService } from './bird/bird.service';
 import { ProfileService } from './users/profile.service';
 
 @Module({
-  imports: [UsersModule, DatabaseModule, AuthModule, BirdModule],
-  controllers: [AppController, UsersController, AuthController, BirdController],
+  imports: [UsersModule, DatabaseModule, BirdModule],
+  controllers: [AppController, UsersController, BirdController],
   providers: [
     AppService,
     UsersService,

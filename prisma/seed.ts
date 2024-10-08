@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
-import { hashPassword } from '../src/auth/auth.helpers';
-import { TEST_USER_PASSWORD } from '../src/auth/auth.constants';
+import { hashPassword } from '../src/common/helpers/auth.helpers';
+import { TEST_USER_PASSWORD } from '../src/common/constants/auth.constants';
 import { birds } from '../db/birds.json';
 import { species } from '../db/species.json';
 
