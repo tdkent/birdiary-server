@@ -16,12 +16,12 @@ import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 
+@UseGuards(AuthGuard)
 @Controller('sightings')
 export class SightingsController {
   constructor(private readonly sightingsService: SightingsService) {}
 
   //---- POST '/sightings' :: Create a new bird sighting
-  @UseGuards(AuthGuard)
   @Post()
   create(
     @CurrentUser('id') id: number,
@@ -31,14 +31,12 @@ export class SightingsController {
   }
 
   //---- GET '/sightings' :: Fetch all user's sightings
-  @UseGuards(AuthGuard)
   @Get()
   findAll(@CurrentUser('id') id: number) {
     return this.sightingsService.findAll(id);
   }
 
   //---- GET '/sightings/:id' :: Fetch a single sighting
-  @UseGuards(AuthGuard)
   @Get(':id')
   findOne(
     @CurrentUser('id') userId: number,
@@ -48,7 +46,6 @@ export class SightingsController {
   }
 
   //---- PATCH 'sightings/:id' :: Update a single sighting
-  @UseGuards(AuthGuard)
   @Patch(':id')
   update(
     @CurrentUser('id') userId: number,
@@ -60,7 +57,10 @@ export class SightingsController {
 
   //---- DELETE 'sightings/:id' :: Delete a single sighting
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.sightingsService.remove(+id);
+  remove(
+    @CurrentUser('id') userId: number,
+    @Param('id', ParseIntPipe) sightingId: number,
+  ) {
+    return this.sightingsService.remove(userId, sightingId);
   }
 }

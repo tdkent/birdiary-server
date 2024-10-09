@@ -59,7 +59,17 @@ export class SightingsService {
   }
 
   //---- DELETE A SIGHTING
-  remove(id: number) {
-    return `This action removes a #${id} sighting`;
+  async remove(userId: number, sightingId: number) {
+    const result = await this.databaseService.sighting.deleteMany({
+      where: { id: sightingId, user_id: userId },
+    });
+
+    if (!result.count) {
+      throw new NotFoundException(
+        'Resource does not exist, or you are not authorized',
+      );
+    }
+
+    return result;
   }
 }
