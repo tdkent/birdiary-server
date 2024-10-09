@@ -141,7 +141,7 @@ Response object
 { id }
 ```
 
-#### Sign in user
+#### (Auth) Sign in user
 
 ```
 POST base_url + '/users/auth/signin'
@@ -195,7 +195,7 @@ PATCH base_url + '/users/profile'
 
 Request object:
 
-{ name, location }
+{ name?, location? }
 ```
 
 Authorization
@@ -245,21 +245,155 @@ Request object:
 { bird_id, date, desc }
 ```
 
+Authorization
+
+- Protected route. Requires token in `Authorization` header.
+
 Validation
 
-- `bird_id`: Int. Must be a valid bird id in the Bird table.
-- `date`: Date string. Dates earlier than 1950 and later than the current date are invalid. To generate a date standardized to UTC, use the following pattern in the frontend application:
+- `bird_id`: Int. Optional. Must be a valid bird id in the Bird table.
+- `desc`: String. Optional. Max 150 characters.
+- `date`: Date string. Optional. Dates earlier than 1950 and later than the current date are invalid. To generate a date standardized to UTC, use the following pattern in the frontend application:
 
 ```
 const date = new Date(Date.UTC(2024, 9, 9));
 ```
 
-- `desc`: String, 0 to 150 characters.
+Response object
+
+```
+{ id, user_id, bird_id, date, desc }
+```
+
+#### Fetch all user's sightings
+
+```
+GET base_url + '/sightings'
+```
+
+Authorization
+
+- Protected route. Requires token in `Authorization` header.
+
+Response object
+
+```
+[{ id, user_id, bird_id, date, desc }]
+```
+
+#### Fetch a single sighting
+
+```
+GET base_url + '/sightings/:sightingId'
+```
+
+Authorization
+
+- Protected route. Requires token in `Authorization` header.
+
+Validation
+
+- `sightingId`: Must parse to a valid integer.
 
 Response object
 
 ```
 { id, user_id, bird_id, date, desc }
+```
+
+#### Update a sighting
+
+```
+PATCH base_url + '/sightings/:sightingId'
+
+Request object:
+
+{ bird_id?, date?, desc? }
+```
+
+Authorization
+
+- Protected route. Requires token in `Authorization` header.
+
+Validation
+
+- `sightingId`: Must parse to a valid integer.
+- `bird_id`: Int. Optional.
+- `desc`: String. Optional. Max 150 characters.
+- `date`: Date string. Optional. Dates earlier than 1950 and later than the current date are invalid. To generate a date standardized to UTC, use the following pattern in the frontend application:
+
+```
+const date = new Date(Date.UTC(2024, 9, 9));
+```
+
+Response object
+
+```
+{ count }
+```
+
+#### Delete a sighting
+
+```
+DELETE base_url + '/sightings/:sightingId'
+```
+
+Authorization
+
+- Protected route. Requires token in `Authorization` header.
+
+Validation
+
+- `sightingId`: Must parse to a valid integer.
+
+Response object
+
+```
+{ count }
+```
+
+### Bird
+
+#### Fetch all birds
+
+```
+GET base_url + '/bird'
+```
+
+Response object
+
+```
+[{
+  id,
+  comm_name,
+  sci_name,
+  rarity,
+  images: [],
+  species: { id, name }
+}]
+```
+
+#### Fetch a single bird
+
+```
+GET base_url + '/bird/:birdId'
+```
+
+Validation
+
+- `birdId`: Must parse to a valid integer.
+
+Response object
+
+```
+{
+  id,
+  comm_name,
+  sci_name,
+  rarity,
+  images: [],
+  species: { id, name }
+}
 ```
 
 ## Dependencies
