@@ -1,4 +1,11 @@
-import { IsDate, IsInt, IsString, Length, Max, Min } from 'class-validator';
+import {
+  IsDateString,
+  IsInt,
+  IsString,
+  Length,
+  Max,
+  Min,
+} from 'class-validator';
 import { BIRD_COUNT } from 'src/common/constants/bird.constants';
 export class CreateSightingDto {
   @IsInt()
@@ -6,7 +13,7 @@ export class CreateSightingDto {
   @Max(BIRD_COUNT)
   readonly bird_id: number;
 
-  @IsDate()
+  @IsDateString()
   readonly date: Date;
 
   @IsString()

@@ -204,7 +204,7 @@ Authorization
 
 Validation
 
-- `name`: Maximum 36 character string. Should be the same as the user's current name if the value is not being updated.
+- `name`: String, 0 to 36 characters. Should be the same as the user's current name if the value is not being updated.
 - `location`: Maximum 60 character string. Should be the same as the user's current location if the value is not being updated.
 
 Response object
@@ -231,6 +231,35 @@ Response object
 
 ```
 { user_id, bird_id }
+```
+
+### Sightings
+
+#### Create new sighting
+
+```
+POST base_url + '/sightings'
+
+Request object:
+
+{ bird_id, date, desc }
+```
+
+Validation
+
+- `bird_id`: Int. Must be a valid bird id in the Bird table.
+- `date`: Date string. Dates earlier than 1950 and later than the current date are invalid. To generate a date standardized to UTC, use the following pattern in the frontend application:
+
+```
+const date = new Date(Date.UTC(2024, 9, 9));
+```
+
+- `desc`: String, 0 to 150 characters.
+
+Response object
+
+```
+{ id, user_id, bird_id, date, desc }
 ```
 
 ## Dependencies

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ValidationPipe,
 } from '@nestjs/common';
 import { SightingsService } from './sightings.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
@@ -17,7 +18,7 @@ export class SightingsController {
 
   //---- POST '/sightings' :: Create a new bird sighting
   @Post()
-  create(@Body() createSightingDto: CreateSightingDto) {
+  create(@Body(ValidationPipe) createSightingDto: CreateSightingDto) {
     return this.sightingsService.create(createSightingDto);
   }
 

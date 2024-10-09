@@ -1,17 +1,21 @@
 import { Injectable } from '@nestjs/common';
+import { DatabaseService } from 'src/database/database.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 
 @Injectable()
 export class SightingsService {
+  constructor(private readonly databaseService: DatabaseService) {}
   //---- CREATE NEW SIGHTING
   create(createSightingDto: CreateSightingDto) {
-    return 'This action adds a new sighting';
+    return this.databaseService.sighting.create({
+      data: { user_id: 1, ...createSightingDto },
+    });
   }
 
   //---- FETCH ALL SIGHTINGS BY USER
   findAll() {
-    return `This action returns all sightings`;
+    return this.databaseService.sighting.findMany();
   }
 
   //---- FETCH A SIGHTING

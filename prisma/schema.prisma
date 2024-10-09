@@ -66,6 +66,6 @@ model Sighting {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   bird_id Int
   bird Bird @relation(fields: [bird_id], references: [id])
-  date DateTime
+  date DateTime @db.Date
   desc String
 }
