@@ -10,9 +10,10 @@ import { BirdModule } from './bird/bird.module';
 import { BirdController } from './bird/bird.controller';
 import { BirdService } from './bird/bird.service';
 import { ProfileService } from './users/profile.service';
+import { SightingsModule } from './sightings/sightings.module';
 
 @Module({
-  imports: [UsersModule, DatabaseModule, BirdModule],
+  imports: [UsersModule, DatabaseModule, BirdModule, SightingsModule],
   controllers: [AppController, UsersController, BirdController],
   providers: [
     AppService,
