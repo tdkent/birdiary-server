@@ -7,15 +7,17 @@ import { UpdateSightingDto } from './dto/update-sighting.dto';
 export class SightingsService {
   constructor(private readonly databaseService: DatabaseService) {}
   //---- CREATE NEW SIGHTING
-  create(createSightingDto: CreateSightingDto) {
+  create(id: number, createSightingDto: CreateSightingDto) {
     return this.databaseService.sighting.create({
-      data: { user_id: 1, ...createSightingDto },
+      data: { user_id: id, ...createSightingDto },
     });
   }
 
   //---- FETCH ALL SIGHTINGS BY USER
-  findAll() {
-    return this.databaseService.sighting.findMany();
+  findAll(id: number) {
+    return this.databaseService.sighting.findMany({
+      where: { user_id: id },
+    });
   }
 
   //---- FETCH A SIGHTING
