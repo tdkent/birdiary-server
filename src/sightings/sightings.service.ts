@@ -38,8 +38,24 @@ export class SightingsService {
   }
 
   //---- UPDATE A SIGHTING
-  update(id: number, updateSightingDto: UpdateSightingDto) {
-    return `This action updates a #${id} sighting`;
+  async update(
+    userId: number,
+    sightingId: number,
+    updateSightingDto: UpdateSightingDto,
+  ) {
+    // result is an object with count of docs updated :: { count: 0 } or { count: 1 }
+    const result = await this.databaseService.sighting.updateMany({
+      data: updateSightingDto,
+      where: { id: sightingId, user_id: userId },
+    });
+
+    if (!result.count) {
+      throw new NotFoundException(
+        'Resource does not exist, or you are not authorized',
+      );
+    }
+
+    return result;
   }
 
   //---- DELETE A SIGHTING

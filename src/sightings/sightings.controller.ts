@@ -48,12 +48,14 @@ export class SightingsController {
   }
 
   //---- PATCH 'sightings/:id' :: Update a single sighting
+  @UseGuards(AuthGuard)
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @CurrentUser('id') userId: number,
+    @Param('id', ParseIntPipe) sightingId: number,
     @Body() updateSightingDto: UpdateSightingDto,
   ) {
-    return this.sightingsService.update(+id, updateSightingDto);
+    return this.sightingsService.update(userId, sightingId, updateSightingDto);
   }
 
   //---- DELETE 'sightings/:id' :: Delete a single sighting
