@@ -63,9 +63,9 @@ model Image {
 model Sighting {
   id Int @id @default(autoincrement())
   user_id Int
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   bird_id Int
   bird Bird @relation(fields: [bird_id], references: [id])
-  date DateTime @default(now())
-  desc String?
+  date DateTime
+  desc String
 }
