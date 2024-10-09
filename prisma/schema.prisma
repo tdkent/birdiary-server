@@ -13,10 +13,11 @@ model User {
   id Int @id @default(autoincrement())
   email String @unique
   password String
-  profile Profile?
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+  profile Profile?
   fav_bird Favorite?
+  sightings Sighting[]
 }
 
 model Profile {
@@ -43,6 +44,7 @@ model Bird {
   spec_id Int
   images Image[]
   favorites Favorite[]
+  sightings Sighting[]
 }
 
 model Species {
@@ -56,4 +58,14 @@ model Image {
   img_url String
   bird Bird @relation(fields:[bird_name], references: [comm_name])
   bird_name String
+}
+
+model Sighting {
+  id Int @id @default(autoincrement())
+  user_id Int
+  user User @relation(fields: [user_id], references: [id])
+  bird_id Int
+  bird Bird @relation(fields: [bird_id], references: [id])
+  date DateTime @default(now())
+  desc String?
 }
