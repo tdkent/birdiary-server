@@ -1,11 +1,12 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
   Post,
-  Body,
   Patch,
   Param,
-  Delete,
+  ParseIntPipe,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -37,9 +38,13 @@ export class SightingsController {
   }
 
   //---- GET '/sightings/:id' :: Fetch a single sighting
+  @UseGuards(AuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.sightingsService.findOne(+id);
+  findOne(
+    @CurrentUser('id') userId: number,
+    @Param('id', ParseIntPipe) sightingId: number,
+  ) {
+    return this.sightingsService.findOne(userId, sightingId);
   }
 
   //---- PATCH 'sightings/:id' :: Update a single sighting

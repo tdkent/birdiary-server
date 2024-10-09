@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
@@ -21,8 +21,20 @@ export class SightingsService {
   }
 
   //---- FETCH A SIGHTING
-  findOne(id: number) {
-    return `This action returns a #${id} sighting`;
+  async findOne(userId: number, sightingId: number) {
+    const result = await this.databaseService.sighting.findFirst({
+      where: {
+        AND: [{ user_id: userId }, { id: sightingId }],
+      },
+    });
+
+    if (!result) {
+      throw new NotFoundException(
+        'Resource does not exist, or you are not authorized',
+      );
+    }
+
+    return result;
   }
 
   //---- UPDATE A SIGHTING
