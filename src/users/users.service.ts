@@ -1,4 +1,9 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { hashPassword } from '../common/helpers/auth.helpers';
@@ -9,27 +14,26 @@ export class UsersService {
 
   //---- CREATE A NEW USER W/DEFAULT PROFILE
   async create(createUserDto: CreateUserDto) {
-    const { email, password } = createUserDto;
-
-    const findExistingEmail = await this.findByEmail(email);
-
-    if (findExistingEmail) {
-      throw new BadRequestException(`${email} is already registed!`);
-    }
-
-    const hashedPassword = await hashPassword(password);
-
-    return await this.databaseService.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        profile: {
-          create: {},
+    return await this.databaseService.user
+      .create({
+        data: {
+          email: createUserDto.email,
+          password: await hashPassword(createUserDto.password),
+          profile: { create: {} },
         },
-      },
-      omit: { password: true },
-      include: { profile: true },
-    });
+        omit: { password: true },
+        include: { profile: true },
+      })
+      .catch((err) => {
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          if (err.code === 'P2002') {
+            throw new BadRequestException(
+              `${createUserDto.email} is already registed!`,
+            );
+          }
+        }
+        throw new InternalServerErrorException('An unknown error occurred');
+      });
   }
 
   //---- UTILITY: FIND USER BY EMAIL
@@ -46,10 +50,17 @@ export class UsersService {
   }
 
   //---- DELETE USER (CASCADES PROFILE, FAVORITE)
+  //? Note: Prisma throws an unhandled error when using
+  //? delete method on a resource that no longer exists.
+  //? https://github.com/prisma/prisma/issues/4072
   async remove(id: number) {
-    return this.databaseService.user.delete({
-      where: { id },
-      select: { id: true },
-    });
+    return this.databaseService.user
+      .delete({
+        where: { id },
+        select: { id: true },
+      })
+      .catch(() => {
+        throw new InternalServerErrorException('An error occurred');
+      });
   }
 }

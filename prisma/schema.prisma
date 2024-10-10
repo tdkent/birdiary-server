@@ -67,5 +67,5 @@ model Sighting {
   bird_id Int
   bird Bird @relation(fields: [bird_id], references: [id])
   date DateTime @db.Date
-  desc String
+  desc String?
 }

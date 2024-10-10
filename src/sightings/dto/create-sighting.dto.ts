@@ -1,9 +1,10 @@
 import {
   IsDateString,
   IsInt,
+  IsOptional,
   IsString,
-  Length,
   Max,
+  MaxLength,
   Min,
 } from 'class-validator';
 import { BIRD_COUNT } from 'src/common/constants/bird.constants';
@@ -16,7 +17,8 @@ export class CreateSightingDto {
   @IsDateString()
   readonly date: Date;
 
+  @IsOptional()
   @IsString()
-  @Length(0, 150)
+  @MaxLength(150)
   readonly desc: string;
 }
