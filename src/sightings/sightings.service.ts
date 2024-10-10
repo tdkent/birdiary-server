@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
+import ErrorMessages from 'src/common/errors/errors.enum';
 
 @Injectable()
 export class SightingsService {
@@ -18,7 +19,7 @@ export class SightingsService {
         data: { user_id: id, ...createSightingDto },
       })
       .catch(() => {
-        throw new InternalServerErrorException('An error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 
@@ -29,7 +30,7 @@ export class SightingsService {
         where: { user_id: id },
       })
       .catch(() => {
-        throw new InternalServerErrorException('An error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 
@@ -44,10 +45,10 @@ export class SightingsService {
       .catch((err) => {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
-            throw new NotFoundException('Resource or user does not exist');
+            throw new NotFoundException(ErrorMessages.ResourceNotFound);
           }
         }
-        throw new InternalServerErrorException('An error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 
@@ -72,9 +73,9 @@ export class SightingsService {
       })
       .catch((err) => {
         if (err instanceof NotFoundException) {
-          throw new NotFoundException('Resource or user does not exist');
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
         }
-        throw new InternalServerErrorException('An error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 
@@ -94,9 +95,9 @@ export class SightingsService {
       })
       .catch((err) => {
         if (err instanceof NotFoundException) {
-          throw new NotFoundException('Resource or user does not exist');
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
         }
-        throw new InternalServerErrorException('An error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 }

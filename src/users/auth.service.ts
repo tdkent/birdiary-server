@@ -10,6 +10,7 @@ import { compare } from 'bcrypt';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { DatabaseService } from 'src/database/database.service';
 import { UsersService } from '../users/users.service';
+import ErrorMessages from 'src/common/errors/errors.enum';
 
 @Injectable()
 export class AuthService {
@@ -37,12 +38,12 @@ export class AuthService {
     } catch (err) {
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === 'P2025') {
-          throw new NotFoundException(`User ${loginUser.email} does not exist`);
+          throw new NotFoundException(ErrorMessages.UserNotFound);
         }
       } else if (err instanceof BadRequestException) {
-        throw new BadRequestException('Incorrect password');
+        throw new BadRequestException(ErrorMessages.IncorrectPassword);
       } else {
-        throw new InternalServerErrorException('An error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       }
     }
   }

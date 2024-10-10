@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
+import ErrorMessages from 'src/common/errors/errors.enum';
 
 @Injectable()
 export class BirdService {
@@ -19,7 +20,7 @@ export class BirdService {
         take: 20,
       })
       .catch(() => {
-        throw new InternalServerErrorException('An error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 
@@ -34,10 +35,10 @@ export class BirdService {
       .catch((err) => {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
-            throw new NotFoundException('Resource does not exist');
+            throw new NotFoundException(ErrorMessages.ResourceNotFound);
           }
         }
-        throw new InternalServerErrorException('An error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 }

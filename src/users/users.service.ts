@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { hashPassword } from '../common/helpers/auth.helpers';
+import ErrorMessages from 'src/common/errors/errors.enum';
 
 @Injectable()
 export class UsersService {
@@ -27,12 +28,10 @@ export class UsersService {
       .catch((err) => {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2002') {
-            throw new BadRequestException(
-              `${createUserDto.email} is already registed!`,
-            );
+            throw new BadRequestException(ErrorMessages.BadRequest);
           }
         }
-        throw new InternalServerErrorException('An unknown error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 
@@ -54,7 +53,7 @@ export class UsersService {
         select: { id: true },
       })
       .catch(() => {
-        throw new InternalServerErrorException('An error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 }

@@ -7,6 +7,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
+import ErrorMessages from 'src/common/errors/errors.enum';
 
 @Injectable()
 export class ProfileService {
@@ -29,10 +30,10 @@ export class ProfileService {
       .catch((err) => {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
-            throw new NotFoundException('User does not exist');
+            throw new NotFoundException(ErrorMessages.UserNotFound);
           }
         }
-        throw new InternalServerErrorException('An unknown error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 
@@ -47,11 +48,11 @@ export class ProfileService {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2025') {
-              throw new NotFoundException('User does not exist');
+              throw new NotFoundException(ErrorMessages.UserNotFound);
             }
           }
         }
-        throw new InternalServerErrorException('Unknown error');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 
@@ -70,10 +71,10 @@ export class ProfileService {
       .catch((err) => {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2003') {
-            throw new BadRequestException('Invalid request');
+            throw new BadRequestException(ErrorMessages.BadRequest);
           }
         }
-        throw new InternalServerErrorException('An unknown error occurred');
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
 }
