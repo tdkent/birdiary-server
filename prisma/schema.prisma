@@ -42,7 +42,6 @@ model Bird {
   rarity Int
   species Species @relation(fields: [spec_id], references: [id])
   spec_id Int
-  images Image[]
   favorites Favorite[]
   sightings Sighting[]
 }
@@ -51,13 +50,6 @@ model Species {
   id Int @unique
   name String
   birds Bird[]
-}
-
-model Image {
-  id Int @id @default(autoincrement())
-  img_url String
-  bird Bird @relation(fields:[bird_name], references: [comm_name])
-  bird_name String
 }
 
 model Sighting {
