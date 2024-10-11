@@ -15,11 +15,15 @@ import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { LifeListService } from './lifelist.service';
 
 @UseGuards(AuthGuard)
 @Controller('sightings')
 export class SightingsController {
-  constructor(private readonly sightingsService: SightingsService) {}
+  constructor(
+    private readonly sightingsService: SightingsService,
+    private readonly lifeListService: LifeListService,
+  ) {}
 
   //---- POST '/sightings' :: Create a new bird sighting
   @Post()
@@ -43,6 +47,12 @@ export class SightingsController {
     @Param('id', ParseIntPipe) sightingId: number,
   ) {
     return this.sightingsService.findOne(userId, sightingId);
+  }
+
+  //---- GET '/sightings/:id/lifelist' :: Fetch user's life list
+  @Get('/:id/lifelist')
+  findLifeList(@CurrentUser('id') id: number) {
+    return this.lifeListService.findLifeList(id);
   }
 
   //---- PATCH 'sightings/:id' :: Update a single sighting
