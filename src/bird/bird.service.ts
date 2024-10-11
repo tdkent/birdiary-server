@@ -26,7 +26,7 @@ export class BirdService {
   async findAll() {
     return this.databaseService.bird
       .findMany({
-        include: { images: true, species: true },
+        include: { species: true },
         omit: { spec_id: true },
         take: 3,
       })

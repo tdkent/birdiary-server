@@ -368,7 +368,6 @@ Response object
   comm_name,
   sci_name,
   rarity,
-  images: [],
   species: { id, name }
 }]
 ```

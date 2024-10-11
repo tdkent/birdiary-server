@@ -2629,7 +2629,7 @@
       "spec_id": 52
     },
     {
-      "comm_name": "(American) Barn Owl",
+      "comm_name": "American Barn Owl",
       "sci_name": "Tyto furcata",
       "rarity": 1,
       "spec_id": 52
@@ -4501,7 +4501,7 @@
       "spec_id": 84
     },
     {
-      "comm_name": "Lavender Waxbill ",
+      "comm_name": "Lavender Waxbill",
       "sci_name": "Glaucestrilda caerulescens",
       "rarity": 2,
       "spec_id": 84
@@ -4993,7 +4993,7 @@
       "spec_id": 89
     },
     {
-      "comm_name": "(Northern) House Wren",
+      "comm_name": "Northern House Wren",
       "sci_name": "Troglodytes aedon",
       "rarity": 1,
       "spec_id": 89
