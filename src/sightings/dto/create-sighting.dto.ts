@@ -1,7 +1,6 @@
 import {
   IsDateString,
   IsInt,
-  IsNumber,
   IsObject,
   IsOptional,
   IsString,
@@ -12,22 +11,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { BIRD_COUNT } from 'src/common/constants/bird.constants';
-
-export class LocationDto {
-  @IsString()
-  @MaxLength(150)
-  readonly name: string;
-
-  @IsNumber()
-  @Min(-90)
-  @Max(90)
-  readonly lat: number;
-
-  @IsNumber()
-  @Min(-180)
-  @Max(180)
-  readonly lng: number;
-}
+import { LocationDto } from './create-location.dto';
 
 export class CreateSightingDto {
   @IsInt()

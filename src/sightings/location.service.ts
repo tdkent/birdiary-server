@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { LocationDto } from './dto/create-sighting.dto';
+import { LocationDto } from './dto/create-location.dto';
 import { DatabaseService } from 'src/database/database.service';
 import ErrorMessages from 'src/common/errors/errors.enum';
 
