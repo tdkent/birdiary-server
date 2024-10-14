@@ -12,6 +12,7 @@ import { BirdService } from './bird/bird.service';
 import { ProfileService } from './users/profile.service';
 import { LifeListService } from './sightings/lifelist.service';
 import { SightingsModule } from './sightings/sightings.module';
+import { LocationService } from './sightings/location.service';
 
 @Module({
   imports: [UsersModule, DatabaseModule, BirdModule, SightingsModule],
@@ -23,6 +24,7 @@ import { SightingsModule } from './sightings/sightings.module';
     BirdService,
     ProfileService,
     LifeListService,
+    LocationService,
   ],
 })
 export class AppModule {}

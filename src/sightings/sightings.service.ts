@@ -5,22 +5,28 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/database/database.service';
+import { LocationService } from './location.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import ErrorMessages from 'src/common/errors/errors.enum';
 
 @Injectable()
 export class SightingsService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly locationService: LocationService,
+  ) {}
   //---- CREATE NEW SIGHTING
   async create(id: number, createSightingDto: CreateSightingDto) {
-    return this.databaseService.sighting
-      .create({
-        data: { user_id: id, ...createSightingDto },
-      })
-      .catch(() => {
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
+    // use location service to add location data to table
+    // add returned location id to this service
+    // return this.databaseService.sighting
+    //   .create({
+    //     data: { user_id: id, ...createSightingDto },
+    //   })
+    //   .catch(() => {
+    //     throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    //   });
   }
 
   //---- FETCH ALL SIGHTINGS BY USER
