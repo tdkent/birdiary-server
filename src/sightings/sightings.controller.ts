@@ -40,6 +40,12 @@ export class SightingsController {
     return this.sightingsService.findAll(id);
   }
 
+  //---- GET '/sightings/locations' :: Fetch user's life list
+  @Get('locations')
+  findAllLocations() {
+    return this.sightingsService.findAllLocations();
+  }
+
   //---- GET '/sightings/:id' :: Fetch a single sighting
   @Get(':id')
   findOne(

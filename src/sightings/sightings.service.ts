@@ -18,15 +18,27 @@ export class SightingsService {
   ) {}
   //---- CREATE NEW SIGHTING
   async create(id: number, createSightingDto: CreateSightingDto) {
-    // use location service to add location data to table
-    // add returned location id to this service
-    // return this.databaseService.sighting
-    //   .create({
-    //     data: { user_id: id, ...createSightingDto },
-    //   })
-    //   .catch(() => {
-    //     throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-    //   });
+    const { bird_id, date, desc, loc } = createSightingDto;
+
+    if (loc) {
+      await this.locationService.create(id, loc);
+    }
+
+    return this.databaseService.sighting
+      .create({
+        data: {
+          user_id: id,
+          bird_id,
+          date,
+          desc,
+          loc_name: loc?.name || null,
+        },
+        include: { loc: true },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
   }
 
   //---- FETCH ALL SIGHTINGS BY USER
@@ -105,5 +117,9 @@ export class SightingsService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+  }
+
+  findAllLocations() {
+    return this.databaseService.location.findMany();
   }
 }

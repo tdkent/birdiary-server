@@ -13,7 +13,7 @@ import {
 import { Type } from 'class-transformer';
 import { BIRD_COUNT } from 'src/common/constants/bird.constants';
 
-class LocationDto {
+export class LocationDto {
   @IsString()
   @MaxLength(150)
   readonly name: string;
