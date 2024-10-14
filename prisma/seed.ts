@@ -8,8 +8,8 @@ const prisma = new PrismaClient();
 
 async function main() {
   const hashedPassword = await hashPassword(TEST_USER_PASSWORD);
-  //! limit birds to 50 records
-  const slicedBirds = birds.slice(0, 50);
+  //! limit birds to 20 records
+  const slicedBirds = birds.slice(0, 20);
 
   await prisma.species.createMany({
     data: species,
@@ -29,8 +29,8 @@ async function main() {
   await prisma.profile.create({
     data: {
       user_id: 1,
-      name: 'Tim',
-      location: 'Alameda, CA',
+      name: '',
+      location: '',
     },
   });
 

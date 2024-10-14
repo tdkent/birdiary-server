@@ -18,6 +18,7 @@ model User {
   profile Profile?
   fav_bird Favorite?
   sightings Sighting[]
+  locations Location[]
 }
 
 model Profile {
@@ -58,6 +59,18 @@ model Sighting {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   bird_id Int
   bird Bird @relation(fields: [bird_id], references: [id])
+  location_id Int
+  location Location @relation(fields: [location_id], references: [id])
   date DateTime @db.Date
   desc String?
+}
+
+model Location {
+  id Int @id @default(autoincrement())
+  user_id Int
+  user User @relation(fields: [user_id], references: [id])
+  name String
+  lat Float
+  lng Float
+  sightings Sighting[]
 }
