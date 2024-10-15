@@ -31,5 +31,5 @@ export class CreateSightingDto {
   @IsObject()
   @ValidateNested()
   @Type(() => LocationDto)
-  loc: LocationDto;
+  location: LocationDto;
 }

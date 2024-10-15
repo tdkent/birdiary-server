@@ -18,10 +18,10 @@ export class SightingsService {
   ) {}
   //---- CREATE NEW SIGHTING
   async create(id: number, createSightingDto: CreateSightingDto) {
-    const { bird_id, date, desc, loc } = createSightingDto;
+    const { bird_id, date, desc, location } = createSightingDto;
 
-    if (loc) {
-      await this.locationService.create(id, loc);
+    if (location) {
+      await this.locationService.create(id, location);
     }
 
     return this.databaseService.sighting
@@ -31,9 +31,9 @@ export class SightingsService {
           bird_id,
           date,
           desc,
-          loc_name: loc?.name || null,
+          location_name: location?.name || null,
         },
-        include: { loc: true },
+        include: { location: true },
       })
       .catch((err) => {
         console.log(err);

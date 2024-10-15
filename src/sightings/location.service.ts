@@ -11,7 +11,7 @@ export class LocationService {
     return this.databaseService.location
       .upsert({
         where: {
-          locId: {
+          locationId: {
             user_id: id,
             name: locationDto.name,
           },

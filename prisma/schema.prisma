@@ -59,8 +59,8 @@ model Sighting {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   bird_id Int
   bird Bird @relation(fields: [bird_id], references: [id])
-  loc_name String?
-  loc Location? @relation(fields:[user_id,loc_name], references: [user_id,name])
+  location_name String?
+  location Location? @relation(fields:[user_id,location_name], references: [user_id,name])
   date DateTime @db.Date
   desc String?
 }
@@ -73,5 +73,5 @@ model Location {
   lng Float
   sightings Sighting[]
 
-  @@id(name: "locId",[user_id, name])
+  @@id(name: "locationId",[user_id, name])
 }
