@@ -10,7 +10,6 @@ import { BirdModule } from './bird/bird.module';
 import { BirdController } from './bird/bird.controller';
 import { BirdService } from './bird/bird.service';
 import { ProfileService } from './users/profile.service';
-import { LifeListService } from './sightings/lifelist.service';
 import { SightingsModule } from './sightings/sightings.module';
 import { LocationService } from './sightings/location.service';
 
@@ -23,7 +22,6 @@ import { LocationService } from './sightings/location.service';
     AuthService,
     BirdService,
     ProfileService,
-    LifeListService,
     LocationService,
   ],
 })
