@@ -43,14 +43,26 @@ export class SightingsService {
   }
 
   //---- FETCH ALL SIGHTINGS BY USER
-  async findAll(id: number, get?: GetSightingsDto) {
-    const queryFilter = get.get ?? null;
+  async findAll(id: number, query?: GetSightingsDto) {
+    const queryFilter = query.get ?? null;
+    const locationFilter = query.name ?? null;
 
     try {
-      //---- RETURN SIGHTINGS COUNT BY LOCATION
+      //---- RETURN SIGHTINGS BY SINGLE LOCATION
       if (queryFilter === 'locations') {
+        if (locationFilter) {
+          return this.databaseService.sighting.findMany({
+            where: {
+              user_id: id,
+              location_name: locationFilter,
+            },
+          });
+        }
+
+        //---- RETURN SIGHTINGS COUNT BY LOCATION
         return this.databaseService.sighting.groupBy({
           by: ['location_name'],
+          where: { user_id: id },
           _count: {
             _all: true,
           },

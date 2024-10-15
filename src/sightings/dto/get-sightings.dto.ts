@@ -4,4 +4,7 @@ export class GetSightingsDto {
   @IsOptional()
   @IsEnum(['locations', 'lifelist'], { message: 'Invalid parameter' })
   readonly get?: 'locations' | 'lifelist';
+
+  @IsOptional()
+  readonly name?: string;
 }

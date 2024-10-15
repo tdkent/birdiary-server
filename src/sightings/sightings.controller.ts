@@ -34,13 +34,15 @@ export class SightingsController {
 
   //---- GET '/sightings' :: Fetch all user's sightings
   //---- GET '/sightings?get=locations' :: Fetch count of sightings for each location
+  //---- GET '/sightings?get=locations&name=nameOfLocation' :: Fetch all sightings by location
   //---- GET '/sightings?get=lifelist' :: Fetch user's lifelist
+
   @Get()
   findAll(
     @CurrentUser('id') id: number,
-    @Query(new ValidationPipe()) get?: GetSightingsDto,
+    @Query(new ValidationPipe()) query?: GetSightingsDto,
   ) {
-    return this.sightingsService.findAll(id, get);
+    return this.sightingsService.findAll(id, query);
   }
 
   //---- GET '/sightings/:id' :: Fetch a single sighting
