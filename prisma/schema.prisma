@@ -67,7 +67,7 @@ model Sighting {
 
 model Location {
   user_id Int
-  user User @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
   name String
   lat Float
   lng Float
