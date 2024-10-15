@@ -32,8 +32,8 @@ model Profile {
 model Favorite {
   user_id Int @id @unique
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  bird_id Int
-  bird Bird @relation(fields:[bird_id], references: [id])
+  bird_id Int?
+  bird Bird? @relation(fields:[bird_id], references: [id])
 }
 
 model Bird {

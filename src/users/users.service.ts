@@ -21,9 +21,14 @@ export class UsersService {
           email: createUserDto.email,
           password: await hashPassword(createUserDto.password),
           profile: { create: {} },
+          fav_bird: {
+            create: {
+              bird_id: null,
+            },
+          },
         },
         omit: { password: true },
-        include: { profile: true },
+        include: { profile: true, fav_bird: true },
       })
       .catch((err) => {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {

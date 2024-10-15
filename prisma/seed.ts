@@ -33,6 +33,13 @@ async function main() {
       location: '',
     },
   });
+
+  await prisma.favorite.create({
+    data: {
+      user_id: 1,
+      bird_id: null,
+    },
+  });
 }
 
 main()
