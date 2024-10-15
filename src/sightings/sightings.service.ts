@@ -8,6 +8,7 @@ import { DatabaseService } from 'src/database/database.service';
 import { LocationService } from './location.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
+import { GetSightingsDto } from './dto/get-sightings.dto';
 import ErrorMessages from 'src/common/errors/errors.enum';
 
 @Injectable()
@@ -42,14 +43,36 @@ export class SightingsService {
   }
 
   //---- FETCH ALL SIGHTINGS BY USER
-  async findAll(id: number) {
-    return this.databaseService.sighting
-      .findMany({
+  async findAll(id: number, get?: GetSightingsDto) {
+    const queryFilter = get.get ?? null;
+
+    try {
+      //---- RETURN SIGHTINGS COUNT BY LOCATION
+      if (queryFilter === 'locations') {
+        return this.databaseService.sighting.groupBy({
+          by: ['location_name'],
+          _count: {
+            _all: true,
+          },
+        });
+      }
+
+      //---- RETURN USER'S LIFELIST
+      if (queryFilter === 'lifelist') {
+        return this.databaseService.sighting.findMany({
+          where: { user_id: id },
+          distinct: ['bird_id'],
+        });
+      }
+
+      //---- RETURN ALL USER'S SIGHTINGS
+      return this.databaseService.sighting.findMany({
         where: { user_id: id },
-      })
-      .catch(() => {
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   //---- FETCH A SIGHTING

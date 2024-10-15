@@ -7,11 +7,13 @@ import {
   Patch,
   Param,
   ParseIntPipe,
+  Query,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { SightingsService } from './sightings.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
+import { GetSightingsDto } from './dto/get-sightings.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -35,15 +37,26 @@ export class SightingsController {
   }
 
   //---- GET '/sightings' :: Fetch all user's sightings
+  //---- GET '/sightings?get=locations' :: Fetch count of sightings for each location
+  //---- GET '/sightings?get=lifelist' :: Fetch user's lifelist
   @Get()
-  findAll(@CurrentUser('id') id: number) {
-    return this.sightingsService.findAll(id);
+  findAll(
+    @CurrentUser('id') id: number,
+    @Query(new ValidationPipe()) get?: GetSightingsDto,
+  ) {
+    return this.sightingsService.findAll(id, get);
   }
 
-  //---- GET '/sightings/locations' :: Fetch user's life list
-  @Get('locations')
+  //---- GET '/sightings?get=locations' :: Fetch user's life list
+  @Get('')
   findAllLocations() {
     return this.sightingsService.findAllLocations();
+  }
+
+  //---- GET '/sightings?get=lifelist' :: Fetch user's life list
+  @Get(':id/lifelist')
+  findLifeList(@CurrentUser('id') id: number) {
+    return this.lifeListService.findLifeList(id);
   }
 
   //---- GET '/sightings/:id' :: Fetch a single sighting
@@ -53,12 +66,6 @@ export class SightingsController {
     @Param('id', ParseIntPipe) sightingId: number,
   ) {
     return this.sightingsService.findOne(userId, sightingId);
-  }
-
-  //---- GET '/sightings/:id/lifelist' :: Fetch user's life list
-  @Get('/:id/lifelist')
-  findLifeList(@CurrentUser('id') id: number) {
-    return this.lifeListService.findLifeList(id);
   }
 
   //---- PATCH 'sightings/:id' :: Update a single sighting
