@@ -45,30 +45,8 @@ export class SightingsService {
   //---- FETCH ALL SIGHTINGS BY USER
   async findAll(id: number, query?: GetSightingsDto) {
     const queryFilter = query.get ?? null;
-    const locationFilter = query.name ?? null;
 
     try {
-      //---- RETURN SIGHTINGS BY SINGLE LOCATION
-      if (queryFilter === 'locations') {
-        if (locationFilter) {
-          return this.databaseService.sighting.findMany({
-            where: {
-              user_id: id,
-              location_name: locationFilter,
-            },
-          });
-        }
-
-        //---- RETURN SIGHTINGS COUNT BY LOCATION
-        return this.databaseService.sighting.groupBy({
-          by: ['location_name'],
-          where: { user_id: id },
-          _count: {
-            _all: true,
-          },
-        });
-      }
-
       //---- RETURN USER'S LIFELIST
       if (queryFilter === 'lifelist') {
         return this.databaseService.sighting.findMany({
@@ -85,6 +63,36 @@ export class SightingsService {
       console.log(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
+  }
+
+  //---- RETURN SIGHTINGS COUNT BY LOCATION
+  async groupAllLocations(userId: number) {
+    return this.databaseService.sighting
+      .groupBy({
+        by: ['location_name'],
+        where: { user_id: userId },
+        _count: {
+          _all: true,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+  }
+
+  async findSightingsBySingleLocation(userId: number, location: string) {
+    return this.databaseService.sighting
+      .findMany({
+        where: {
+          user_id: userId,
+          location_name: location,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
   }
 
   //---- FETCH A SIGHTING

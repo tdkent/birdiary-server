@@ -33,16 +33,28 @@ export class SightingsController {
   }
 
   //---- GET '/sightings' :: Fetch all user's sightings
-  //---- GET '/sightings?get=locations' :: Fetch count of sightings for each location
-  //---- GET '/sightings?get=locations&name=nameOfLocation' :: Fetch all sightings by location
   //---- GET '/sightings?get=lifelist' :: Fetch user's lifelist
-
   @Get()
   findAll(
     @CurrentUser('id') id: number,
     @Query(new ValidationPipe()) query?: GetSightingsDto,
   ) {
     return this.sightingsService.findAll(id, query);
+  }
+
+  //---- GET '/sightings/locations' :: Fetch all user's locations with sighting count
+  @Get('locations')
+  groupAllLocations(@CurrentUser('id') id: number) {
+    return this.sightingsService.groupAllLocations(id);
+  }
+
+  //---- GET '/sightings/locations/id' :: Fetch all sightings by location
+  @Get('locations/:id')
+  findAllByLocation(
+    @CurrentUser('id') id: number,
+    @Param('id') locationId: string,
+  ) {
+    return this.sightingsService.findSightingsBySingleLocation(id, locationId);
   }
 
   //---- GET '/sightings/:id' :: Fetch a single sighting
