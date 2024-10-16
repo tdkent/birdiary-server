@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
@@ -15,9 +13,8 @@ import { LocationService } from './sightings/location.service';
 
 @Module({
   imports: [UsersModule, DatabaseModule, BirdModule, SightingsModule],
-  controllers: [AppController, UsersController, BirdController],
+  controllers: [UsersController, BirdController],
   providers: [
-    AppService,
     UsersService,
     AuthService,
     BirdService,

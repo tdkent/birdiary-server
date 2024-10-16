@@ -40,13 +40,6 @@ export class UsersService {
       });
   }
 
-  //---- FETCH ALL USERS
-  findAll() {
-    return this.databaseService.user.findMany({
-      omit: { password: true },
-    });
-  }
-
   //---- DELETE USER (CASCADES PROFILE, FAVORITE)
   //? Note: Prisma throws an unhandled error when using
   //? delete method on a resource that no longer exists.

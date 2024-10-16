@@ -161,8 +161,4 @@ export class SightingsService {
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
-
-  findAllLocations() {
-    return this.databaseService.location.findMany();
-  }
 }

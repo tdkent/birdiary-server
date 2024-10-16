@@ -57,16 +57,11 @@ export class ProfileService {
   }
 
   //---- UPSERT FAVORITE BIRD
-  async upsertFavoriteBird(id: number, birdId: number) {
-    //TODO: error handling for out of range bird ids
+  async updateFavoriteBird(id: number, birdId: number) {
     return this.databaseService.favorite
-      .upsert({
+      .update({
         where: { user_id: id },
-        update: { bird_id: birdId },
-        create: {
-          user_id: id,
-          bird_id: birdId,
-        },
+        data: { bird_id: birdId },
       })
       .catch((err) => {
         if (err instanceof Prisma.PrismaClientKnownRequestError) {

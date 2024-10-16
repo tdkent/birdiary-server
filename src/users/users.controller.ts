@@ -7,7 +7,6 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  Put,
   Query,
   UseGuards,
   ValidationPipe,
@@ -34,13 +33,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  //---- GET '/users' :: FETCH ALL USERS
-  // TODO: ADD ADMIN GUARD
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
   //---- DELETE '/users' :: DELETE A USER
   @UseGuards(AuthGuard)
   @Delete()
@@ -49,7 +41,7 @@ export class UsersController {
   }
 
   //---- POST '/auth/signin' :: SIGN IN A USER
-  @Post('/auth/signin')
+  @Post('auth/signin')
   @HttpCode(200)
   signin(@Body(ValidationPipe) loginUser: CreateUserDto) {
     return this.authService.signin(loginUser);
@@ -57,15 +49,14 @@ export class UsersController {
 
   //---- GET '/users/profile' :: FETCH A SINGLE USER
   @UseGuards(AuthGuard)
-  @Get('/profile')
+  @Get('profile')
   findOne(@CurrentUser('id') id: number) {
     return this.profileService.findById(id);
   }
 
   //---- PATCH '/users/profile' :: UPDATE A SINGLE USER
-  // TODO: replace with PUT
   @UseGuards(AuthGuard)
-  @Patch('/profile')
+  @Patch('profile')
   update(
     @CurrentUser('id') id: number,
     @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,
@@ -73,13 +64,13 @@ export class UsersController {
     return this.profileService.updateProfile(id, updateProfileDto);
   }
 
-  //---- PUT '/users/profile/fav' :: CREATE/UPDATE A FAVORITE BIRD
+  //---- PUT '/users/profile/fav' :: UPDATE USER'S FAVORITE BIRD
   @UseGuards(AuthGuard)
-  @Put('/profile/fav')
+  @Patch('profile/fav')
   upsertFavoriteBird(
     @CurrentUser('id') id: number,
     @Query('birdid', ParseIntPipe) birdId: number,
   ) {
-    return this.profileService.upsertFavoriteBird(id, birdId);
+    return this.profileService.updateFavoriteBird(id, birdId);
   }
 }
