@@ -12,8 +12,10 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { SightingsService } from './sightings.service';
+import { LocationService } from './location.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { GetSightingsDto } from './dto/get-sightings.dto';
+import { LocationDto } from './dto/create-location.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -21,7 +23,10 @@ import { CurrentUser } from '../common/decorators/current-user.decorator';
 @UseGuards(AuthGuard)
 @Controller('sightings')
 export class SightingsController {
-  constructor(private readonly sightingsService: SightingsService) {}
+  constructor(
+    private readonly sightingsService: SightingsService,
+    private readonly locationsService: LocationService,
+  ) {}
 
   //---- POST '/sightings' :: Create a new bird sighting
   @Post()
@@ -55,6 +60,16 @@ export class SightingsController {
     @Param('id', ParseIntPipe) locationId: number,
   ) {
     return this.sightingsService.findSightingsBySingleLocation(id, locationId);
+  }
+
+  //---- PATCH 'sightings/locations/:id' :: Update a single location
+  @Patch('locations/:id')
+  updateLocation(
+    @CurrentUser('id') id: number,
+    @Param('id', ParseIntPipe) locationId: number,
+    @Body(ValidationPipe) locationDto: LocationDto,
+  ) {
+    return this.locationsService.updateLocation(id, locationId, locationDto);
   }
 
   //---- GET '/sightings/:id' :: Fetch a single sighting
