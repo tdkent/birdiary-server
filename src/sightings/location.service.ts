@@ -7,17 +7,20 @@ import ErrorMessages from 'src/common/errors/errors.enum';
 export class LocationService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async create(id: number, locationDto: LocationDto) {
+  //---- CREATE NEW LOCATION IF IT DOES NOT EXIST, RETURN ID
+  async upsertUserLocation(userId: number, locationDto: LocationDto) {
     return this.databaseService.location
       .upsert({
         where: {
-          locationId: {
-            user_id: id,
-            name: locationDto.name,
-          },
+          user_id: userId,
+          name: locationDto.name,
         },
         update: {},
-        create: { user_id: id, ...locationDto },
+        create: {
+          user_id: userId,
+          ...locationDto,
+        },
+        select: { id: true },
       })
       .catch((err) => {
         console.log(err);

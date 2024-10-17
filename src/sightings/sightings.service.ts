@@ -20,9 +20,10 @@ export class SightingsService {
   //---- CREATE NEW SIGHTING
   async create(id: number, createSightingDto: CreateSightingDto) {
     const { bird_id, date, desc, location } = createSightingDto;
+    let locationId: { id: number } | null = null;
 
     if (location) {
-      await this.locationService.create(id, location);
+      locationId = await this.locationService.upsertUserLocation(id, location);
     }
 
     return this.databaseService.sighting
@@ -32,7 +33,7 @@ export class SightingsService {
           bird_id,
           date,
           desc,
-          location_name: location?.name || null,
+          location_id: locationId?.id || null,
         },
         include: { location: true },
       })
@@ -69,7 +70,7 @@ export class SightingsService {
   async groupAllLocations(userId: number) {
     return this.databaseService.sighting
       .groupBy({
-        by: ['location_name'],
+        by: ['location_id'],
         where: { user_id: userId },
         _count: {
           _all: true,
@@ -81,12 +82,13 @@ export class SightingsService {
       });
   }
 
-  async findSightingsBySingleLocation(userId: number, location: string) {
+  //---- FIND ALL USER'S SIGHTINGS BY SINGLE LOCATION
+  async findSightingsBySingleLocation(userId: number, locationId: number) {
     return this.databaseService.sighting
       .findMany({
         where: {
           user_id: userId,
-          location_name: location,
+          location_id: locationId,
         },
       })
       .catch((err) => {
@@ -95,7 +97,7 @@ export class SightingsService {
       });
   }
 
-  //---- FETCH A SIGHTING
+  //---- FIND A SINGLE SIGHTING
   async findOne(userId: number, sightingId: number) {
     return this.databaseService.sighting
       .findFirstOrThrow({
@@ -115,7 +117,7 @@ export class SightingsService {
 
   //---- UPDATE A SIGHTING
   // result is an object with updated count :: { count: 0 } or { count: 1 }
-  //? updateMany is required to have multiple WHERE clauses
+  //? using updateMany in order to have multiple WHERE clauses
   async update(
     userId: number,
     sightingId: number,
@@ -142,7 +144,7 @@ export class SightingsService {
 
   //---- DELETE A SIGHTING
   // result is an object with updated count :: { count: 0 } or { count: 1 }
-  //? deleteMany is required to have multiple WHERE clauses
+  //? using deleteMany in order to have multiple WHERE clauses
   async remove(userId: number, sightingId: number) {
     return this.databaseService.sighting
       .deleteMany({

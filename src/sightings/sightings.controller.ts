@@ -48,11 +48,11 @@ export class SightingsController {
     return this.sightingsService.groupAllLocations(id);
   }
 
-  //---- GET '/sightings/locations/id' :: Fetch all sightings by location
+  //---- GET '/sightings/locations/:id' :: Fetch all user's sightings by location
   @Get('locations/:id')
   findAllByLocation(
     @CurrentUser('id') id: number,
-    @Param('id') locationId: string,
+    @Param('id', ParseIntPipe) locationId: number,
   ) {
     return this.sightingsService.findSightingsBySingleLocation(id, locationId);
   }
