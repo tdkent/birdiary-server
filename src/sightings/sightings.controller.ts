@@ -72,6 +72,15 @@ export class SightingsController {
     return this.locationsService.updateLocation(id, locationId, locationDto);
   }
 
+  //---- DELETE 'sightings/locations/:id' :: Remove a single location
+  @Delete('locations/:id')
+  deleteLocation(
+    @CurrentUser('id') id: number,
+    @Param('id', ParseIntPipe) locationId: number,
+  ) {
+    return this.locationsService.removeLocation(id, locationId);
+  }
+
   //---- GET '/sightings/:id' :: Fetch a single sighting
   @Get(':id')
   findOne(

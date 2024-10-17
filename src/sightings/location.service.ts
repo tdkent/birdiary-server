@@ -62,4 +62,29 @@ export class LocationService {
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
+
+  //---- DELETE A SINGLE LOCATION
+  //? Sets location_id to null in related Sighting records
+  async removeLocation(userId: number, locationId: number) {
+    return this.databaseService.location
+      .deleteMany({
+        where: {
+          user_id: userId,
+          id: locationId,
+        },
+      })
+      .then((res) => {
+        if (!res.count) {
+          throw new NotFoundException();
+        }
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err instanceof NotFoundException) {
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
+        }
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+  }
 }
