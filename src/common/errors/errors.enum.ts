@@ -5,6 +5,7 @@ enum ErrorMessages {
   IncorrectPassword = 'Incorrect password',
   BadRequest = 'Invalid request',
   EmailIsRegistered = 'Submitted email already registered',
+  AccessForbidden = 'You do not have permission to access this resource',
 }
 
 export default ErrorMessages;

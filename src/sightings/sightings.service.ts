@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -84,18 +85,38 @@ export class SightingsService {
   }
 
   //---- FIND ALL USER'S SIGHTINGS BY SINGLE LOCATION
+  //? Location may exist but have no associated sightings (no error)
+  //? Location may not exist or may not be associated with requesting user (error)
   async findSightingsBySingleLocation(userId: number, locationId: number) {
-    return this.databaseService.sighting
-      .findMany({
+    try {
+      // Check if the location exists
+      const locationData = await this.databaseService.location.findFirstOrThrow(
+        { where: { id: locationId } },
+      );
+
+      // Check if the location is related to the current user
+      if (locationData.user_id !== userId) {
+        throw new ForbiddenException();
+      }
+
+      return this.databaseService.sighting.findMany({
         where: {
           user_id: userId,
           location_id: locationId,
         },
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+    } catch (err) {
+      console.log(err);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
+        }
+      }
+      if (err instanceof ForbiddenException) {
+        throw new ForbiddenException(ErrorMessages.AccessForbidden);
+      }
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   //---- FIND A SINGLE SIGHTING
