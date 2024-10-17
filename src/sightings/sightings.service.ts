@@ -4,12 +4,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { DatabaseService } from 'src/database/database.service';
+import { DatabaseService } from '../database/database.service';
 import { LocationService } from './location.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { GetSightingsDto } from './dto/get-sightings.dto';
-import ErrorMessages from 'src/common/errors/errors.enum';
+import { UpdateSighting } from '../common/models/update-sighting.model';
+import ErrorMessages from '../common/errors/errors.enum';
 
 @Injectable()
 export class SightingsService {
@@ -123,9 +124,23 @@ export class SightingsService {
     sightingId: number,
     updateSightingDto: UpdateSightingDto,
   ) {
+    const { location, ...requestData } = updateSightingDto;
+    const updateSightingData: UpdateSighting = requestData;
+    let locationId: { id: number } | null = null;
+
+    if (location) {
+      locationId = await this.locationService.upsertUserLocation(
+        userId,
+        location,
+      );
+      updateSightingData['location_id'] = locationId.id;
+    }
+
     return this.databaseService.sighting
       .updateMany({
-        data: updateSightingDto,
+        data: {
+          ...updateSightingData,
+        },
         where: { id: sightingId, user_id: userId },
       })
       .then((res) => {
@@ -135,6 +150,7 @@ export class SightingsService {
         return res;
       })
       .catch((err) => {
+        console.log(err);
         if (err instanceof NotFoundException) {
           throw new NotFoundException(ErrorMessages.ResourceNotFound);
         }
