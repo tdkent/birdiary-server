@@ -7,14 +7,12 @@ import {
   Patch,
   Param,
   ParseIntPipe,
-  Query,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { SightingsService } from './sightings.service';
 import { LocationService } from './location.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
-import { GetSightingsDto } from './dto/get-sightings.dto';
 import { LocationDto } from './dto/create-location.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
@@ -38,13 +36,15 @@ export class SightingsController {
   }
 
   //---- GET '/sightings' :: Fetch all user's sightings
-  //---- GET '/sightings?get=lifelist' :: Fetch user's lifelist
   @Get()
-  findAll(
-    @CurrentUser('id') id: number,
-    @Query(new ValidationPipe()) query?: GetSightingsDto,
-  ) {
-    return this.sightingsService.findAll(id, query);
+  findAll(@CurrentUser('id') id: number) {
+    return this.sightingsService.findAll(id);
+  }
+
+  //---- GET '/sightings/lifelist' :: Fetch user's lifelist
+  @Get('lifelist')
+  findLifeList(@CurrentUser('id') id: number) {
+    return this.sightingsService.findLifeList(id);
   }
 
   //---- GET '/sightings/locations' :: Fetch all user's locations with sighting count
@@ -82,6 +82,7 @@ export class SightingsController {
   }
 
   //---- GET '/sightings/:id' :: Fetch a single sighting
+  //! Remove this route?
   @Get(':id')
   findOne(
     @CurrentUser('id') userId: number,

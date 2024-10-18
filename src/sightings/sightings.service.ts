@@ -9,7 +9,6 @@ import { DatabaseService } from '../database/database.service';
 import { LocationService } from './location.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
-import { GetSightingsDto } from './dto/get-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
 
@@ -45,27 +44,32 @@ export class SightingsService {
       });
   }
 
-  //---- FETCH ALL SIGHTINGS BY USER
-  async findAll(id: number, query?: GetSightingsDto) {
-    const queryFilter = query.get ?? null;
-
-    try {
-      //---- RETURN USER'S LIFELIST
-      if (queryFilter === 'lifelist') {
-        return this.databaseService.sighting.findMany({
-          where: { user_id: id },
-          distinct: ['bird_id'],
-        });
-      }
-
-      //---- RETURN ALL USER'S SIGHTINGS
-      return this.databaseService.sighting.findMany({
+  //---- GET ALL USER'S SIGHTINGS
+  async findAll(id: number) {
+    return this.databaseService.sighting
+      .findMany({
         where: { user_id: id },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
-    } catch (err) {
-      console.log(err);
-      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-    }
+  }
+
+  //---- FIND USER'S LIFE LIST
+  async findLifeList(id: number) {
+    return this.databaseService.sighting
+      .findMany({
+        where: { user_id: id },
+        distinct: ['bird_id'],
+        orderBy: {
+          date: 'asc',
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
   }
 
   //---- RETURN SIGHTINGS COUNT BY LOCATION

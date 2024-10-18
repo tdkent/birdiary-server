@@ -47,14 +47,14 @@ export class UsersController {
     return this.authService.signin(loginUser);
   }
 
-  //---- GET '/users/profile' :: FETCH A SINGLE USER
+  //---- GET '/users/profile' :: FETCH USER PROFILE
   @UseGuards(AuthGuard)
   @Get('profile')
   findOne(@CurrentUser('id') id: number) {
     return this.profileService.findById(id);
   }
 
-  //---- PATCH '/users/profile' :: UPDATE A SINGLE USER
+  //---- PATCH '/users/profile' :: UPDATE USER PROFILE
   @UseGuards(AuthGuard)
   @Patch('profile')
   update(
