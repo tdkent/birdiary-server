@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   ParseIntPipe,
+  Query,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { LocationService } from './location.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { LocationDto } from './dto/create-location.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
+import { GroupSightingDto } from './dto/group-sighting.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 
@@ -35,25 +37,25 @@ export class SightingsController {
     return this.sightingsService.create(id, createSightingDto);
   }
 
-  //---- GET '/sightings' :: Fetch all user's sightings
+  //---- GET '/sightings' :: Find all user's sightings
+  //---- GET '/sightings?groupby=date' :: Group user's sightings by date
+  //---- GET '/sightings?groupby=bird_id' :: Group user's sightings by bird
+  //---- GET '/sightings?groupby=location_id' :: Group user's sightings by location
   @Get()
-  findAll(@CurrentUser('id') id: number) {
-    return this.sightingsService.findAll(id);
+  findAllOrGroup(
+    @CurrentUser('id') id: number,
+    @Query(new ValidationPipe()) query: GroupSightingDto,
+  ) {
+    return this.sightingsService.findAllOrGroup(id, query);
   }
 
-  //---- GET '/sightings/lifelist' :: Fetch user's lifelist
+  //---- GET '/sightings/lifelist' :: Find user's lifelist
   @Get('lifelist')
   findLifeList(@CurrentUser('id') id: number) {
     return this.sightingsService.findLifeList(id);
   }
 
-  //---- GET '/sightings/locations' :: Fetch all user's locations with sighting count
-  @Get('locations')
-  groupAllLocations(@CurrentUser('id') id: number) {
-    return this.sightingsService.groupAllLocations(id);
-  }
-
-  //---- GET '/sightings/locations/:id' :: Fetch all user's sightings by location
+  //---- GET '/sightings/locations/:id' :: Find all user's sightings grouped by location
   @Get('locations/:id')
   findAllByLocation(
     @CurrentUser('id') id: number,
@@ -81,7 +83,7 @@ export class SightingsController {
     return this.locationsService.removeLocation(id, locationId);
   }
 
-  //---- GET '/sightings/:id' :: Fetch a single sighting
+  //---- GET '/sightings/:id' :: Find a single sighting
   //! Remove this route?
   @Get(':id')
   findOne(

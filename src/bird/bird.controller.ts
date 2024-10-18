@@ -12,7 +12,6 @@ export class BirdController {
   }
 
   //---- GET '/bird/:id' :: FETCH A SINGLE BIRD
-  //! Delete this route?
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.birdService.findOne(id);

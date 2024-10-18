@@ -9,6 +9,7 @@ import { DatabaseService } from '../database/database.service';
 import { LocationService } from './location.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
+import { GroupSightingDto } from './dto/group-sighting.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
 
@@ -45,15 +46,27 @@ export class SightingsService {
   }
 
   //---- GET ALL USER'S SIGHTINGS
-  async findAll(id: number) {
-    return this.databaseService.sighting
-      .findMany({
+  async findAllOrGroup(id: number, query: GroupSightingDto) {
+    try {
+      if (query.groupby) {
+        return this.databaseService.sighting.groupBy({
+          by:
+            query.groupby === 'date'
+              ? ['date']
+              : query.groupby === 'bird_id'
+                ? ['bird_id']
+                : ['location_id'],
+          where: { user_id: id },
+          _count: { _all: true },
+        });
+      }
+      return this.databaseService.sighting.findMany({
         where: { user_id: id },
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   //---- FIND USER'S LIFE LIST
@@ -64,22 +77,6 @@ export class SightingsService {
         distinct: ['bird_id'],
         orderBy: {
           date: 'asc',
-        },
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
-  }
-
-  //---- RETURN SIGHTINGS COUNT BY LOCATION
-  async groupAllLocations(userId: number) {
-    return this.databaseService.sighting
-      .groupBy({
-        by: ['location_id'],
-        where: { user_id: userId },
-        _count: {
-          _all: true,
         },
       })
       .catch((err) => {
