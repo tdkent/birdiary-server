@@ -5,8 +5,10 @@ import {
   IsOptional,
   IsString,
   Max,
+  MaxDate,
   MaxLength,
   Min,
+  MinDate,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -21,6 +23,8 @@ export class CreateSightingDto {
 
   @IsDate()
   @Type(() => Date)
+  @MinDate(new Date('1950-01-01'))
+  @MaxDate(new Date())
   readonly date: Date;
 
   @IsOptional()
