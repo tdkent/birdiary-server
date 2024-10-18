@@ -13,6 +13,7 @@ import { GroupSightingDto } from './dto/group-sighting.dto';
 import { GetSightingByDateDto } from './dto/get-sighting-by-date.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
+import { BIRD_COUNT } from 'src/common/constants/bird.constants';
 
 @Injectable()
 export class SightingsService {
@@ -93,6 +94,24 @@ export class SightingsService {
         where: {
           user_id: userId,
           date: date.date,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+  }
+
+  //---- FIND ALL USER'S SIGHTINGS BY SINGLE BIRD
+  async findSightingsBySingleBird(userId: number, birdId: number) {
+    if (birdId < 1 || birdId > BIRD_COUNT) {
+      throw new NotFoundException(ErrorMessages.ResourceNotFound);
+    }
+    return this.databaseService.sighting
+      .findMany({
+        where: {
+          user_id: userId,
+          bird_id: birdId,
         },
       })
       .catch((err) => {

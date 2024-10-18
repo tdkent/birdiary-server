@@ -65,6 +65,15 @@ export class SightingsController {
     return this.sightingsService.findSightingsBySingleDate(id, params);
   }
 
+  //---- GET '/sightings/date/:date' :: Find all user's sightings for provided date
+  @Get('bird/:id')
+  findAllByBird(
+    @CurrentUser('id') id: number,
+    @Param('id', ParseIntPipe) birdId: number,
+  ) {
+    return this.sightingsService.findSightingsBySingleBird(id, birdId);
+  }
+
   //---- GET '/sightings/locations/:id' :: Find all user's sightings for provided location
   @Get('locations/:id')
   findAllByLocation(
