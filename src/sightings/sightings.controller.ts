@@ -17,6 +17,7 @@ import { CreateSightingDto } from './dto/create-sighting.dto';
 import { LocationDto } from './dto/create-location.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { GroupSightingDto } from './dto/group-sighting.dto';
+import { GetSightingByDateDto } from './dto/get-sighting-by-date.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 
@@ -55,7 +56,16 @@ export class SightingsController {
     return this.sightingsService.findLifeList(id);
   }
 
-  //---- GET '/sightings/locations/:id' :: Find all user's sightings grouped by location
+  //---- GET '/sightings/date/:date' :: Find all user's sightings for provided date
+  @Get('date/:date')
+  findAllByDate(
+    @CurrentUser('id') id: number,
+    @Param() params: GetSightingByDateDto,
+  ) {
+    return this.sightingsService.findSightingsBySingleDate(id, params);
+  }
+
+  //---- GET '/sightings/locations/:id' :: Find all user's sightings for provided location
   @Get('locations/:id')
   findAllByLocation(
     @CurrentUser('id') id: number,

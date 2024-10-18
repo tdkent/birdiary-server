@@ -1,5 +1,5 @@
 import {
-  IsDateString,
+  IsDate,
   IsInt,
   IsObject,
   IsOptional,
@@ -19,7 +19,8 @@ export class CreateSightingDto {
   @Max(BIRD_COUNT)
   readonly bird_id: number;
 
-  @IsDateString()
+  @IsDate()
+  @Type(() => Date)
   readonly date: Date;
 
   @IsOptional()
