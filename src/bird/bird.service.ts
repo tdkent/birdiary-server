@@ -26,11 +26,12 @@ export class BirdService {
   async findAll() {
     return this.databaseService.bird
       .findMany({
-        include: { species: true },
+        include: { family: true },
         omit: { spec_id: true },
         take: 3,
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
@@ -40,7 +41,7 @@ export class BirdService {
     return this.databaseService.bird
       .findUniqueOrThrow({
         where: { id },
-        include: { species: true },
+        include: { family: true },
         omit: { spec_id: true },
       })
       .then(async (prismaRes) => {
@@ -60,6 +61,7 @@ export class BirdService {
         return { ...prismaRes, images: imgArr || [] };
       })
       .catch((err) => {
+        console.log(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
             throw new NotFoundException(ErrorMessages.ResourceNotFound);

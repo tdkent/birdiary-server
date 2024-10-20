@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../src/common/helpers/auth.helpers';
 import { TEST_USER_PASSWORD } from '../src/common/constants/auth.constants';
 import { birds } from '../db/birds.json';
-import { species } from '../db/species.json';
+import { families } from '../db/families.json';
 
 const prisma = new PrismaClient();
 
@@ -11,8 +11,8 @@ async function main() {
   //! limit birds to 20 records
   const slicedBirds = birds.slice(0, 20);
 
-  await prisma.species.createMany({
-    data: species,
+  await prisma.family.createMany({
+    data: families,
   });
 
   await prisma.bird.createMany({

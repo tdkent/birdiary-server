@@ -28,6 +28,7 @@ export class ProfileService {
         omit: { password: true },
       })
       .catch((err) => {
+        console.log(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
             throw new NotFoundException(ErrorMessages.UserNotFound);
@@ -45,6 +46,7 @@ export class ProfileService {
         data: updateProfileDto,
       })
       .catch((err) => {
+        console.log(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err instanceof Prisma.PrismaClientKnownRequestError) {
             if (err.code === 'P2025') {
@@ -64,6 +66,7 @@ export class ProfileService {
         data: { bird_id: birdId },
       })
       .catch((err) => {
+        console.log(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2003') {
             throw new BadRequestException(ErrorMessages.BadRequest);

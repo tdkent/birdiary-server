@@ -36,6 +36,7 @@ export class AuthService {
       const token = await this.jwtService.signAsync(payload);
       return { id: user.id, email: user.email, token };
     } catch (err) {
+      console.log(err);
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === 'P2025') {
           throw new NotFoundException(ErrorMessages.UserNotFound);

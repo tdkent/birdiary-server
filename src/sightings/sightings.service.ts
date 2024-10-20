@@ -164,6 +164,7 @@ export class SightingsService {
         },
       })
       .catch((err) => {
+        console.log(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
             throw new NotFoundException(ErrorMessages.ResourceNotFound);
@@ -230,6 +231,7 @@ export class SightingsService {
         return res;
       })
       .catch((err) => {
+        console.log(err);
         if (err instanceof NotFoundException) {
           throw new NotFoundException(ErrorMessages.ResourceNotFound);
         }

@@ -31,9 +31,10 @@ export class UsersService {
         include: { profile: true, fav_bird: true },
       })
       .catch((err) => {
+        console.log(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2002') {
-            throw new BadRequestException(ErrorMessages.BadRequest);
+            throw new BadRequestException(ErrorMessages.EmailIsRegistered);
           }
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
@@ -50,7 +51,8 @@ export class UsersService {
         where: { id },
         select: { id: true },
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
