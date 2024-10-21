@@ -56,7 +56,7 @@ export class SightingsController {
     return this.sightingsService.findLifeList(id);
   }
 
-  //---- GET '/sightings/date/:date' :: Find all user's sightings for provided date
+  //---- GET '/sightings/date/:date' :: Find all user's sightings by single date
   @Get('date/:date')
   findAllByDate(
     @CurrentUser('id') id: number,
@@ -65,7 +65,7 @@ export class SightingsController {
     return this.sightingsService.findSightingsBySingleDate(id, params);
   }
 
-  //---- GET '/sightings/date/:date' :: Find all user's sightings for provided date
+  //---- GET '/sightings/date/:date' :: Find all user's sightings by single bird
   @Get('bird/:id')
   findAllByBird(
     @CurrentUser('id') id: number,
@@ -74,7 +74,7 @@ export class SightingsController {
     return this.sightingsService.findSightingsBySingleBird(id, birdId);
   }
 
-  //---- GET '/sightings/locations/:id' :: Find all user's sightings for provided location
+  //---- GET '/sightings/locations/:id' :: Find all user's sightings by single location
   @Get('locations/:id')
   findAllByLocation(
     @CurrentUser('id') id: number,
@@ -83,23 +83,14 @@ export class SightingsController {
     return this.sightingsService.findSightingsBySingleLocation(id, locationId);
   }
 
-  //---- PATCH 'sightings/locations/:id' :: Update a single location
+  //---- PATCH 'sightings/locations/:id' :: Upsert location, update Sighting
   @Patch('locations/:id')
   updateLocation(
     @CurrentUser('id') id: number,
     @Param('id', ParseIntPipe) locationId: number,
     @Body(ValidationPipe) locationDto: LocationDto,
   ) {
-    return this.locationsService.updateLocation(id, locationId, locationDto);
-  }
-
-  //---- DELETE 'sightings/locations/:id' :: Remove a single location
-  @Delete('locations/:id')
-  deleteLocation(
-    @CurrentUser('id') id: number,
-    @Param('id', ParseIntPipe) locationId: number,
-  ) {
-    return this.locationsService.removeLocation(id, locationId);
+    return this.locationsService.update(id, locationId, locationDto);
   }
 
   //---- GET '/sightings/:id' :: Find a single sighting

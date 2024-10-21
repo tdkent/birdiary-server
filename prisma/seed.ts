@@ -23,21 +23,17 @@ async function main() {
     data: {
       email: 'tim@tim.me',
       password: hashedPassword,
-    },
-  });
-
-  await prisma.profile.create({
-    data: {
-      user_id: 1,
-      name: '',
-      location: '',
-    },
-  });
-
-  await prisma.favorite.create({
-    data: {
-      user_id: 1,
-      bird_id: null,
+      profile: {
+        create: {
+          name: '',
+          location: '',
+        },
+      },
+      fav_bird: {
+        create: {
+          bird_id: null,
+        },
+      },
     },
   });
 }

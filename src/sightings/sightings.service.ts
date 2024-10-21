@@ -1,5 +1,4 @@
 import {
-  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -25,13 +24,11 @@ export class SightingsService {
   async create(id: number, createSightingDto: CreateSightingDto) {
     const { bird_id, date, desc, location } = createSightingDto;
     let locationId: { id: number } | null = null;
-
-    if (location) {
-      locationId = await this.locationService.upsertUserLocation(id, location);
-    }
-
-    return this.databaseService.sighting
-      .create({
+    try {
+      if (location) {
+        locationId = await this.locationService.upsert(location);
+      }
+      return this.databaseService.sighting.create({
         data: {
           user_id: id,
           bird_id,
@@ -40,11 +37,11 @@ export class SightingsService {
           location_id: locationId?.id || null,
         },
         include: { location: true },
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   //---- GET ALL USER'S SIGHTINGS
@@ -55,7 +52,7 @@ export class SightingsService {
           by:
             query.groupby === 'date'
               ? ['date']
-              : query.groupby === 'bird_id'
+              : query.groupby === 'bird'
                 ? ['bird_id']
                 : ['location_id'],
           where: { user_id: id },
@@ -121,20 +118,8 @@ export class SightingsService {
   }
 
   //---- FIND ALL USER'S SIGHTINGS BY SINGLE LOCATION
-  //? Location may exist but have no associated sightings (no error)
-  //? Location may not exist or may not be associated with requesting user (error)
   async findSightingsBySingleLocation(userId: number, locationId: number) {
     try {
-      // Check if the location exists
-      const locationData = await this.databaseService.location.findFirstOrThrow(
-        { where: { id: locationId } },
-      );
-
-      // Check if the location is related to the current user
-      if (locationData.user_id !== userId) {
-        throw new ForbiddenException();
-      }
-
       return this.databaseService.sighting.findMany({
         where: {
           user_id: userId,
@@ -143,14 +128,6 @@ export class SightingsService {
       });
     } catch (err) {
       console.log(err);
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        if (err.code === 'P2025') {
-          throw new NotFoundException(ErrorMessages.ResourceNotFound);
-        }
-      }
-      if (err instanceof ForbiddenException) {
-        throw new ForbiddenException(ErrorMessages.AccessForbidden);
-      }
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
@@ -185,35 +162,50 @@ export class SightingsService {
     const { location, ...requestData } = updateSightingDto;
     const updateSightingData: UpdateSighting = requestData;
     let locationId: { id: number } | null = null;
-
-    if (location) {
-      locationId = await this.locationService.upsertUserLocation(
-        userId,
-        location,
-      );
-      updateSightingData['location_id'] = locationId.id;
-    }
-
-    return this.databaseService.sighting
-      .updateMany({
+    try {
+      if (location) {
+        locationId = await this.locationService.upsert(location);
+        updateSightingData['location_id'] = locationId.id;
+      }
+      const res = await this.databaseService.sighting.updateMany({
         data: {
           ...updateSightingData,
         },
         where: { id: sightingId, user_id: userId },
-      })
-      .then((res) => {
-        if (!res.count) {
-          throw new NotFoundException();
-        }
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err instanceof NotFoundException) {
-          throw new NotFoundException(ErrorMessages.ResourceNotFound);
-        }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+      if (!res.count) {
+        throw new NotFoundException();
+      }
+      return res;
+    } catch (err) {
+      console.log(err);
+      if (err instanceof NotFoundException) {
+        throw new NotFoundException(ErrorMessages.ResourceNotFound);
+      }
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
+
+    // if (location) {
+    //   locationId = await this.locationService.upsert(location);
+    //   updateSightingData['location_id'] = locationId.id;
+    // }
+
+    // return this.databaseService.sighting
+    //   .updateMany({
+    //     data: {
+    //       ...updateSightingData,
+    //     },
+    //     where: { id: sightingId, user_id: userId },
+    //   })
+    //   .then((res) => {
+    //     if (!res.count) {
+    //       throw new NotFoundException();
+    //     }
+    //     return res;
+    //   })
+    // .catch((err) => {
+
+    // });
   }
 
   //---- DELETE A SIGHTING

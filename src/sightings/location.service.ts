@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { LocationDto } from './dto/create-location.dto';
 import { DatabaseService } from 'src/database/database.service';
 import ErrorMessages from 'src/common/errors/errors.enum';
@@ -12,16 +8,14 @@ export class LocationService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   //---- CREATE NEW LOCATION IF IT DOES NOT EXIST, RETURN ID
-  async upsertUserLocation(userId: number, locationDto: LocationDto) {
+  async upsert(locationDto: LocationDto) {
     return this.databaseService.location
       .upsert({
         where: {
-          user_id: userId,
           name: locationDto.name,
         },
         update: {},
         create: {
-          user_id: userId,
           ...locationDto,
         },
         select: { id: true },
@@ -33,58 +27,22 @@ export class LocationService {
   }
 
   //---- UPDATE SINGLE LOCATION
-  async updateLocation(
-    userId: number,
-    locationId: number,
-    locationDto: LocationDto,
-  ) {
-    return this.databaseService.location
-      .updateMany({
+  //? Upserts the location and changes location id of user's related sightings
+  async update(userId: number, locationId: number, locationDto: LocationDto) {
+    try {
+      const newLocationId = await this.upsert(locationDto);
+      return this.databaseService.sighting.updateMany({
         where: {
           user_id: userId,
-          id: locationId,
+          location_id: locationId,
         },
         data: {
-          ...locationDto,
+          location_id: newLocationId.id,
         },
-      })
-      .then((res) => {
-        if (!res.count) {
-          throw new NotFoundException();
-        }
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err instanceof NotFoundException) {
-          throw new NotFoundException(ErrorMessages.ResourceNotFound);
-        }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
-  }
-
-  //---- DELETE A SINGLE LOCATION
-  //? Sets location_id to null in related Sighting records
-  async removeLocation(userId: number, locationId: number) {
-    return this.databaseService.location
-      .deleteMany({
-        where: {
-          user_id: userId,
-          id: locationId,
-        },
-      })
-      .then((res) => {
-        if (!res.count) {
-          throw new NotFoundException();
-        }
-        return res;
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err instanceof NotFoundException) {
-          throw new NotFoundException(ErrorMessages.ResourceNotFound);
-        }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 }
