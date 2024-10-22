@@ -44,7 +44,7 @@ export class SightingsService {
     }
   }
 
-  //---- GET ALL USER'S SIGHTINGS
+  //---- GET USER'S SIGHTINGS
   async findAllOrGroup(id: number, query: GroupSightingDto) {
     try {
       if (query.groupby) {
@@ -84,7 +84,7 @@ export class SightingsService {
       });
   }
 
-  //---- FIND ALL USER'S SIGHTINGS BY SINGLE DATE
+  //---- FIND USER'S SIGHTINGS BY SINGLE DATE
   async findSightingsBySingleDate(userId: number, date: GetSightingByDateDto) {
     return this.databaseService.sighting
       .findMany({
@@ -99,7 +99,7 @@ export class SightingsService {
       });
   }
 
-  //---- FIND ALL USER'S SIGHTINGS BY SINGLE BIRD
+  //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
   async findSightingsBySingleBird(userId: number, birdId: number) {
     if (birdId < 1 || birdId > BIRD_COUNT) {
       throw new NotFoundException(ErrorMessages.ResourceNotFound);
@@ -117,19 +117,64 @@ export class SightingsService {
       });
   }
 
-  //---- FIND ALL USER'S SIGHTINGS BY SINGLE LOCATION
+  //---- FIND USER'S SIGHTINGS BY SINGLE LOCATION
   async findSightingsBySingleLocation(userId: number, locationId: number) {
-    try {
-      return this.databaseService.sighting.findMany({
+    return this.databaseService.location
+      .findUniqueOrThrow({
+        where: { id: locationId },
+        include: {
+          sightings: {
+            where: { user_id: userId },
+          },
+        },
+      })
+      .then((res) => {
+        if (!res.sightings.length) {
+          throw new NotFoundException('Location does not exist');
+        }
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          if (err.code === 'P2025') {
+            throw new NotFoundException(ErrorMessages.ResourceNotFound);
+          }
+        }
+        if (err instanceof NotFoundException) {
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
+        }
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+  }
+
+  //---- GROUP USER'S SIGHTINGS BY SINGLE LOCATION
+  //? Prisma does not support include or select with groupBy()
+  //! Need to add location and bird to response
+  async groupBirdsByLocation(userId: number, locationId: number) {
+    return this.databaseService.sighting
+      .groupBy({
+        by: ['bird_id'],
         where: {
           user_id: userId,
           location_id: locationId,
         },
+        _count: { _all: true },
+      })
+      .then((res) => {
+        if (!res.length) {
+          throw new NotFoundException();
+        }
+        return res;
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err instanceof NotFoundException) {
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
+        }
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
-    } catch (err) {
-      console.log(err);
-      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-    }
+    return;
   }
 
   //---- FIND A SINGLE SIGHTING
@@ -184,28 +229,6 @@ export class SightingsService {
       }
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
-
-    // if (location) {
-    //   locationId = await this.locationService.upsert(location);
-    //   updateSightingData['location_id'] = locationId.id;
-    // }
-
-    // return this.databaseService.sighting
-    //   .updateMany({
-    //     data: {
-    //       ...updateSightingData,
-    //     },
-    //     where: { id: sightingId, user_id: userId },
-    //   })
-    //   .then((res) => {
-    //     if (!res.count) {
-    //       throw new NotFoundException();
-    //     }
-    //     return res;
-    //   })
-    // .catch((err) => {
-
-    // });
   }
 
   //---- DELETE A SIGHTING

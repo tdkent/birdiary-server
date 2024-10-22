@@ -83,6 +83,15 @@ export class SightingsController {
     return this.sightingsService.findSightingsBySingleLocation(id, locationId);
   }
 
+  //---- GET 'sightings/locations/:id/group :: Group user's birds by single location
+  @Get('locations/:id/group')
+  groupBirdsByLocation(
+    @CurrentUser('id') id: number,
+    @Param('id', ParseIntPipe) locationId: number,
+  ) {
+    return this.sightingsService.groupBirdsByLocation(id, locationId);
+  }
+
   //---- PATCH 'sightings/locations/:id' :: Upsert location, update Sighting
   @Patch('locations/:id')
   updateLocation(
