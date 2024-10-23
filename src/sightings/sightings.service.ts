@@ -119,28 +119,21 @@ export class SightingsService {
 
   //---- FIND USER'S SIGHTINGS BY SINGLE LOCATION
   async findSightingsBySingleLocation(userId: number, locationId: number) {
-    return this.databaseService.location
-      .findUniqueOrThrow({
-        where: { id: locationId },
-        include: {
-          sightings: {
-            where: { user_id: userId },
-          },
+    return this.databaseService.sighting
+      .findMany({
+        where: {
+          user_id: userId,
+          location_id: locationId,
         },
       })
       .then((res) => {
-        if (!res.sightings.length) {
-          throw new NotFoundException('Location does not exist');
+        if (!res.length) {
+          throw new NotFoundException();
         }
         return res;
       })
       .catch((err) => {
         console.log(err);
-        if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          if (err.code === 'P2025') {
-            throw new NotFoundException(ErrorMessages.ResourceNotFound);
-          }
-        }
         if (err instanceof NotFoundException) {
           throw new NotFoundException(ErrorMessages.ResourceNotFound);
         }
