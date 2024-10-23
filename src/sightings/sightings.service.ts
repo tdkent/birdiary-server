@@ -10,6 +10,7 @@ import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { GroupSightingDto } from './dto/group-sighting.dto';
 import { GetSightingByDateDto } from './dto/get-sighting-by-date.dto';
+import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
 import { BIRD_COUNT } from 'src/common/constants/bird.constants';
@@ -66,6 +67,23 @@ export class SightingsService {
       console.log(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
+  }
+
+  //---- FIND USER'S RECENT POSTS (PAGINATED)
+  async findRecent(id: number, params: GetRecentSightingsDto) {
+    const TAKE_AMOUNT = 10;
+    const SKIP_AMOUNT = TAKE_AMOUNT * params.page;
+    return this.databaseService.sighting
+      .findMany({
+        where: { user_id: id },
+        orderBy: { date: 'desc' },
+        take: TAKE_AMOUNT,
+        skip: SKIP_AMOUNT,
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
   }
 
   //---- FIND USER'S LIFE LIST
