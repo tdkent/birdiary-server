@@ -18,6 +18,7 @@ import { LocationDto } from './dto/create-location.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { GroupSightingDto } from './dto/group-sighting.dto';
 import { GetSightingByDateDto } from './dto/get-sighting-by-date.dto';
+import { GetSightingsByBirdDto } from './dto/get-sighting-by-bird.dto';
 import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -73,16 +74,16 @@ export class SightingsController {
     @CurrentUser('id') id: number,
     @Param() params: GetSightingByDateDto,
   ) {
-    return this.sightingsService.findSightingsBySingleDate(id, params);
+    return this.sightingsService.findSightingsBySingleDate(id, params.date);
   }
 
   //---- GET '/sightings/bird/:id' :: Find all user's sightings by single bird
   @Get('bird/:id')
   findAllByBird(
     @CurrentUser('id') id: number,
-    @Param('id', ParseIntPipe) birdId: number,
+    @Param(new ValidationPipe()) params: GetSightingsByBirdDto,
   ) {
-    return this.sightingsService.findSightingsBySingleBird(id, birdId);
+    return this.sightingsService.findSightingsBySingleBird(id, params.id);
   }
 
   //---- GET 'sightings/locations/:id' :: Find a single location

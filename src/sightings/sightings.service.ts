@@ -9,7 +9,6 @@ import { LocationService } from './location.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { GroupSightingDto } from './dto/group-sighting.dto';
-import { GetSightingByDateDto } from './dto/get-sighting-by-date.dto';
 import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
@@ -103,12 +102,12 @@ export class SightingsService {
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE DATE
-  async findSightingsBySingleDate(userId: number, date: GetSightingByDateDto) {
+  async findSightingsBySingleDate(userId: number, date: Date) {
     return this.databaseService.sighting
       .findMany({
         where: {
           user_id: userId,
-          date: date.date,
+          date: new Date(date),
         },
       })
       .catch((err) => {
