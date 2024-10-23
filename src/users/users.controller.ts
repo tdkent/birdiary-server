@@ -4,10 +4,9 @@ import {
   Delete,
   Get,
   HttpCode,
-  ParseIntPipe,
+  Param,
   Patch,
   Post,
-  Query,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -16,6 +15,7 @@ import { ProfileService } from './profile.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { UpdateFavoriteBirdDto } from './dtos/update-favorite-bird.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 
@@ -64,13 +64,13 @@ export class UsersController {
     return this.profileService.updateProfile(id, updateProfileDto);
   }
 
-  //---- PUT '/users/profile/fav' :: UPDATE USER'S FAVORITE BIRD
+  //---- PUT '/users/profile/fav/:id' :: UPDATE USER'S FAVORITE BIRD
   @UseGuards(AuthGuard)
-  @Patch('profile/fav')
+  @Patch('profile/fav/:id')
   upsertFavoriteBird(
     @CurrentUser('id') id: number,
-    @Query('birdid', ParseIntPipe) birdId: number,
+    @Param(new ValidationPipe()) params: UpdateFavoriteBirdDto,
   ) {
-    return this.profileService.updateFavoriteBird(id, birdId);
+    return this.profileService.updateFavoriteBird(id, params.id);
   }
 }

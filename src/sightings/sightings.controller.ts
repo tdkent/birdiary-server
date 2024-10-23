@@ -41,8 +41,8 @@ export class SightingsController {
 
   //---- GET '/sightings' :: Find all user's sightings
   //---- GET '/sightings?groupby=date' :: Group user's sightings by date
-  //---- GET '/sightings?groupby=bird_id' :: Group user's sightings by bird
-  //---- GET '/sightings?groupby=location_id' :: Group user's sightings by location
+  //---- GET '/sightings?groupby=bird' :: Group user's sightings by bird
+  //---- GET '/sightings?groupby=location' :: Group user's sightings by location
   @Get()
   findAllOrGroup(
     @CurrentUser('id') id: number,
@@ -51,7 +51,7 @@ export class SightingsController {
     return this.sightingsService.findAllOrGroup(id, query);
   }
 
-  //---- GET '/sightings/recent' :: Find paginated recent sightings
+  //---- GET '/sightings/recent/:page' :: Find paginated recent sightings
   //? Uses offset pagination, receives :page param to calculate records to skip
   @Get('/recent/:page')
   findRecent(
@@ -76,7 +76,7 @@ export class SightingsController {
     return this.sightingsService.findSightingsBySingleDate(id, params);
   }
 
-  //---- GET '/sightings/date/:date' :: Find all user's sightings by single bird
+  //---- GET '/sightings/bird/:id' :: Find all user's sightings by single bird
   @Get('bird/:id')
   findAllByBird(
     @CurrentUser('id') id: number,

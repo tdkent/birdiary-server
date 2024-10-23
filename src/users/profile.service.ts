@@ -67,6 +67,7 @@ export class ProfileService {
       })
       .catch((err) => {
         console.log(err);
+        //? foreign key constraint error throws while using partial birds db
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2003') {
             throw new BadRequestException(ErrorMessages.BadRequest);
