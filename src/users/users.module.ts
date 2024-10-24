@@ -5,13 +5,14 @@ import { UsersService } from './users.service';
 import { ProfileService } from './profile.service';
 import { AuthService } from './auth.service';
 import { DatabaseModule } from '../database/database.module';
+import { jwtKey } from '../common/constants/env.constants';
 
 @Module({
   imports: [
     DatabaseModule,
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_KEY,
+      secret: jwtKey,
       signOptions: { expiresIn: 3600 },
     }),
   ],

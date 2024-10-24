@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../src/common/helpers/auth.helpers';
-import { TEST_USER_PASSWORD } from '../src/common/constants/auth.constants';
 import { birds } from '../db/birds.json';
 import { families } from '../db/families.json';
+import { testUserPw } from '../src/common/constants/env.constants';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const hashedPassword = await hashPassword(TEST_USER_PASSWORD);
+  const hashedPassword = await hashPassword(testUserPw);
   //! limit birds to 20 records
   const slicedBirds = birds.slice(0, 20);
 

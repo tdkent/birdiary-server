@@ -11,11 +11,16 @@ import {
   CloudinaryResponse,
   CloudinaryError,
 } from '../common/models/cloudinary.model';
+import {
+  cloudinaryName,
+  cloudinaryKey,
+  cloudinarySecret,
+} from '../common/constants/env.constants';
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET,
+  cloud_name: cloudinaryName,
+  api_key: cloudinaryKey,
+  api_secret: cloudinarySecret,
 });
 
 @Injectable()

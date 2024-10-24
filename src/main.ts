@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { port } from './common/constants/env.constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,8 +10,8 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  await app.listen(process.env.PORT, () => {
-    console.log('Birdiary API is listening! Port:', process.env.PORT);
+  await app.listen(port, () => {
+    console.log('Birdiary API is listening! Port:', port);
   });
 }
 bootstrap();
