@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { LocationDto } from './dto/create-location.dto';
-import { DatabaseService } from 'src/database/database.service';
-import ErrorMessages from 'src/common/errors/errors.enum';
+import { DatabaseService } from '../database/database.service';
+import ErrorMessages from '../common/errors/errors.enum';
 
 @Injectable()
 export class LocationService {

@@ -1,6 +1,6 @@
 import { Controller, Get, Param, ValidationPipe } from '@nestjs/common';
 import { BirdService } from './bird.service';
-import { GetSightingsByBirdDto } from 'src/sightings/dto/get-sighting-by-bird.dto';
+import { GetSightingsByBirdDto } from '../sightings/dto/get-sighting-by-bird.dto';
 
 @Controller('bird')
 export class BirdController {

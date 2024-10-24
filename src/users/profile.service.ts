@@ -5,9 +5,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { DatabaseService } from 'src/database/database.service';
+import { DatabaseService } from '../database/database.service';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
-import ErrorMessages from 'src/common/errors/errors.enum';
+import ErrorMessages from '../common/errors/errors.enum';
 
 @Injectable()
 export class ProfileService {

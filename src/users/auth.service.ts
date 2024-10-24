@@ -8,9 +8,9 @@ import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import { compare } from 'bcrypt';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { DatabaseService } from 'src/database/database.service';
+import { DatabaseService } from '../database/database.service';
 import { UsersService } from '../users/users.service';
-import ErrorMessages from 'src/common/errors/errors.enum';
+import ErrorMessages from '../common/errors/errors.enum';
 
 @Injectable()
 export class AuthService {

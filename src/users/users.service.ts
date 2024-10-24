@@ -7,7 +7,7 @@ import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { hashPassword } from '../common/helpers/auth.helpers';
-import ErrorMessages from 'src/common/errors/errors.enum';
+import ErrorMessages from '../common/errors/errors.enum';
 
 @Injectable()
 export class UsersService {

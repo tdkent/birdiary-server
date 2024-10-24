@@ -12,7 +12,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { BIRD_COUNT } from 'src/common/constants/bird.constants';
+import { BIRD_COUNT } from '../../common/constants/bird.constants';
 import { LocationDto } from './create-location.dto';
 
 export class CreateSightingDto {

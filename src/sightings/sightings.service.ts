@@ -12,7 +12,7 @@ import { GroupSightingDto } from './dto/group-sighting.dto';
 import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
-import { BIRD_COUNT } from 'src/common/constants/bird.constants';
+import { BIRD_COUNT } from '../common/constants/bird.constants';
 
 @Injectable()
 export class SightingsService {
