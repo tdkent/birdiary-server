@@ -8,6 +8,7 @@ import { DatabaseService } from '../database/database.service';
 describe('UsersService', () => {
   let usersService: UsersService;
   let profileService: ProfileService;
+  let testUserId: number | null = null;
 
   const payload = {
     email: faker.internet.email(),
@@ -28,22 +29,37 @@ describe('UsersService', () => {
   });
 
   describe('create user method', () => {
-    it('throws error if email already exists', async () => {
+    beforeEach(async () => {
       const testUser = await usersService.create(payload);
+      testUserId = testUser.id;
+    });
+
+    afterEach(async () => {
+      await usersService.remove(testUserId);
+    });
+    it('throws error if email already exists', async () => {
       // Assert
       await expect(usersService.create(payload)).rejects.toThrow(
         BadRequestException,
       );
-      // Clean up db
-      await usersService.remove(testUser.id);
     });
-    it('creates new User and Profile', async () => {
-      const testUser = await usersService.create(payload);
+    it('creates new user', async () => {
+      const testUserProfile = await profileService.findById(testUserId);
       // Assert
-      expect(testUser).toHaveProperty('id');
-      expect(testUser.email).toBe(payload.email);
-      // Clean up db
-      await usersService.remove(testUser.id);
+      expect(testUserProfile.email).toBe(payload.email);
+    });
+    it('creates related Profile record with null values', async () => {
+      const testUserProfile = await profileService.findById(testUserId);
+      // Assert
+      expect(testUserProfile.profile).toBeDefined();
+      expect(testUserProfile.profile.user_id).toBe(testUserId);
+      expect(testUserProfile.profile.name).toBeNull();
+    });
+    it('creates related Favorite record with null values', async () => {
+      const testUserProfile = await profileService.findById(testUserId);
+      // Assert
+      expect(testUserProfile.fav_bird).toBeDefined();
+      expect(testUserProfile.fav_bird.bird).toBeNull();
     });
   });
 
@@ -52,7 +68,7 @@ describe('UsersService', () => {
       const testUser = await usersService.create(payload);
       await usersService.remove(testUser.id);
       // Assert
-      await expect(profileService.findById(testUser.id)).rejects.toThrow(
+      await expect(profileService.findById(testUserId)).rejects.toThrow(
         NotFoundException,
       );
     });
