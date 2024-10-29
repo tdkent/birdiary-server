@@ -44,6 +44,7 @@ model Bird {
   spec_id Int
   favorites Favorite[]
   sightings Sighting[]
+  images Image[]
 }
 
 model Family {
@@ -70,4 +71,12 @@ model Location {
   lat Float
   lng Float
   sightings Sighting[]
+}
+
+model Image {
+  id Int @id @default(autoincrement())
+  bird_id Int
+  bird Bird @relation(fields: [bird_id], references: [id])
+  attr String?
+  href String?
 }
