@@ -190,7 +190,7 @@ Validation
 Response object
 
 ```
-{ name, location }
+{ id }
 ```
 
 #### Create/update favorite bird

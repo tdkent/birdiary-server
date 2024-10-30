@@ -44,11 +44,11 @@ export class UsersService {
   //? Note: Prisma throws an unhandled error when using
   //? delete method on a resource that no longer exists.
   //? https://github.com/prisma/prisma/issues/4072
-  async remove(id: number) {
+  async remove(id: string) {
     return this.databaseService.user
       .delete({
-        where: { id },
-        select: { id: true },
+        where: { user_id: id },
+        select: { user_id: true },
       })
       .catch((err) => {
         console.log(err);

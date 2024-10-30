@@ -36,7 +36,7 @@ export class UsersController {
   //---- DELETE '/users' :: DELETE A USER
   @UseGuards(AuthGuard)
   @Delete()
-  remove(@CurrentUser('id') id: number) {
+  remove(@CurrentUser('id') id: string) {
     return this.usersService.remove(id);
   }
 
@@ -50,7 +50,7 @@ export class UsersController {
   //---- GET '/users/profile' :: FETCH USER PROFILE
   @UseGuards(AuthGuard)
   @Get('profile')
-  findOne(@CurrentUser('id') id: number) {
+  findOne(@CurrentUser('id') id: string) {
     return this.profileService.findById(id);
   }
 

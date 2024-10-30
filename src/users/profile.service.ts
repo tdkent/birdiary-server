@@ -14,10 +14,10 @@ export class ProfileService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   //---- FIND USER BY ID
-  async findById(id: number) {
+  async findById(id: string) {
     return this.databaseService.user
       .findUniqueOrThrow({
-        where: { id },
+        where: { user_id: id },
         select: {
           email: true,
           created_at: true,
@@ -57,7 +57,7 @@ export class ProfileService {
       .update({
         where: { user_id: id },
         data: updateProfileDto,
-        select: { name: true, location: true },
+        select: { user_id: true },
       })
       .catch((err) => {
         console.log(err);
