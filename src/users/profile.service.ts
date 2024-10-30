@@ -18,14 +18,22 @@ export class ProfileService {
     return this.databaseService.user
       .findUniqueOrThrow({
         where: { id },
-        include: {
-          profile: true,
+        select: {
+          created_at: true,
+          profile: {
+            select: {
+              name: true,
+              location: true,
+            },
+          },
           fav_bird: {
-            include: { bird: true },
-            omit: { user_id: true, bird_id: true },
+            select: {
+              bird: {
+                select: { comm_name: true },
+              },
+            },
           },
         },
-        omit: { password: true },
       })
       .catch((err) => {
         console.log(err);
@@ -44,6 +52,7 @@ export class ProfileService {
       .update({
         where: { user_id: id },
         data: updateProfileDto,
+        select: { name: true, location: true },
       })
       .catch((err) => {
         console.log(err);
@@ -64,6 +73,7 @@ export class ProfileService {
       .update({
         where: { user_id: id },
         data: { bird_id: birdId },
+        select: { bird_id: true },
       })
       .catch((err) => {
         console.log(err);

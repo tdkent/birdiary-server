@@ -3,7 +3,7 @@
 
 ## Description
 
-This is a Node.js REST API built with TypeScript, NestJS and Prisma. The server handles requests to create and authenticate users and their birdwatching activities. The database stores user and bird sighting records, and general information about more than 800 North American bird species. The API routes, validates, and processes a variety of requests and queries to support the Birdiary client application.
+This is a Node.js REST API built with TypeScript, NestJS and Prisma. The server handles requests to create and authenticate users and their birdwatching activities. The database stores user and bird sighting records, and general information about more than 800 North American species of bird. The API routes, validates, and processes a variety of requests and queries to support the Birdiary client application.
 
 ## Important Scripts
 
@@ -96,7 +96,7 @@ Behavior: A new row will be added to `User`. Related rows with null data (aside 
 Response object
 
 ```
-{ id, email, name, created_at, update_at}
+{ email }
 ```
 
 #### Delete user
@@ -114,7 +114,7 @@ Behavior: Deletes row in `User` with matching `id`. Deletion cascades to related
 Response object
 
 ```
-{ id }
+{ email }
 ```
 
 #### (Auth) Sign in user
@@ -135,7 +135,7 @@ Validation
 Response object
 
 ```
-{ id, email, token}
+{ token }
 ```
 
 #### Find user by id
@@ -152,15 +152,16 @@ Response object
 
 ```
 {
-  id,
-  email,
+  created_at,
   profile: {
     name,
-    string,
-    user_id
-    },
-  created_at,
-  update_at
+    location
+  },
+  fav_bird: {
+    bird: {
+      comm_name
+    }
+  } || null
 }
 ```
 
@@ -186,7 +187,7 @@ Validation
 Response object
 
 ```
-{ user_id, name, location }
+{ name, location }
 ```
 
 #### Create/update favorite bird
@@ -206,7 +207,7 @@ Validation
 Response object
 
 ```
-{ user_id, bird_id }
+{ bird_id }
 ```
 
 ### Sightings
@@ -255,10 +256,10 @@ const date = new Date(Date.UTC(YYYY, MM, DD));
 Response object
 
 ```
-{ id, user_id, bird_id, date, desc }
+{ id }
 ```
 
-#### Fetch all user's sightings
+#### Find all user's sightings
 
 ```
 GET base_url + '/sightings'
@@ -266,7 +267,7 @@ GET base_url + '/sightings'
 
 Query Options
 
-- The route may optionally include a `groupby` query with one of three values: `bird`, `location`, `bird`
+- The route may optionally include a `groupby` query with one of three values: `date`, `location`, `bird`
 
 ```
 GET base_url + '/sightings?groupby=date'
@@ -281,10 +282,56 @@ Authorization
 Response object
 
 ```
-[{ id, user_id, bird_id, date, desc }]
+// FIND ALL:
+[
+  {
+    id,
+    date,
+    bird: {
+      id,
+      comm_name
+    },
+    location: {
+      id,
+      name
+    }
+  }
+]
+
+// GROUP BY: DATE
+[
+  {
+    _count: {
+      _all
+    },
+    date
+  }
+]
+
+// GROUP BY: LOCATION
+[
+  {
+    _count: {
+      _all
+    },
+    location_id,
+    location_name
+  }
+]
+
+// GROUP BY: BIRD
+[
+  {
+    _count: {
+      _all
+    },
+    bird_id,
+    bird_name
+  }
+]
 ```
 
-#### Fetch user's recent sightings
+#### Find user's recent sightings
 
 ```
 GET base_url + '/sightings/recent/:page'
@@ -303,10 +350,19 @@ Validation
 Response object
 
 ```
-
+[
+  {
+    id,
+    date,
+    bird: {
+      id,
+      comm_name
+    }
+  }
+]
 ```
 
-#### Fetch user's life list
+#### Find user's life list
 
 ```
 GET base_url + '/sightings/lifelist'
@@ -321,10 +377,23 @@ Authorization
 Response object
 
 ```
-[]
+[
+  {
+    id,
+    date,
+    bird: {
+      id,
+      comm_name
+    },
+    location: {
+      id,
+      name
+    }
+  }
+]
 ```
 
-#### Fetch user's sightings by single date
+#### Find user's sightings by single date
 
 ```
 GET base_url + '/sightings/date/:date'
@@ -341,10 +410,23 @@ Validation
 Response object
 
 ```
-[]
+[
+  {
+    id,
+    desc,
+    bird: {
+      id,
+      comm_name
+    },
+    location: {
+      id,
+      name
+    }
+  }
+]
 ```
 
-#### Fetch user's sightings by single bird
+#### Find user's sightings by single bird
 
 ```
 GET base_url + '/sightings/bird/:id'
@@ -361,27 +443,17 @@ Validation
 Response object
 
 ```
-[]
-```
-
-#### Find single location
-
-```
-GET base_url + '/sightings/locations/:id'
-```
-
-Authorization
-
-- Protected route. Requires token in `Authorization` header.
-
-Validation
-
-- `:id`: Integer parameter.
-
-Response object
-
-```
-[]
+[
+  {
+    id,
+    date,
+    desc,
+    location: {
+      id,
+      name
+    }
+  }
+]
 ```
 
 #### Find user's sightings by single location
@@ -401,7 +473,17 @@ Validation
 Response object
 
 ```
-[]
+[
+  {
+    id,
+    date,
+    desc,
+    bird: {
+      id,
+      comm_name
+    }
+  }
+]
 ```
 
 #### Group user's sightings by single location
@@ -421,33 +503,15 @@ Validation
 Response object
 
 ```
-[]
-```
-
-#### Upsert location and update user's sightings
-
-```
-PATCH base_url + '/sightings/locations/:id'
-```
-
-Upserts location to `Location`. Updates related sightings with new `location_id`.
-
-Authorization
-
-- Protected route. Requires token in `Authorization` header.
-
-Validation
-
-- `:id`: Integer parameter.
-- `location`: Required. Nested Location object.
-  - `name`: Required. Max 150 characters. Generated by Google Places API.
-  - `lng`: Required. Float between -180 and 180. Generated by Google Geocode API.
-  - `lat`: Required. Float between -90 and 90. Generated by Google Geocode API.
-
-Response object
-
-```
-[]
+[
+  {
+    _count: {
+      _all
+    },
+    bird_id,
+    comm_name
+  }
+]
 ```
 
 #### Update a sighting
@@ -506,9 +570,57 @@ Response object
 { count }
 ```
 
+### Location
+
+#### Find single location
+
+```
+GET base_url + '/sightings/locations/:id'
+```
+
+Authorization
+
+- Protected route. Requires token in `Authorization` header.
+
+Validation
+
+- `:id`: Integer parameter.
+
+Response object
+
+```
+{ id, name, lat, lng }
+```
+
+#### Update a location
+
+```
+PATCH base_url + '/sightings/locations/:id'
+```
+
+Upserts location to `Location`. Updates related sightings with new `location_id`.
+
+Authorization
+
+- Protected route. Requires token in `Authorization` header.
+
+Validation
+
+- `:id`: Integer parameter.
+- `location`: Required. Nested Location object.
+  - `name`: Required. Max 150 characters. Generated by Google Places API.
+  - `lng`: Required. Float between -180 and 180. Generated by Google Geocode API.
+  - `lat`: Required. Float between -90 and 90. Generated by Google Geocode API.
+
+Response object
+
+```
+{ count }
+```
+
 ### Bird
 
-#### Fetch all birds
+#### Find all birds
 
 ```
 GET base_url + '/bird'
@@ -517,16 +629,15 @@ GET base_url + '/bird'
 Response object
 
 ```
-[{
-  id,
-  comm_name,
-  sci_name,
-  rarity,
-  species: { id, name }
-}]
+[
+  {
+    id,
+    comm_name
+  }
+]
 ```
 
-#### Fetch a single bird
+#### Find a single bird
 
 ```
 GET base_url + '/bird/:id'
@@ -544,8 +655,13 @@ Response object
   comm_name,
   sci_name,
   rarity,
-  images: [],
-  species: { id, name }
+  desc,
+  img_attr,
+  img_href
+  family: {
+    id,
+    name
+  }
 }
 ```
 

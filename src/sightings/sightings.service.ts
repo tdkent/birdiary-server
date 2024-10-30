@@ -6,19 +6,20 @@ import {
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { LocationService } from './location.service';
+import { BirdService } from '../bird/bird.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { GroupSightingDto } from './dto/group-sighting.dto';
 import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
-import { BIRD_COUNT } from '../common/constants/bird.constants';
 
 @Injectable()
 export class SightingsService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly locationService: LocationService,
+    private readonly birdService: BirdService,
   ) {}
   //---- CREATE NEW SIGHTING
   async create(id: number, createSightingDto: CreateSightingDto) {
@@ -36,7 +37,7 @@ export class SightingsService {
           desc,
           location_id: locationId?.id || null,
         },
-        include: { location: true },
+        select: { id: true },
       });
     } catch (err) {
       console.log(err);
@@ -48,19 +49,56 @@ export class SightingsService {
   async findAllOrGroup(id: number, query: GroupSightingDto) {
     try {
       if (query.groupby) {
-        return this.databaseService.sighting.groupBy({
-          by:
-            query.groupby === 'date'
-              ? ['date']
-              : query.groupby === 'bird'
-                ? ['bird_id']
-                : ['location_id'],
-          where: { user_id: id },
-          _count: { _all: true },
-        });
+        if (query.groupby === 'date') {
+          return this.databaseService.sighting.groupBy({
+            by: ['date'],
+            where: { user_id: id },
+            _count: { _all: true },
+          });
+        } else if (query.groupby === 'location') {
+          const locGroup = await this.databaseService.sighting.groupBy({
+            by: ['location_id'],
+            where: { user_id: id },
+            _count: { _all: true },
+          });
+          for (const loc of locGroup) {
+            const location = await this.locationService.findOne(
+              loc.location_id,
+            );
+            loc['location_name'] = location.name;
+          }
+          return locGroup;
+        } else {
+          const birdGroup = await this.databaseService.sighting.groupBy({
+            by: ['bird_id'],
+            where: { user_id: id },
+            _count: { _all: true },
+          });
+          for (const b of birdGroup) {
+            const bird = await this.birdService.findOne(b.bird_id);
+            b['bird_name'] = bird.comm_name;
+          }
+          return birdGroup;
+        }
       }
       return this.databaseService.sighting.findMany({
         where: { user_id: id },
+        select: {
+          id: true,
+          date: true,
+          bird: {
+            select: {
+              id: true,
+              comm_name: true,
+            },
+          },
+          location: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
       });
     } catch (err) {
       console.log(err);
@@ -75,6 +113,16 @@ export class SightingsService {
     return this.databaseService.sighting
       .findMany({
         where: { user_id: id },
+        select: {
+          id: true,
+          date: true,
+          bird: {
+            select: {
+              id: true,
+              comm_name: true,
+            },
+          },
+        },
         orderBy: { date: 'desc' },
         take: TAKE_AMOUNT,
         skip: SKIP_AMOUNT,
@@ -91,6 +139,22 @@ export class SightingsService {
       .findMany({
         where: { user_id: id },
         distinct: ['bird_id'],
+        select: {
+          id: true,
+          date: true,
+          bird: {
+            select: {
+              id: true,
+              comm_name: true,
+            },
+          },
+          location: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
         orderBy: {
           date: 'asc',
         },
@@ -109,6 +173,22 @@ export class SightingsService {
           user_id: userId,
           date: new Date(date),
         },
+        select: {
+          id: true,
+          desc: true,
+          bird: {
+            select: {
+              id: true,
+              comm_name: true,
+            },
+          },
+          location: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
       })
       .catch((err) => {
         console.log(err);
@@ -118,14 +198,22 @@ export class SightingsService {
 
   //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
   async findSightingsBySingleBird(userId: number, birdId: number) {
-    if (birdId < 1 || birdId > BIRD_COUNT) {
-      throw new NotFoundException(ErrorMessages.ResourceNotFound);
-    }
     return this.databaseService.sighting
       .findMany({
         where: {
           user_id: userId,
           bird_id: birdId,
+        },
+        select: {
+          id: true,
+          date: true,
+          desc: true,
+          location: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
       })
       .catch((err) => {
@@ -141,6 +229,17 @@ export class SightingsService {
         where: {
           user_id: userId,
           location_id: locationId,
+        },
+        select: {
+          id: true,
+          date: true,
+          desc: true,
+          bird: {
+            select: {
+              id: true,
+              comm_name: true,
+            },
+          },
         },
       })
       .then((res) => {
@@ -160,7 +259,6 @@ export class SightingsService {
 
   //---- GROUP USER'S SIGHTINGS BY SINGLE LOCATION
   //? Prisma does not support include or select with groupBy()
-  //! Need to add location and bird to response
   async groupBirdsByLocation(userId: number, locationId: number) {
     return this.databaseService.sighting
       .groupBy({
@@ -171,9 +269,13 @@ export class SightingsService {
         },
         _count: { _all: true },
       })
-      .then((res) => {
+      .then(async (res) => {
         if (!res.length) {
           throw new NotFoundException();
+        }
+        for (const el of res) {
+          const bird = await this.birdService.findOne(el.bird_id);
+          el['comm_name'] = bird.comm_name;
         }
         return res;
       })
@@ -188,6 +290,7 @@ export class SightingsService {
   }
 
   //---- FIND A SINGLE SIGHTING
+  //? Currently this method is only used in testing
   async findOne(userId: number, sightingId: number) {
     return this.databaseService.sighting
       .findFirstOrThrow({

@@ -110,7 +110,7 @@ export class SightingsController {
     return this.sightingsService.groupBirdsByLocation(id, locationId);
   }
 
-  //---- PATCH 'sightings/locations/:id' :: Upsert location, update Sighting
+  //---- PATCH 'sightings/locations/:id' :: Update a single location
   @Patch('locations/:id')
   updateLocation(
     @CurrentUser('id') id: number,

@@ -34,7 +34,7 @@ export class AuthService {
 
       const payload = { id: user.id, email: user.email };
       const token = await this.jwtService.signAsync(payload);
-      return { id: user.id, email: user.email, token };
+      return { token };
     } catch (err) {
       console.log(err);
       if (err instanceof Prisma.PrismaClientKnownRequestError) {

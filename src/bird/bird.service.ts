@@ -31,8 +31,7 @@ export class BirdService {
   async findAll() {
     return this.databaseService.bird
       .findMany({
-        include: { family: true },
-        omit: { family_id: true },
+        select: { id: true, comm_name: true },
         take: 10,
       })
       .catch((err) => {
@@ -43,6 +42,27 @@ export class BirdService {
 
   //---- FETCH A SINGLE BIRD
   async findOne(id: number) {
+    return this.databaseService.bird
+      .findUniqueOrThrow({
+        where: { id },
+        select: {
+          id: true,
+          comm_name: true,
+        },
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          if (err.code === 'P2025') {
+            throw new NotFoundException(ErrorMessages.ResourceNotFound);
+          }
+        }
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+  }
+
+  //---- FETCH A SINGLE BIRD WITH IMAGE
+  async findOneWithImage(id: number) {
     return this.databaseService.bird
       .findUniqueOrThrow({
         where: { id },

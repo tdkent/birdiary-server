@@ -15,6 +15,6 @@ export class BirdController {
   //---- GET '/bird/:id' :: FETCH A SINGLE BIRD
   @Get(':id')
   findOne(@Param(new ValidationPipe()) params: GetSightingsByBirdDto) {
-    return this.birdService.findOne(params.id);
+    return this.birdService.findOneWithImage(params.id);
   }
 }

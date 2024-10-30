@@ -64,7 +64,7 @@ export class UsersController {
     return this.profileService.updateProfile(id, updateProfileDto);
   }
 
-  //---- PUT '/users/profile/fav/:id' :: UPDATE USER'S FAVORITE BIRD
+  //---- PATCH '/users/profile/fav/:id' :: UPDATE USER'S FAVORITE BIRD
   @UseGuards(AuthGuard)
   @Patch('profile/fav/:id')
   upsertFavoriteBird(
