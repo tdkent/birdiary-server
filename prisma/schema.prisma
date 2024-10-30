@@ -39,12 +39,13 @@ model Bird {
   id Int @id @default(autoincrement())
   comm_name String @unique
   sci_name String @unique
+  family Family @relation(fields: [family_id], references: [id])
+  family_id Int
   rarity Int
-  family Family @relation(fields: [spec_id], references: [id])
-  spec_id Int
+  desc String
+  img_attr String?
   favorites Favorite[]
   sightings Sighting[]
-  images Image[]
 }
 
 model Family {
@@ -71,12 +72,4 @@ model Location {
   lat Float
   lng Float
   sightings Sighting[]
-}
-
-model Image {
-  id Int @id @default(autoincrement())
-  bird_id Int
-  bird Bird @relation(fields: [bird_id], references: [id])
-  attr String?
-  href String?
 }

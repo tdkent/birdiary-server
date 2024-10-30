@@ -32,8 +32,8 @@ export class BirdService {
     return this.databaseService.bird
       .findMany({
         include: { family: true },
-        omit: { spec_id: true },
-        take: 3,
+        omit: { family_id: true },
+        take: 10,
       })
       .catch((err) => {
         console.log(err);
@@ -47,23 +47,29 @@ export class BirdService {
       .findUniqueOrThrow({
         where: { id },
         include: { family: true },
-        omit: { spec_id: true },
+        omit: { family_id: true },
       })
       .then(async (prismaRes) => {
-        const imgArr = (await cloudinary.api
-          .resources_by_asset_folder(prismaRes.comm_name)
-          .then((res) => {
-            const cloudinaryRes = res as unknown as CloudinaryResponse;
-            console.log('rate limit:', cloudinaryRes.rate_limit_remaining);
-            return cloudinaryRes.resources.map((r) => r.secure_url);
-          })
-          .catch((err) => {
-            const {
-              error: { message, http_code },
-            } = err as CloudinaryError;
-            console.log('Cloudinary error: ', http_code, message);
-          })) as CloudinaryResponse | void;
-        return { ...prismaRes, images: imgArr || [] };
+        // if bird has an image, fetch from cloudinary
+        if (prismaRes.img_attr) {
+          const img = (await cloudinary.api
+            .resources_by_asset_folder(prismaRes.comm_name)
+            .then((res) => {
+              const cloudinaryRes = res as unknown as CloudinaryResponse;
+              console.log(cloudinaryRes);
+              console.log('rate limit:', cloudinaryRes.rate_limit_remaining);
+              return cloudinaryRes.resources[0].secure_url;
+            })
+            .catch((err) => {
+              const {
+                error: { message, http_code },
+              } = err as CloudinaryError;
+              console.log('Cloudinary error: ', http_code, message);
+            })) as CloudinaryResponse | void;
+          return { ...prismaRes, img_href: img };
+        }
+
+        return { ...prismaRes, img_href: null };
       })
       .catch((err) => {
         console.log(err);
