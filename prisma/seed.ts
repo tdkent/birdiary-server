@@ -7,7 +7,6 @@ import { testUserPw } from '../src/common/constants/env.constants';
 const prisma = new PrismaClient();
 
 async function main() {
-  const hashedPassword = await hashPassword(testUserPw);
   //! limit birds to 20 records
   const slicedBirds = birds.slice(0, 20);
 
@@ -22,7 +21,7 @@ async function main() {
   await prisma.user.create({
     data: {
       email: 'tim@tim.me',
-      password: hashedPassword,
+      password: await hashPassword(testUserPw),
       profile: {
         create: {
           name: '',

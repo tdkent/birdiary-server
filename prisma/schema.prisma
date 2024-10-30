@@ -11,6 +11,7 @@ datasource db {
 
 model User {
   id Int @id @default(autoincrement())
+  user_id String @db.Uuid @unique @default(uuid())
   email String @unique
   password String
   created_at DateTime @default(now())
@@ -24,13 +25,14 @@ model Profile {
   id Int @id @default(autoincrement())
   name String?
   location String?
-  user_id Int @unique
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String @db.Uuid @unique
+  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
 }
 
 model Favorite {
-  user_id Int @id @unique
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id Int @id @default(autoincrement())
+  user_id String @db.Uuid @unique
+  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   bird_id Int?
   bird Bird? @relation(fields:[bird_id], references: [id])
 }
@@ -56,8 +58,8 @@ model Family {
 
 model Sighting {
   id Int @id @default(autoincrement())
-  user_id Int
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id String @db.Uuid
+  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
   bird_id Int
   bird Bird @relation(fields: [bird_id], references: [id])
   location_id Int?

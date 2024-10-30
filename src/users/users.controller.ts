@@ -58,7 +58,7 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Patch('profile')
   update(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,
   ) {
     return this.profileService.updateProfile(id, updateProfileDto);
@@ -68,7 +68,7 @@ export class UsersController {
   @UseGuards(AuthGuard)
   @Patch('profile/fav/:id')
   upsertFavoriteBird(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Param(new ValidationPipe()) params: UpdateFavoriteBirdDto,
   ) {
     return this.profileService.updateFavoriteBird(id, params.id);

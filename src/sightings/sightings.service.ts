@@ -22,7 +22,7 @@ export class SightingsService {
     private readonly birdService: BirdService,
   ) {}
   //---- CREATE NEW SIGHTING
-  async create(id: number, createSightingDto: CreateSightingDto) {
+  async create(id: string, createSightingDto: CreateSightingDto) {
     const { bird_id, date, desc, location } = createSightingDto;
     let locationId: { id: number } | null = null;
     try {
@@ -54,7 +54,7 @@ export class SightingsService {
   }
 
   //---- GET USER'S SIGHTINGS
-  async findAllOrGroup(id: number, query: GroupSightingDto) {
+  async findAllOrGroup(id: string, query: GroupSightingDto) {
     try {
       if (query.groupby) {
         if (query.groupby === 'date') {
@@ -115,7 +115,7 @@ export class SightingsService {
   }
 
   //---- FIND USER'S RECENT POSTS (PAGINATED)
-  async findRecent(id: number, params: GetRecentSightingsDto) {
+  async findRecent(id: string, params: GetRecentSightingsDto) {
     const TAKE_AMOUNT = 10;
     const SKIP_AMOUNT = TAKE_AMOUNT * params.page;
     return this.databaseService.sighting
@@ -142,7 +142,7 @@ export class SightingsService {
   }
 
   //---- FIND USER'S LIFE LIST
-  async findLifeList(id: number) {
+  async findLifeList(id: string) {
     return this.databaseService.sighting
       .findMany({
         where: { user_id: id },
@@ -174,7 +174,7 @@ export class SightingsService {
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE DATE
-  async findSightingsBySingleDate(userId: number, date: Date) {
+  async findSightingsBySingleDate(userId: string, date: Date) {
     return this.databaseService.sighting
       .findMany({
         where: {
@@ -205,7 +205,7 @@ export class SightingsService {
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
-  async findSightingsBySingleBird(userId: number, birdId: number) {
+  async findSightingsBySingleBird(userId: string, birdId: number) {
     return this.databaseService.sighting
       .findMany({
         where: {
@@ -231,7 +231,7 @@ export class SightingsService {
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE LOCATION
-  async findSightingsBySingleLocation(userId: number, locationId: number) {
+  async findSightingsBySingleLocation(userId: string, locationId: number) {
     return this.databaseService.sighting
       .findMany({
         where: {
@@ -267,7 +267,7 @@ export class SightingsService {
 
   //---- GROUP USER'S SIGHTINGS BY SINGLE LOCATION
   //? Prisma does not support include or select with groupBy()
-  async groupBirdsByLocation(userId: number, locationId: number) {
+  async groupBirdsByLocation(userId: string, locationId: number) {
     return this.databaseService.sighting
       .groupBy({
         by: ['bird_id'],
@@ -299,7 +299,7 @@ export class SightingsService {
 
   //---- FIND A SINGLE SIGHTING
   //? Currently this method is only used in testing
-  async findOne(userId: number, sightingId: number) {
+  async findOne(userId: string, sightingId: number) {
     return this.databaseService.sighting
       .findFirstOrThrow({
         where: {
@@ -321,7 +321,7 @@ export class SightingsService {
   // result is an object with updated count :: { count: 0 } or { count: 1 }
   //? using updateMany in order to have multiple WHERE clauses
   async update(
-    userId: number,
+    userId: string,
     sightingId: number,
     updateSightingDto: UpdateSightingDto,
   ) {
@@ -355,7 +355,7 @@ export class SightingsService {
   //---- DELETE A SIGHTING
   // result is an object with updated count :: { count: 0 } or { count: 1 }
   //? using deleteMany in order to have multiple WHERE clauses
-  async remove(userId: number, sightingId: number) {
+  async remove(userId: string, sightingId: number) {
     return this.databaseService.sighting
       .deleteMany({
         where: { id: sightingId, user_id: userId },

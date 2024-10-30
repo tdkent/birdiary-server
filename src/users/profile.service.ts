@@ -52,7 +52,7 @@ export class ProfileService {
   }
 
   //---- UPDATE USER PROFILE
-  async updateProfile(id: number, updateProfileDto: UpdateProfileDto) {
+  async updateProfile(id: string, updateProfileDto: UpdateProfileDto) {
     return this.databaseService.profile
       .update({
         where: { user_id: id },
@@ -73,7 +73,7 @@ export class ProfileService {
   }
 
   //---- UPSERT FAVORITE BIRD
-  async updateFavoriteBird(id: number, birdId: number) {
+  async updateFavoriteBird(id: string, birdId: number) {
     return this.databaseService.favorite
       .update({
         where: { user_id: id },

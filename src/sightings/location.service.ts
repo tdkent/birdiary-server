@@ -51,7 +51,7 @@ export class LocationService {
 
   //---- UPDATE SINGLE LOCATION
   //? Upserts the location and changes location id of user's related sightings
-  async update(userId: number, locationId: number, locationDto: LocationDto) {
+  async update(userId: string, locationId: number, locationDto: LocationDto) {
     try {
       const newLocationId = await this.upsert(locationDto);
       return this.databaseService.sighting.updateMany({

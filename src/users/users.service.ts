@@ -27,7 +27,7 @@ export class UsersService {
             },
           },
         },
-        select: { id: true },
+        select: { user_id: true },
       })
       .catch((err) => {
         console.log(err);

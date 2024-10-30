@@ -32,7 +32,7 @@ export class AuthService {
         throw new BadRequestException();
       }
 
-      const payload = { id: user.id, email: user.email };
+      const payload = { id: user.user_id };
       const token = await this.jwtService.signAsync(payload);
       return { token };
     } catch (err) {

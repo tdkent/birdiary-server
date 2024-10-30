@@ -34,7 +34,7 @@ export class SightingsController {
   //---- POST '/sightings' :: Create a new bird sighting
   @Post()
   create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Body(ValidationPipe) createSightingDto: CreateSightingDto,
   ) {
     return this.sightingsService.create(id, createSightingDto);
@@ -46,7 +46,7 @@ export class SightingsController {
   //---- GET '/sightings?groupby=location' :: Group user's sightings by location
   @Get()
   findAllOrGroup(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Query(new ValidationPipe()) query: GroupSightingDto,
   ) {
     return this.sightingsService.findAllOrGroup(id, query);
@@ -56,7 +56,7 @@ export class SightingsController {
   //? Uses offset pagination, receives :page param to calculate records to skip
   @Get('/recent/:page')
   findRecent(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Param(new ValidationPipe()) params: GetRecentSightingsDto,
   ) {
     return this.sightingsService.findRecent(id, params);
@@ -64,14 +64,14 @@ export class SightingsController {
 
   //---- GET '/sightings/lifelist' :: Find user's lifelist
   @Get('lifelist')
-  findLifeList(@CurrentUser('id') id: number) {
+  findLifeList(@CurrentUser('id') id: string) {
     return this.sightingsService.findLifeList(id);
   }
 
   //---- GET '/sightings/date/:date' :: Find all user's sightings by single date
   @Get('date/:date')
   findAllByDate(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Param() params: GetSightingByDateDto,
   ) {
     return this.sightingsService.findSightingsBySingleDate(id, params.date);
@@ -80,7 +80,7 @@ export class SightingsController {
   //---- GET '/sightings/bird/:id' :: Find all user's sightings by single bird
   @Get('bird/:id')
   findAllByBird(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Param(new ValidationPipe()) params: GetSightingsByBirdDto,
   ) {
     return this.sightingsService.findSightingsBySingleBird(id, params.id);
@@ -95,7 +95,7 @@ export class SightingsController {
   //---- GET '/sightings/locations/:id/all' :: Find all user's sightings by single location
   @Get('locations/:id/all')
   findAllByLocation(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Param('id', ParseIntPipe) locationId: number,
   ) {
     return this.sightingsService.findSightingsBySingleLocation(id, locationId);
@@ -104,7 +104,7 @@ export class SightingsController {
   //---- GET 'sightings/locations/:id/group :: Group user's birds by single location
   @Get('locations/:id/group')
   groupBirdsByLocation(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Param('id', ParseIntPipe) locationId: number,
   ) {
     return this.sightingsService.groupBirdsByLocation(id, locationId);
@@ -113,7 +113,7 @@ export class SightingsController {
   //---- PATCH 'sightings/locations/:id' :: Update a single location
   @Patch('locations/:id')
   updateLocation(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') id: string,
     @Param('id', ParseIntPipe) locationId: number,
     @Body(ValidationPipe) locationDto: LocationDto,
   ) {
@@ -124,7 +124,7 @@ export class SightingsController {
   //! Remove this route?
   @Get(':id')
   findOne(
-    @CurrentUser('id') userId: number,
+    @CurrentUser('id') userId: string,
     @Param('id', ParseIntPipe) sightingId: number,
   ) {
     return this.sightingsService.findOne(userId, sightingId);
@@ -133,7 +133,7 @@ export class SightingsController {
   //---- PATCH 'sightings/:id' :: Update a single sighting
   @Patch(':id')
   update(
-    @CurrentUser('id') userId: number,
+    @CurrentUser('id') userId: string,
     @Param('id', ParseIntPipe) sightingId: number,
     @Body() updateSightingDto: UpdateSightingDto,
   ) {
@@ -143,7 +143,7 @@ export class SightingsController {
   //---- DELETE 'sightings/:id' :: Delete a single sighting
   @Delete(':id')
   remove(
-    @CurrentUser('id') userId: number,
+    @CurrentUser('id') userId: string,
     @Param('id', ParseIntPipe) sightingId: number,
   ) {
     return this.sightingsService.remove(userId, sightingId);
