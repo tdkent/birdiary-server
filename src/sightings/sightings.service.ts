@@ -37,7 +37,15 @@ export class SightingsService {
           desc,
           location_id: locationId?.id || null,
         },
-        select: { id: true },
+        select: {
+          id: true,
+          bird_id: true,
+          location: {
+            select: {
+              id: true,
+            },
+          },
+        },
       });
     } catch (err) {
       console.log(err);

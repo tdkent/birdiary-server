@@ -96,7 +96,7 @@ Behavior: A new row will be added to `User`. Related rows with null data (aside 
 Response object
 
 ```
-{ email }
+{ id }
 ```
 
 #### Delete user
@@ -114,7 +114,7 @@ Behavior: Deletes row in `User` with matching `id`. Deletion cascades to related
 Response object
 
 ```
-{ email }
+{ id }
 ```
 
 #### (Auth) Sign in user
@@ -152,13 +152,16 @@ Response object
 
 ```
 {
+  email,
   created_at,
   profile: {
+    user_id,
     name,
     location
   },
   fav_bird: {
     bird: {
+      id,
       comm_name
     }
   } || null
@@ -256,7 +259,13 @@ const date = new Date(Date.UTC(YYYY, MM, DD));
 Response object
 
 ```
-{ id }
+{
+  id,
+  bird_id,
+  location: {
+    id
+  }
+}
 ```
 
 #### Find all user's sightings

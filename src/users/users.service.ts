@@ -27,7 +27,7 @@ export class UsersService {
             },
           },
         },
-        select: { email: true },
+        select: { id: true },
       })
       .catch((err) => {
         console.log(err);
@@ -48,7 +48,7 @@ export class UsersService {
     return this.databaseService.user
       .delete({
         where: { id },
-        select: { email: true },
+        select: { id: true },
       })
       .catch((err) => {
         console.log(err);

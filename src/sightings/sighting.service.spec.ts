@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker';
 import { SightingsService } from './sightings.service';
 import { LocationService } from './location.service';
 import { UsersService } from '../users/users.service';
+import { BirdService } from '../bird/bird.service';
 import { DatabaseService } from '../database/database.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { NotFoundException } from '@nestjs/common';
@@ -40,6 +41,7 @@ describe('SightingService', () => {
         SightingsService,
         LocationService,
         UsersService,
+        BirdService,
         DatabaseService,
       ],
     }).compile();
@@ -53,6 +55,7 @@ describe('SightingService', () => {
     testUserId = testUser.id;
 
     const sighting = await sightingService.create(testUserId, sightingPayload);
+    console.log('🚀 ~ beforeEach ~ sighting:', sighting);
     testSighting = sighting;
   });
 
@@ -68,13 +71,14 @@ describe('SightingService', () => {
   describe('create sighting method', () => {
     it('creates new sighting', async () => {
       // Assert
+      console.log('testSighting', testSighting);
+
       expect(testSighting.id).toBeDefined();
       expect(testSighting.bird_id).toBe(sightingPayload.bird_id);
-      expect(testSighting.desc).toBe(sightingPayload.desc);
     });
-    it('has null location_id if a location is not provided in request', async () => {
+    it('has null location if a location is not provided in request', async () => {
       // Assert
-      expect(testSighting.location_id).toBeNull();
+      expect(testSighting.location).toBeNull();
     });
     it('correctly upserts a new location', async () => {
       const testSightingWithLocation = await sightingService.create(
@@ -105,7 +109,7 @@ describe('SightingService', () => {
         },
       );
       // Assert
-      expect(testLocation.id).toBe(testSightingWithLocation.location_id);
+      expect(testLocation.id).toBe(testSightingWithLocation.location.id);
       // Clean up db
       await databaseService.location.delete({ where: { id: testLocation.id } });
     });

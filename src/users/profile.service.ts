@@ -19,9 +19,11 @@ export class ProfileService {
       .findUniqueOrThrow({
         where: { id },
         select: {
+          email: true,
           created_at: true,
           profile: {
             select: {
+              user_id: true,
               name: true,
               location: true,
             },
@@ -29,7 +31,10 @@ export class ProfileService {
           fav_bird: {
             select: {
               bird: {
-                select: { comm_name: true },
+                select: {
+                  id: true,
+                  comm_name: true,
+                },
               },
             },
           },
