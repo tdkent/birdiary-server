@@ -8,7 +8,7 @@ import { DatabaseService } from '../database/database.service';
 describe('UsersService', () => {
   let usersService: UsersService;
   let profileService: ProfileService;
-  let testUserId: number | null = null;
+  let testUserId: string;
 
   const payload = {
     email: faker.internet.email(),
@@ -31,7 +31,8 @@ describe('UsersService', () => {
   describe('create user method', () => {
     beforeEach(async () => {
       const testUser = await usersService.create(payload);
-      testUserId = testUser.id;
+      console.log('🚀 ~ beforeEach ~ testUser:', testUser);
+      testUserId = testUser.user_id;
     });
 
     afterEach(async () => {
@@ -66,7 +67,7 @@ describe('UsersService', () => {
   describe('remove user method', () => {
     it('removes user from db', async () => {
       const testUser = await usersService.create(payload);
-      await usersService.remove(testUser.id);
+      await usersService.remove(testUser.user_id);
       // Assert
       await expect(profileService.findById(testUserId)).rejects.toThrow(
         NotFoundException,

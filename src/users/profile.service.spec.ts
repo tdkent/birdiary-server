@@ -9,7 +9,8 @@ import { UpdateProfileDto } from './dtos/update-profile.dto';
 describe('ProfileService', () => {
   let profileService: ProfileService;
   let usersService: UsersService;
-  let testUserId: number | null = null;
+  let testUserId: string;
+  const fakeUuid = '123e4567-e89b-12d3-a456-426614174000';
 
   const createUserPayload = {
     email: faker.internet.email(),
@@ -30,7 +31,7 @@ describe('ProfileService', () => {
     usersService = module.get<UsersService>(UsersService);
 
     const testUser = await usersService.create(createUserPayload);
-    testUserId = testUser.id;
+    testUserId = testUser.user_id;
   });
 
   afterEach(async () => {
@@ -44,7 +45,7 @@ describe('ProfileService', () => {
   describe('update profile method', () => {
     it('throws 404 error if user does not exist', async () => {
       await expect(
-        profileService.updateProfile(-1, updateUserPayload),
+        profileService.updateProfile(fakeUuid, updateUserPayload),
       ).rejects.toThrow(NotFoundException);
     });
     it('correctly updates user profile', async () => {

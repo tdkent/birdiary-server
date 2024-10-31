@@ -14,8 +14,9 @@ describe('SightingService', () => {
   let usersService: UsersService;
   let databaseService: DatabaseService;
 
-  let testUserId: number;
+  let testUserId: string;
   let testSighting: any;
+  const fakeUuid = '123e4567-e89b-12d3-a456-426614174000';
 
   const userPayload = {
     email: faker.internet.email(),
@@ -52,10 +53,9 @@ describe('SightingService', () => {
     databaseService = module.get<DatabaseService>(DatabaseService);
 
     const testUser = await usersService.create(userPayload);
-    testUserId = testUser.id;
+    testUserId = testUser.user_id;
 
     const sighting = await sightingService.create(testUserId, sightingPayload);
-    console.log('🚀 ~ beforeEach ~ sighting:', sighting);
     testSighting = sighting;
   });
 
@@ -71,8 +71,6 @@ describe('SightingService', () => {
   describe('create sighting method', () => {
     it('creates new sighting', async () => {
       // Assert
-      console.log('testSighting', testSighting);
-
       expect(testSighting.id).toBeDefined();
       expect(testSighting.bird_id).toBe(sightingPayload.bird_id);
     });
@@ -140,9 +138,9 @@ describe('SightingService', () => {
   describe('remove sighting method', () => {
     it('throws 404 error if sighting does not exist, or user is not authorized', async () => {
       // Assert
-      await expect(sightingService.remove(-1, testSighting.id)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        sightingService.remove(fakeUuid, testSighting.id),
+      ).rejects.toThrow(NotFoundException);
     });
     it('correctly removes sighting', async () => {
       const res = await sightingService.remove(testUserId, testSighting.id);

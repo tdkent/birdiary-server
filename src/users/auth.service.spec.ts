@@ -43,7 +43,7 @@ describe('AuthService', () => {
         authService.signin({ email: payload.email, password: badPassword }),
       ).rejects.toThrow(BadRequestException);
       // Clean up db
-      await usersService.remove(testUser.id);
+      await usersService.remove(testUser.user_id);
     });
   });
 });
