@@ -2,7 +2,7 @@ import { IsNumber, IsString, Max, MaxLength, Min } from 'class-validator';
 
 export class LocationDto {
   @IsString()
-  @MaxLength(150)
+  @MaxLength(255)
   readonly name: string;
 
   @IsNumber()
