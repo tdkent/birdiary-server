@@ -13,7 +13,7 @@ model User {
   id Int @id @default(autoincrement())
   user_id String @db.Uuid @unique @default(uuid())
   email String @unique @db.VarChar(255)
-  password String @db.VarChar(36)
+  password String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   profile Profile?
