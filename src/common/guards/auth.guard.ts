@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { jwtKey } from '../constants/env.constants';
+import ErrorMessages from '../errors/errors.enum';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -16,14 +17,14 @@ export class AuthGuard implements CanActivate {
     const tokenString = request.headers.authorization;
 
     if (!tokenString) {
-      throw new UnauthorizedException('This request is not authorized');
+      throw new UnauthorizedException(ErrorMessages.InvalidToken);
     }
 
     const type = tokenString.split(' ')[0];
     const token = tokenString.split(' ')[1];
 
     if (type !== 'Bearer' || !token) {
-      throw new UnauthorizedException('This request is not authorized');
+      throw new UnauthorizedException(ErrorMessages.InvalidToken);
     }
 
     try {
@@ -34,7 +35,7 @@ export class AuthGuard implements CanActivate {
       // assign the payload to the request object
       request['user'] = payload;
     } catch {
-      throw new UnauthorizedException('This request is not authorized');
+      throw new UnauthorizedException(ErrorMessages.InvalidToken);
     }
 
     return true;
