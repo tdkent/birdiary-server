@@ -3,7 +3,6 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
 import { AuthService } from './auth.service';
 import { UsersService } from './users.service';
-import { JwtService } from '@nestjs/jwt';
 import { DatabaseService } from '../database/database.service';
 
 describe('AuthService', () => {
@@ -17,7 +16,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService, UsersService, DatabaseService, JwtService],
+      providers: [AuthService, UsersService, DatabaseService],
     }).compile();
 
     usersService = module.get<UsersService>(UsersService);

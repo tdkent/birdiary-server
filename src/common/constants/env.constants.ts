@@ -5,4 +5,4 @@ export const cloudinaryName = process.env.CLOUDINARY_NAME;
 export const cloudinaryKey = process.env.CLOUDINARY_KEY;
 export const cloudinarySecret = process.env.CLOUDINARY_SECRET;
 // Jwt
-export const jwtKey = process.env.JWT_KEY;
+export const sessionKey = process.env.SESSION_KEY;

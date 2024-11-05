@@ -4,21 +4,15 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Prisma } from '@prisma/client';
 import { compare } from 'bcrypt';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { DatabaseService } from '../database/database.service';
-import { UsersService } from '../users/users.service';
 import ErrorMessages from '../common/errors/errors.enum';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
-    private readonly databaseService: DatabaseService,
-  ) {}
+  constructor(private readonly databaseService: DatabaseService) {}
 
   //---- SIGN IN A USER. ERROR ON FAIL, TOKEN ON SUCCESS.
   async signin(loginUser: CreateUserDto) {
@@ -32,9 +26,7 @@ export class AuthService {
         throw new BadRequestException();
       }
 
-      const payload = { id: user.user_id };
-      const token = await this.jwtService.signAsync(payload);
-      return { userId: user.user_id, token };
+      return { id: user.user_id };
     } catch (err) {
       console.log(err);
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
