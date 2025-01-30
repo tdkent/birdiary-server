@@ -29,7 +29,8 @@ export class SightingsService {
       if (location) {
         locationId = await this.locationService.upsert(location);
       }
-      return this.databaseService.sighting.create({
+
+      await this.databaseService.sighting.create({
         data: {
           user_id: id,
           bird_id,
@@ -37,16 +38,9 @@ export class SightingsService {
           desc,
           location_id: locationId?.id || null,
         },
-        select: {
-          id: true,
-          bird_id: true,
-          location: {
-            select: {
-              id: true,
-            },
-          },
-        },
       });
+
+      return { message: 'ok' };
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
