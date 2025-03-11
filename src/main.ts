@@ -11,6 +11,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.setGlobalPrefix('/api');
   await app.listen(port, () => {
     console.log('Birdiary API is listening! Port:', port);
   });

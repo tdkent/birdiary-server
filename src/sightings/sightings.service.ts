@@ -10,7 +10,7 @@ import { BirdService } from '../bird/bird.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { GroupSightingDto } from './dto/group-sighting.dto';
-import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
+// import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
 
@@ -108,26 +108,23 @@ export class SightingsService {
     }
   }
 
-  //---- FIND USER'S RECENT POSTS (PAGINATED)
-  async findRecent(id: string, params: GetRecentSightingsDto) {
-    const TAKE_AMOUNT = 10;
-    const SKIP_AMOUNT = TAKE_AMOUNT * params.page;
-    return this.databaseService.sighting
+  //---- FIND USER'S RECENT SIGHTINGS
+  async findRecent(id: string) {
+    return await this.databaseService.sighting
       .findMany({
         where: { user_id: id },
-        select: {
-          id: true,
-          date: true,
-          bird: {
-            select: {
-              id: true,
-              comm_name: true,
-            },
-          },
-        },
+        include: { bird: { select: { comm_name: true } } },
         orderBy: { date: 'desc' },
-        take: TAKE_AMOUNT,
-        skip: SKIP_AMOUNT,
+        take: 10,
+      })
+      .then((res) => {
+        const data = res.map(({ bird, ...res }) => {
+          return {
+            ...res,
+            commName: bird.comm_name,
+          };
+        });
+        return { message: 'ok', data };
       })
       .catch((err) => {
         console.log(err);

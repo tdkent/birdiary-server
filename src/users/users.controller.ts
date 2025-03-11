@@ -40,7 +40,7 @@ export class UsersController {
     return this.usersService.remove(id);
   }
 
-  //---- POST '/auth/signin' :: SIGN IN A USER
+  //---- POST '/users/auth/signin' :: SIGN IN A USER
   @Post('auth/signin')
   @HttpCode(200)
   signin(@Body(ValidationPipe) loginUser: CreateUserDto) {
