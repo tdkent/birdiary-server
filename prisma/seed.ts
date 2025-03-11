@@ -1,23 +1,17 @@
 import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../src/common/helpers/auth.helpers';
-import { birds } from '../db/birds.json';
-import { families } from '../db/families.json';
 import { testUserPw } from '../src/common/constants/env.constants';
-import { Bird } from '../src/common/models/bird.model';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  //! limit birds to 20 records
-  const slicedBirds = birds.slice(0, 20) as unknown as Bird;
-
-  await prisma.family.createMany({
-    data: families,
-  });
-
-  await prisma.bird.createMany({
-    data: slicedBirds,
-  });
+  //? Use to see Family and Bird data
+  // await prisma.family.createMany({
+  //   data: families,
+  // });
+  // await prisma.bird.createMany({
+  //   data: birds as unknown as Bird,
+  // });
 
   await prisma.user.create({
     data: {
