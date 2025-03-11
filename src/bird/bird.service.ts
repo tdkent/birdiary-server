@@ -31,7 +31,7 @@ export class BirdService {
   async findAll() {
     return this.databaseService.bird
       .findMany({
-        select: { id: true, comm_name: true },
+        select: { id: true, commName: true },
         take: 10,
       })
       .catch((err) => {
@@ -47,7 +47,7 @@ export class BirdService {
         where: { id },
         select: {
           id: true,
-          comm_name: true,
+          commName: true,
         },
       })
       .catch((err) => {
@@ -67,13 +67,13 @@ export class BirdService {
       .findUniqueOrThrow({
         where: { id },
         include: { family: true },
-        omit: { family_id: true },
+        omit: { familyId: true },
       })
       .then(async (prismaRes) => {
         // if bird has an image, fetch from cloudinary
-        if (prismaRes.img_attr) {
+        if (prismaRes.imgAttr) {
           const img = (await cloudinary.api
-            .resources_by_asset_folder(prismaRes.comm_name)
+            .resources_by_asset_folder(prismaRes.commName)
             .then((res) => {
               const cloudinaryRes = res as unknown as CloudinaryResponse;
               console.log(cloudinaryRes);

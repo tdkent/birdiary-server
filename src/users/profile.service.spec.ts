@@ -31,7 +31,7 @@ describe('ProfileService', () => {
     usersService = module.get<UsersService>(UsersService);
 
     const testUser = await usersService.create(createUserPayload);
-    testUserId = testUser.user_id;
+    testUserId = testUser.userId;
   });
 
   afterEach(async () => {
@@ -63,8 +63,8 @@ describe('ProfileService', () => {
       await profileService.updateFavoriteBird(testUserId, birdId);
       const fetchTestUser = await profileService.findById(testUserId);
       // Assert
-      expect(fetchTestUser.fav_bird.bird).toBeDefined();
-      expect(fetchTestUser.fav_bird.bird.id).toBe(birdId);
+      expect(fetchTestUser.favBird.bird).toBeDefined();
+      expect(fetchTestUser.favBird.bird.id).toBe(birdId);
     });
   });
 });

@@ -26,7 +26,7 @@ export class AuthService {
         throw new BadRequestException();
       }
 
-      return { id: user.user_id };
+      return { id: user.userId };
     } catch (err) {
       console.log(err);
       if (err instanceof Prisma.PrismaClientKnownRequestError) {

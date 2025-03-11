@@ -17,23 +17,23 @@ export class ProfileService {
   async findById(id: string) {
     return this.databaseService.user
       .findUniqueOrThrow({
-        where: { user_id: id },
+        where: { userId: id },
         select: {
           email: true,
-          created_at: true,
+          createdAt: true,
           profile: {
             select: {
-              user_id: true,
+              userId: true,
               name: true,
               location: true,
             },
           },
-          fav_bird: {
+          favBird: {
             select: {
               bird: {
                 select: {
                   id: true,
-                  comm_name: true,
+                  commName: true,
                 },
               },
             },
@@ -55,9 +55,9 @@ export class ProfileService {
   async updateProfile(id: string, updateProfileDto: UpdateProfileDto) {
     return this.databaseService.profile
       .update({
-        where: { user_id: id },
+        where: { userId: id },
         data: updateProfileDto,
-        select: { user_id: true },
+        select: { userId: true },
       })
       .catch((err) => {
         console.log(err);
@@ -76,9 +76,9 @@ export class ProfileService {
   async updateFavoriteBird(id: string, birdId: number) {
     return this.databaseService.favorite
       .update({
-        where: { user_id: id },
-        data: { bird_id: birdId },
-        select: { bird_id: true },
+        where: { userId: id },
+        data: { birdId: birdId },
+        select: { birdId: true },
       })
       .catch((err) => {
         console.log(err);

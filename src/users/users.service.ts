@@ -21,13 +21,13 @@ export class UsersService {
           email: createUserDto.email,
           password: await hashPassword(createUserDto.password),
           profile: { create: {} },
-          fav_bird: {
+          favBird: {
             create: {
-              bird_id: null,
+              birdId: null,
             },
           },
         },
-        select: { user_id: true },
+        select: { userId: true },
       })
       .catch((err) => {
         console.log(err);
@@ -47,8 +47,8 @@ export class UsersService {
   async remove(id: string) {
     return this.databaseService.user
       .delete({
-        where: { user_id: id },
-        select: { user_id: true },
+        where: { userId: id },
+        select: { userId: true },
       })
       .catch((err) => {
         console.log(err);

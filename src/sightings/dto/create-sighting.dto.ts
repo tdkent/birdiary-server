@@ -19,7 +19,7 @@ export class CreateSightingDto {
   @IsInt()
   @Min(1)
   @Max(BIRD_COUNT)
-  readonly bird_id: number;
+  readonly birdId: number;
 
   @IsDate()
   @Type(() => Date)

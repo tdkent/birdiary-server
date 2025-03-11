@@ -23,7 +23,7 @@ export class SightingsService {
   ) {}
   //---- CREATE NEW SIGHTING
   async create(id: string, createSightingDto: CreateSightingDto) {
-    const { bird_id, date, desc, location } = createSightingDto;
+    const { birdId, date, desc, location } = createSightingDto;
     let locationId: { id: number } | null = null;
     try {
       if (location) {
@@ -32,11 +32,11 @@ export class SightingsService {
 
       await this.databaseService.sighting.create({
         data: {
-          user_id: id,
-          bird_id,
+          userId: id,
+          birdId,
           date,
           desc,
-          location_id: locationId?.id || null,
+          locationId: locationId?.id || null,
         },
       });
 
@@ -54,44 +54,42 @@ export class SightingsService {
         if (query.groupby === 'date') {
           return this.databaseService.sighting.groupBy({
             by: ['date'],
-            where: { user_id: id },
+            where: { userId: id },
             _count: { _all: true },
           });
         } else if (query.groupby === 'location') {
           const locGroup = await this.databaseService.sighting.groupBy({
-            by: ['location_id'],
-            where: { user_id: id },
+            by: ['locationId'],
+            where: { userId: id },
             _count: { _all: true },
           });
           for (const loc of locGroup) {
-            const location = await this.locationService.findOne(
-              loc.location_id,
-            );
+            const location = await this.locationService.findOne(loc.locationId);
             loc['location_name'] = location.name;
           }
           return locGroup;
         } else {
           const birdGroup = await this.databaseService.sighting.groupBy({
-            by: ['bird_id'],
-            where: { user_id: id },
+            by: ['birdId'],
+            where: { userId: id },
             _count: { _all: true },
           });
           for (const b of birdGroup) {
-            const bird = await this.birdService.findOne(b.bird_id);
-            b['bird_name'] = bird.comm_name;
+            const bird = await this.birdService.findOne(b.birdId);
+            b['bird_name'] = bird.commName;
           }
           return birdGroup;
         }
       }
       return this.databaseService.sighting.findMany({
-        where: { user_id: id },
+        where: { userId: id },
         select: {
           id: true,
           date: true,
           bird: {
             select: {
               id: true,
-              comm_name: true,
+              commName: true,
             },
           },
           location: {
@@ -112,8 +110,8 @@ export class SightingsService {
   async findRecent(id: string) {
     return await this.databaseService.sighting
       .findMany({
-        where: { user_id: id },
-        include: { bird: { select: { comm_name: true } } },
+        where: { userId: id },
+        include: { bird: { select: { commName: true } } },
         orderBy: { date: 'desc' },
         take: 10,
       })
@@ -121,7 +119,7 @@ export class SightingsService {
         const data = res.map(({ bird, ...res }) => {
           return {
             ...res,
-            commName: bird.comm_name,
+            commName: bird.commName,
           };
         });
         return { message: 'ok', data };
@@ -136,15 +134,15 @@ export class SightingsService {
   async findLifeList(id: string) {
     return this.databaseService.sighting
       .findMany({
-        where: { user_id: id },
-        distinct: ['bird_id'],
+        where: { userId: id },
+        distinct: ['birdId'],
         select: {
           id: true,
           date: true,
           bird: {
             select: {
               id: true,
-              comm_name: true,
+              commName: true,
             },
           },
           location: {
@@ -169,7 +167,7 @@ export class SightingsService {
     return this.databaseService.sighting
       .findMany({
         where: {
-          user_id: userId,
+          userId: userId,
           date: new Date(date),
         },
         select: {
@@ -178,7 +176,7 @@ export class SightingsService {
           bird: {
             select: {
               id: true,
-              comm_name: true,
+              commName: true,
             },
           },
           location: {
@@ -200,8 +198,8 @@ export class SightingsService {
     return this.databaseService.sighting
       .findMany({
         where: {
-          user_id: userId,
-          bird_id: birdId,
+          userId: userId,
+          birdId: birdId,
         },
         select: {
           id: true,
@@ -226,8 +224,8 @@ export class SightingsService {
     return this.databaseService.sighting
       .findMany({
         where: {
-          user_id: userId,
-          location_id: locationId,
+          userId: userId,
+          locationId: locationId,
         },
         select: {
           id: true,
@@ -236,7 +234,7 @@ export class SightingsService {
           bird: {
             select: {
               id: true,
-              comm_name: true,
+              commName: true,
             },
           },
         },
@@ -261,10 +259,10 @@ export class SightingsService {
   async groupBirdsByLocation(userId: string, locationId: number) {
     return this.databaseService.sighting
       .groupBy({
-        by: ['bird_id'],
+        by: ['birdId'],
         where: {
-          user_id: userId,
-          location_id: locationId,
+          userId: userId,
+          locationId: locationId,
         },
         _count: { _all: true },
       })
@@ -273,8 +271,8 @@ export class SightingsService {
           throw new NotFoundException();
         }
         for (const el of res) {
-          const bird = await this.birdService.findOne(el.bird_id);
-          el['comm_name'] = bird.comm_name;
+          const bird = await this.birdService.findOne(el.birdId);
+          el['commName'] = bird.commName;
         }
         return res;
       })
@@ -294,7 +292,7 @@ export class SightingsService {
     return this.databaseService.sighting
       .findFirstOrThrow({
         where: {
-          AND: [{ user_id: userId }, { id: sightingId }],
+          AND: [{ userId: userId }, { id: sightingId }],
         },
       })
       .catch((err) => {
@@ -322,13 +320,13 @@ export class SightingsService {
     try {
       if (location) {
         locationId = await this.locationService.upsert(location);
-        updateSightingData['location_id'] = locationId.id;
+        updateSightingData['locationId'] = locationId.id;
       }
       const res = await this.databaseService.sighting.updateMany({
         data: {
           ...updateSightingData,
         },
-        where: { id: sightingId, user_id: userId },
+        where: { id: sightingId, userId: userId },
       });
       if (!res.count) {
         throw new NotFoundException();
@@ -349,7 +347,7 @@ export class SightingsService {
   async remove(userId: string, sightingId: number) {
     return this.databaseService.sighting
       .deleteMany({
-        where: { id: sightingId, user_id: userId },
+        where: { id: sightingId, userId: userId },
       })
       .then((res) => {
         if (!res.count) {
