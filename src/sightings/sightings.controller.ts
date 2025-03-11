@@ -19,7 +19,7 @@ import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { GroupSightingDto } from './dto/group-sighting.dto';
 import { GetSightingByDateDto } from './dto/get-sighting-by-date.dto';
 import { GetSightingsByBirdDto } from './dto/get-sighting-by-bird.dto';
-import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
+// import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 
@@ -54,12 +54,14 @@ export class SightingsController {
 
   //---- GET '/sightings/recent/:page' :: Find paginated recent sightings
   //? Uses offset pagination, receives :page param to calculate records to skip
-  @Get('/recent/:page')
+  // @Get('/recent/:page')
+  @Get('/recent')
   findRecent(
     @CurrentUser('id') id: string,
-    @Param(new ValidationPipe()) params: GetRecentSightingsDto,
+    // @Param(new ValidationPipe()) params: GetRecentSightingsDto,
   ) {
-    return this.sightingsService.findRecent(id, params);
+    // return this.sightingsService.findRecent(id, params);
+    return this.sightingsService.findRecent(id);
   }
 
   //---- GET '/sightings/lifelist' :: Find user's lifelist
