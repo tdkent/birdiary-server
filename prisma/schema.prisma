@@ -11,13 +11,13 @@ datasource db {
 
 model User {
   id Int @id @default(autoincrement())
-  user_id String @db.Uuid @unique @default(uuid())
+  userId String @db.Uuid @unique @default(uuid())
   email String @unique @db.VarChar(255)
   password String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   profile Profile?
-  fav_bird Favorite?
+  favBird Favorite?
   sightings Sighting[]
 }
 
@@ -25,16 +25,16 @@ model Profile {
   id Int @id @default(autoincrement())
   name String? @db.VarChar(60)
   location String? @db.VarChar(120)
-  user_id String @db.Uuid @unique
-  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  userId String @db.Uuid @unique
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 }
 
 model Favorite {
   id Int @id @default(autoincrement())
-  user_id String @db.Uuid @unique
-  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  bird_id Int?
-  bird Bird? @relation(fields:[bird_id], references: [id])
+  userId String @db.Uuid @unique
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  birdId Int?
+  bird Bird? @relation(fields:[birdId], references: [id])
 }
 
 enum Rarity {
@@ -44,13 +44,13 @@ enum Rarity {
 }
 model Bird {
   id Int @id @default(autoincrement())
-  comm_name String @unique @db.VarChar(60)
-  sci_name String @unique @db.VarChar(60)
-  family Family @relation(fields: [family_id], references: [id])
-  family_id Int @db.SmallInt
+  commName String @unique @db.VarChar(60)
+  sciName String @unique @db.VarChar(60)
+  family Family @relation(fields: [familyId], references: [id])
+  familyId Int @db.SmallInt
   rarity Rarity 
   desc String @db.VarChar(255)
-  img_attr String? @db.VarChar(255)
+  imgAttr String? @db.VarChar(255)
   favorites Favorite[]
   sightings Sighting[]
 }
@@ -63,12 +63,13 @@ model Family {
 
 model Sighting {
   id Int @id @default(autoincrement())
-  user_id String @db.Uuid
-  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  bird_id Int
-  bird Bird @relation(fields: [bird_id], references: [id])
-  location_id Int?
-  location Location? @relation(fields: [location_id], references: [id])
+  sightingId String @db.Uuid @unique @default(uuid())
+  userId String @db.Uuid
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  birdId Int
+  bird Bird @relation(fields: [birdId], references: [id])
+  locationId Int?
+  location Location? @relation(fields: [locationId], references: [id])
   date DateTime @db.Date
   desc String? @db.VarChar(150)
 }

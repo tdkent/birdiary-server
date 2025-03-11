@@ -56,11 +56,11 @@ export class LocationService {
       const newLocationId = await this.upsert(locationDto);
       return this.databaseService.sighting.updateMany({
         where: {
-          user_id: userId,
-          location_id: locationId,
+          userId: userId,
+          locationId: locationId,
         },
         data: {
-          location_id: newLocationId.id,
+          locationId: newLocationId.id,
         },
       });
     } catch (err) {

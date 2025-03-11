@@ -31,8 +31,7 @@ describe('UsersService', () => {
   describe('create user method', () => {
     beforeEach(async () => {
       const testUser = await usersService.create(payload);
-      console.log('🚀 ~ beforeEach ~ testUser:', testUser);
-      testUserId = testUser.user_id;
+      testUserId = testUser.userId;
     });
 
     afterEach(async () => {
@@ -53,21 +52,21 @@ describe('UsersService', () => {
       const testUserProfile = await profileService.findById(testUserId);
       // Assert
       expect(testUserProfile.profile).toBeDefined();
-      expect(testUserProfile.profile.user_id).toBe(testUserId);
+      expect(testUserProfile.profile.userId).toBe(testUserId);
       expect(testUserProfile.profile.name).toBeNull();
     });
     it('creates related Favorite record with null values', async () => {
       const testUserProfile = await profileService.findById(testUserId);
       // Assert
-      expect(testUserProfile.fav_bird).toBeDefined();
-      expect(testUserProfile.fav_bird.bird).toBeNull();
+      expect(testUserProfile.favBird).toBeDefined();
+      expect(testUserProfile.favBird.bird).toBeNull();
     });
   });
 
   describe('remove user method', () => {
     it('removes user from db', async () => {
       const testUser = await usersService.create(payload);
-      await usersService.remove(testUser.user_id);
+      await usersService.remove(testUser.userId);
       // Assert
       await expect(profileService.findById(testUserId)).rejects.toThrow(
         NotFoundException,
