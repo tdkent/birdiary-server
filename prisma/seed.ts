@@ -29,9 +29,9 @@ async function main() {
           location: '',
         },
       },
-      fav_bird: {
+      favBird: {
         create: {
-          bird_id: null,
+          birdId: null,
         },
       },
     },

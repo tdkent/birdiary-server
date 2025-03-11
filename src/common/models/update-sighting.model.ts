@@ -1,6 +1,6 @@
 export type UpdateSighting = {
-  bird_id?: number;
-  location_id?: number;
+  birdId?: number;
+  locationId?: number;
   desc?: string;
   date?: Date;
 };
