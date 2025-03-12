@@ -1,3 +1,2 @@
-import { birds } from '../../../db/birds.json';
-
-export const BIRD_COUNT = birds.length;
+// The number of Bird records in the database
+export const BIRD_COUNT = 838;
