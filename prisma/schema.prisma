@@ -66,8 +66,8 @@ model Sighting {
   sightingId String @db.Uuid @unique @default(uuid())
   userId String @db.Uuid
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  birdId Int
-  bird Bird @relation(fields: [birdId], references: [id])
+  commName String
+  bird Bird @relation(fields: [commName], references: [commName])
   locationId Int?
   location Location? @relation(fields: [locationId], references: [id])
   date DateTime @db.Date
