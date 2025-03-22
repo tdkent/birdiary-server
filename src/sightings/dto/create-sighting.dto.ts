@@ -22,7 +22,7 @@ export class CreateSightingDto {
   @IsDate()
   @Type(() => Date)
   @MinDate(new Date('1950-01-01'))
-  @MaxDate(new Date())
+  @MaxDate(() => new Date())
   readonly date: Date;
 
   @IsOptional()
