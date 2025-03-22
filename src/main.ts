@@ -9,6 +9,12 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      //? Optional: Extract the first validation error message
+      // exceptionFactory: (validationErrors: ValidationError[] = []) => {
+      //   return new BadRequestException(
+      //     validationErrors.map((error) => Object.values(error.constraints)[0]),
+      //   );
+      // },
     }),
   );
   app.setGlobalPrefix('/api');

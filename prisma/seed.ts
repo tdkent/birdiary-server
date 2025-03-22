@@ -1,11 +1,14 @@
 import { PrismaClient } from '@prisma/client';
 import { hashPassword } from '../src/common/helpers/auth.helpers';
 import { testUserPw } from '../src/common/constants/env.constants';
+// import { birds } from '../db/birds.json';
+// import { families } from '../db/families.json';
+// import type { Bird } from 'src/common/models/bird.model';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  //? Use to see Family and Bird data
+  //? Use to seed Family and Bird data
   // await prisma.family.createMany({
   //   data: families,
   // });

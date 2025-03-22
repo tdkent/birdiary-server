@@ -23,7 +23,7 @@ export class SightingsService {
   ) {}
   //---- CREATE NEW SIGHTING
   async create(id: string, createSightingDto: CreateSightingDto) {
-    const { birdId, date, desc, location } = createSightingDto;
+    const { commName, date, desc, location } = createSightingDto;
     let locationId: { id: number } | null = null;
     try {
       if (location) {
@@ -33,7 +33,7 @@ export class SightingsService {
       await this.databaseService.sighting.create({
         data: {
           userId: id,
-          birdId,
+          commName,
           date,
           desc,
           locationId: locationId?.id || null,
@@ -70,14 +70,14 @@ export class SightingsService {
           return locGroup;
         } else {
           const birdGroup = await this.databaseService.sighting.groupBy({
-            by: ['birdId'],
+            by: ['commName'],
             where: { userId: id },
             _count: { _all: true },
           });
-          for (const b of birdGroup) {
-            const bird = await this.birdService.findOne(b.birdId);
-            b['bird_name'] = bird.commName;
-          }
+          // for (const b of birdGroup) {
+          //   const bird = await this.birdService.findOne(b.birdId);
+          //   b['bird_name'] = bird.commName;
+          // }
           return birdGroup;
         }
       }
@@ -135,7 +135,7 @@ export class SightingsService {
     return this.databaseService.sighting
       .findMany({
         where: { userId: id },
-        distinct: ['birdId'],
+        distinct: ['commName'],
         select: {
           id: true,
           date: true,
@@ -194,12 +194,12 @@ export class SightingsService {
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
-  async findSightingsBySingleBird(userId: string, birdId: number) {
+  async findSightingsBySingleBird(userId: string, commName: string) {
     return this.databaseService.sighting
       .findMany({
         where: {
-          userId: userId,
-          birdId: birdId,
+          userId,
+          commName,
         },
         select: {
           id: true,
@@ -259,7 +259,7 @@ export class SightingsService {
   async groupBirdsByLocation(userId: string, locationId: number) {
     return this.databaseService.sighting
       .groupBy({
-        by: ['birdId'],
+        by: ['commName'],
         where: {
           userId: userId,
           locationId: locationId,
@@ -270,10 +270,10 @@ export class SightingsService {
         if (!res.length) {
           throw new NotFoundException();
         }
-        for (const el of res) {
-          const bird = await this.birdService.findOne(el.birdId);
-          el['commName'] = bird.commName;
-        }
+        // for (const el of res) {
+        //   const bird = await this.birdService.findOne(el.commName);
+        //   el['commName'] = bird.commName;
+        // }
         return res;
       })
       .catch((err) => {

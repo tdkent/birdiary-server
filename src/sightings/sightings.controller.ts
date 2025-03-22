@@ -85,7 +85,8 @@ export class SightingsController {
     @CurrentUser('id') id: string,
     @Param(new ValidationPipe()) params: GetSightingsByBirdDto,
   ) {
-    return this.sightingsService.findSightingsBySingleBird(id, params.id);
+    // return this.sightingsService.findSightingsBySingleBird(id, params.id);
+    return;
   }
 
   //---- GET 'sightings/locations/:id' :: Find a single location
