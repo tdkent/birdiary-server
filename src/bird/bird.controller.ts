@@ -12,9 +12,9 @@ export class BirdController {
     return this.birdService.findAll();
   }
 
-  //---- GET '/birds/:id' :: FETCH A SINGLE BIRD
-  @Get(':id')
+  //---- GET '/birds/:commName' :: FETCH A SINGLE BIRD
+  @Get(':commName')
   findOne(@Param(new ValidationPipe()) params: GetSightingsByBirdDto) {
-    return this.birdService.findOneWithImage(params.id);
+    return this.birdService.findOneWithImage(params.commName);
   }
 }

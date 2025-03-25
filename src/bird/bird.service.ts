@@ -62,10 +62,10 @@ export class BirdService {
   }
 
   //---- FETCH A SINGLE BIRD WITH IMAGE
-  async findOneWithImage(id: number) {
+  async findOneWithImage(commName: string) {
     return this.databaseService.bird
       .findUniqueOrThrow({
-        where: { id },
+        where: { commName },
         include: { family: true },
         omit: { familyId: true },
       })
@@ -86,7 +86,7 @@ export class BirdService {
               } = err as CloudinaryError;
               console.log('Cloudinary error: ', http_code, message);
             })) as CloudinaryResponse | void;
-          return { ...prismaRes, img_href: img };
+          return { message: 'ok', data: { ...prismaRes, img_href: img } };
         }
 
         return { ...prismaRes, img_href: null };
