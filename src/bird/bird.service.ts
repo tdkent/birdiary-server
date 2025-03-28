@@ -86,10 +86,10 @@ export class BirdService {
               } = err as CloudinaryError;
               console.log('Cloudinary error: ', http_code, message);
             })) as CloudinaryResponse | void;
-          return { message: 'ok', data: { ...prismaRes, img_href: img } };
+          return { message: 'ok', data: { ...prismaRes, imgUrl: img } };
         }
 
-        return { ...prismaRes, img_href: null };
+        return { ...prismaRes, imgAttr: null, imgUrl: null };
       })
       .catch((err) => {
         console.log(err);
