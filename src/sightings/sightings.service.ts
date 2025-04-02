@@ -52,11 +52,18 @@ export class SightingsService {
     try {
       if (query.groupby) {
         if (query.groupby === 'date') {
-          return this.databaseService.sighting.groupBy({
+          const data = await this.databaseService.sighting.groupBy({
             by: ['date'],
+            orderBy: { date: 'desc' },
             where: { userId: id },
             _count: { _all: true },
           });
+
+          // Change {_count: { _all: number }} to { count: number }
+          const formatData = data.map((sighting) => {
+            return { date: sighting.date, count: sighting._count._all };
+          });
+          return { message: 'ok', data: formatData };
         } else if (query.groupby === 'location') {
           const locGroup = await this.databaseService.sighting.groupBy({
             by: ['locationId'],
@@ -81,7 +88,7 @@ export class SightingsService {
           return birdGroup;
         }
       }
-      return this.databaseService.sighting.findMany({
+      const data = await this.databaseService.sighting.findMany({
         where: { userId: id },
         select: {
           id: true,
@@ -100,6 +107,7 @@ export class SightingsService {
           },
         },
       });
+      return { message: 'ok', data };
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
@@ -108,26 +116,19 @@ export class SightingsService {
 
   //---- FIND USER'S RECENT SIGHTINGS
   async findRecent(id: string) {
-    return await this.databaseService.sighting
+    const data = await this.databaseService.sighting
       .findMany({
         where: { userId: id },
-        include: { bird: { select: { commName: true } } },
+        omit: { id: true },
         orderBy: { date: 'desc' },
         take: 10,
-      })
-      .then((res) => {
-        const data = res.map(({ bird, ...res }) => {
-          return {
-            ...res,
-            commName: bird.commName,
-          };
-        });
-        return { message: 'ok', data };
       })
       .catch((err) => {
         console.log(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+
+    return { message: 'ok', data };
   }
 
   //---- FIND USER'S LIFE LIST
@@ -164,26 +165,19 @@ export class SightingsService {
 
   //---- FIND USER'S SIGHTINGS BY SINGLE DATE
   async findSightingsBySingleDate(userId: string, date: Date) {
-    return this.databaseService.sighting
+    const data = await this.databaseService.sighting
       .findMany({
         where: {
           userId: userId,
           date: new Date(date),
         },
         select: {
-          id: true,
+          sightingId: true,
+          commName: true,
+          date: true,
           desc: true,
-          bird: {
-            select: {
-              id: true,
-              commName: true,
-            },
-          },
           location: {
-            select: {
-              id: true,
-              name: true,
-            },
+            omit: { id: true },
           },
         },
       })
@@ -191,6 +185,8 @@ export class SightingsService {
         console.log(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+
+    return { message: 'ok', data };
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
