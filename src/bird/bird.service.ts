@@ -89,7 +89,10 @@ export class BirdService {
           return { message: 'ok', data: { ...prismaRes, imgUrl: img } };
         }
 
-        return { ...prismaRes, imgAttr: null, imgUrl: null };
+        return {
+          message: 'ok',
+          data: { ...prismaRes, imgAttr: null, imgUrl: null },
+        };
       })
       .catch((err) => {
         console.log(err);
