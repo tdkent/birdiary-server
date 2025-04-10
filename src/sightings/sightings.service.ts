@@ -191,21 +191,19 @@ export class SightingsService {
 
   //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
   async findSightingsBySingleBird(userId: string, commName: string) {
-    return this.databaseService.sighting
+    const data = await this.databaseService.sighting
       .findMany({
         where: {
           userId,
           commName,
         },
         select: {
-          id: true,
+          sightingId: true,
+          commName: true,
           date: true,
           desc: true,
           location: {
-            select: {
-              id: true,
-              name: true,
-            },
+            omit: { id: true },
           },
         },
       })
@@ -213,6 +211,7 @@ export class SightingsService {
         console.log(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+    return { message: 'ok', data };
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE LOCATION

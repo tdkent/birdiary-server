@@ -79,14 +79,13 @@ export class SightingsController {
     return this.sightingsService.findSightingsBySingleDate(id, params.date);
   }
 
-  //---- GET '/sightings/bird/:id' :: Find all user's sightings by single bird
-  @Get('bird/:id')
+  //---- GET '/sightings/bird/:commName' :: Find all user's sightings by single bird
+  @Get('bird/:commName')
   findAllByBird(
     @CurrentUser('id') id: string,
     @Param(new ValidationPipe()) params: GetSightingsByBirdDto,
   ) {
-    // return this.sightingsService.findSightingsBySingleBird(id, params.id);
-    return;
+    return this.sightingsService.findSightingsBySingleBird(id, params.commName);
   }
 
   //---- GET 'sightings/locations/:id' :: Find a single location
