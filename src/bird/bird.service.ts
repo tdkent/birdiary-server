@@ -31,7 +31,7 @@ export class BirdService {
 
   //---- FETCH ALL BIRDS OR All BY FIRST ALPHA CHARACTER
   //---- PAGINATE RESULTS: 25 RESULTS PER PAGE
-  //---- INCLUDE SIGHTING COUNT FOR EACH BIRD
+  //---- IF USER ID PRESENT, INCLUDE SIGHTING COUNT FOR EACH BIRD
   async findAllByAlpha(id: string, query: GetBirdsByAlphaDto) {
     const { startsWith, page } = query;
     try {
@@ -43,19 +43,22 @@ export class BirdService {
       }
 
       const birds = await this.databaseService.bird.findMany({
-        // Conditionally add `where` clause to statement
+        // Conditionally use `where` clause to statement
         // https://brockherion.dev/blog/posts/how-to-do-conditional-where-statements-in-prisma/
         where: { ...(startsWith ? { commName: { startsWith } } : {}) },
         omit: { familyId: true },
         include: {
           family: true,
-          _count: {
-            select: {
-              sightings: {
-                where: { userId: id },
-              },
-            },
-          },
+          // Conditionally add '_count' clause if 'id' is defined
+          ...(id
+            ? {
+                _count: {
+                  select: {
+                    sightings: { where: { userId: id } },
+                  },
+                },
+              }
+            : {}),
         },
         take: 25,
         skip: 25 * (page - 1),
