@@ -17,6 +17,7 @@ import {
   cloudinaryKey,
   cloudinarySecret,
 } from '../common/constants/env.constants';
+import { BIRD_COUNT } from 'src/common/constants/bird.constants';
 
 cloudinary.config({
   cloud_name: cloudinaryName,
@@ -30,25 +31,36 @@ export class BirdService {
 
   //---- FETCH ALL BIRDS OR All BY FIRST ALPHA CHARACTER
   //---- PAGINATE RESULTS: 25 RESULTS PER PAGE
-  async findAllByAlpha(query: GetBirdsByAlphaDto) {
+  //---- INCLUDE SIGHTING COUNT FOR EACH BIRD
+  async findAllByAlpha(id: string, query: GetBirdsByAlphaDto) {
     const { startsWith, page } = query;
     try {
-      // TODO: Need to include the count of sightings the user has
-      // made for each bird (if a token is present)
+      let countOfRecords = BIRD_COUNT;
+      if (startsWith) {
+        countOfRecords = await this.databaseService.bird.count({
+          where: { commName: { startsWith } },
+        });
+      }
 
-      // TODO: Need to know how many total results are available
-      // for a given 'startsWith' value
-
-      const data = await this.databaseService.bird.findMany({
+      const birds = await this.databaseService.bird.findMany({
         // Conditionally add `where` clause to statement
         // https://brockherion.dev/blog/posts/how-to-do-conditional-where-statements-in-prisma/
         where: { ...(startsWith ? { commName: { startsWith } } : {}) },
         omit: { familyId: true },
-        include: { family: true },
+        include: {
+          family: true,
+          _count: {
+            select: {
+              sightings: {
+                where: { userId: id },
+              },
+            },
+          },
+        },
         take: 25,
         skip: 25 * (page - 1),
       });
-      return { message: 'ok', data };
+      return { message: 'ok', data: { countOfRecords, birds } };
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
