@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { DatabaseService } from '../database/database.service';
 import ErrorMessages from '../common/errors/errors.enum';
+import { GetBirdsByAlphaDto } from 'src/bird/dto/get-birds-by-alpha.dto';
 import {
   CloudinaryResponse,
   CloudinaryError,
@@ -27,17 +28,31 @@ cloudinary.config({
 export class BirdService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  //---- FETCH ALL BIRDS
-  async findAll() {
-    return this.databaseService.bird
-      .findMany({
-        select: { id: true, commName: true },
-        take: 10,
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+  //---- FETCH ALL BIRDS OR All BY FIRST ALPHA CHARACTER
+  //---- PAGINATE RESULTS: 25 RESULTS PER PAGE
+  async findAllByAlpha(query: GetBirdsByAlphaDto) {
+    const { startsWith, page } = query;
+    try {
+      // TODO: Need to include the count of sightings the user has
+      // made for each bird (if a token is present)
+
+      // TODO: Need to know how many total results are available
+      // for a given 'startsWith' value
+
+      const data = await this.databaseService.bird.findMany({
+        // Conditionally add `where` clause to statement
+        // https://brockherion.dev/blog/posts/how-to-do-conditional-where-statements-in-prisma/
+        where: { ...(startsWith ? { commName: { startsWith } } : {}) },
+        omit: { familyId: true },
+        include: { family: true },
+        take: 25,
+        skip: 25 * (page - 1),
       });
+      return { message: 'ok', data };
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   //---- FETCH A SINGLE BIRD
