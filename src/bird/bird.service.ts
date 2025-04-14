@@ -66,7 +66,9 @@ export class BirdService {
 
       if (id) {
         const addCount = birds.map((bird) => {
-          return { ...bird, count: bird._count.sightings };
+          // Remove _count field from `bird` object
+          const { _count, ...rest } = bird;
+          return { ...rest, count: _count.sightings };
         });
         return { message: 'ok', data: { countOfRecords, birds: addCount } };
       }
