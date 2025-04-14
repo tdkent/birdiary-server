@@ -63,6 +63,14 @@ export class BirdService {
         take: 25,
         skip: 25 * (page - 1),
       });
+
+      if (id) {
+        const addCount = birds.map((bird) => {
+          return { ...bird, count: bird._count.sightings };
+        });
+        return { message: 'ok', data: { countOfRecords, birds: addCount } };
+      }
+
       return { message: 'ok', data: { countOfRecords, birds } };
     } catch (err) {
       console.log(err);
