@@ -7,6 +7,7 @@ import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { DatabaseService } from '../database/database.service';
 import ErrorMessages from '../common/errors/errors.enum';
+import { GetBirdsByAlphaDto } from 'src/bird/dto/get-birds-by-alpha.dto';
 import {
   CloudinaryResponse,
   CloudinaryError,
@@ -16,6 +17,7 @@ import {
   cloudinaryKey,
   cloudinarySecret,
 } from '../common/constants/env.constants';
+import { BIRD_COUNT } from 'src/common/constants/bird.constants';
 
 cloudinary.config({
   cloud_name: cloudinaryName,
@@ -27,17 +29,55 @@ cloudinary.config({
 export class BirdService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  //---- FETCH ALL BIRDS
-  async findAll() {
-    return this.databaseService.bird
-      .findMany({
-        select: { id: true, commName: true },
-        take: 10,
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+  //---- FETCH ALL BIRDS OR All BY FIRST ALPHA CHARACTER
+  //---- PAGINATE RESULTS: 25 RESULTS PER PAGE
+  //---- IF USER ID PRESENT, INCLUDE SIGHTING COUNT FOR EACH BIRD
+  async findAllByAlpha(id: string, query: GetBirdsByAlphaDto) {
+    const { startsWith, page } = query;
+    try {
+      let countOfRecords = BIRD_COUNT;
+      if (startsWith) {
+        countOfRecords = await this.databaseService.bird.count({
+          where: { commName: { startsWith } },
+        });
+      }
+
+      const birds = await this.databaseService.bird.findMany({
+        // Conditionally use `where` clause to statement
+        // https://brockherion.dev/blog/posts/how-to-do-conditional-where-statements-in-prisma/
+        where: { ...(startsWith ? { commName: { startsWith } } : {}) },
+        omit: { familyId: true },
+        include: {
+          family: true,
+          // Conditionally add '_count' clause if 'id' is defined
+          ...(id
+            ? {
+                _count: {
+                  select: {
+                    sightings: { where: { userId: id } },
+                  },
+                },
+              }
+            : {}),
+        },
+        take: 25,
+        skip: 25 * (page - 1),
       });
+
+      if (id) {
+        const addCount = birds.map((bird) => {
+          // Remove _count field from `bird` object
+          const { _count, ...rest } = bird;
+          return { ...rest, count: _count.sightings };
+        });
+        return { message: 'ok', data: { countOfRecords, birds: addCount } };
+      }
+
+      return { message: 'ok', data: { countOfRecords, birds } };
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   //---- FETCH A SINGLE BIRD

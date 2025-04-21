@@ -19,6 +19,11 @@ export class AuthGuard implements CanActivate {
     const tokenString = request.headers.authorization;
 
     if (!tokenString) {
+      // A token is optional for '/birds'
+      if (request.url.startsWith('/api/birds')) {
+        request['user'] = { id: '' };
+        return true;
+      }
       throw new UnauthorizedException(ErrorMessages.InvalidToken);
     }
 
@@ -33,7 +38,6 @@ export class AuthGuard implements CanActivate {
       const { payload } = await jwtVerify(token, encodedKey, {
         algorithms: ['HS256'],
       });
-
       // assign the payload to the request object
       request['user'] = payload;
     } catch {
