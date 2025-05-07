@@ -19,11 +19,9 @@ export class ProfileService {
       .findUniqueOrThrow({
         where: { userId: id },
         select: {
-          email: true,
           createdAt: true,
           profile: {
             select: {
-              userId: true,
               name: true,
               location: true,
             },
@@ -38,7 +36,29 @@ export class ProfileService {
               },
             },
           },
+          // Fetch all sightings for aggregations
+          // Note: Prisma cannot combine `_count` and `distinct`
+          sightings: true,
         },
+      })
+      .then((res) => {
+        const { sightings, favBird, ...rest } = res;
+        // Total all sightings
+        const totalSightings = sightings.length;
+        // Total distinct sightings
+        const totalDistinctSightings = new Set(
+          sightings.map((sighting) => sighting.commName),
+        ).size;
+
+        const response = {
+          ...rest,
+          favoriteBird: favBird.bird,
+          count: {
+            totalSightings,
+            totalDistinctSightings,
+          },
+        };
+        return response;
       })
       .catch((err) => {
         console.log(err);
@@ -82,7 +102,6 @@ export class ProfileService {
       })
       .catch((err) => {
         console.log(err);
-        //? foreign key constraint error throws while using partial birds db
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2003') {
             throw new BadRequestException(ErrorMessages.BadRequest);
