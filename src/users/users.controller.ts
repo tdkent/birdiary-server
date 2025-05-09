@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -54,9 +55,9 @@ export class UsersController {
     return this.profileService.findById(id);
   }
 
-  //---- PATCH '/users/profile' :: UPDATE USER PROFILE
+  //---- PUT '/users/profile' :: UPDATE USER PROFILE
   @UseGuards(AuthGuard)
-  @Patch('profile')
+  @Put('profile')
   update(
     @CurrentUser('id') id: string,
     @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,

@@ -73,7 +73,7 @@ export class ProfileService {
 
   //---- UPDATE USER PROFILE
   async updateProfile(id: string, updateProfileDto: UpdateProfileDto) {
-    return this.databaseService.profile
+    await this.databaseService.profile
       .update({
         where: { userId: id },
         data: updateProfileDto,
@@ -82,14 +82,14 @@ export class ProfileService {
       .catch((err) => {
         console.log(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          if (err instanceof Prisma.PrismaClientKnownRequestError) {
-            if (err.code === 'P2025') {
-              throw new NotFoundException(ErrorMessages.UserNotFound);
-            }
+          if (err.code === 'P2025') {
+            throw new NotFoundException(ErrorMessages.UserNotFound);
           }
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+
+    return { message: 'ok' };
   }
 
   //---- UPSERT FAVORITE BIRD
