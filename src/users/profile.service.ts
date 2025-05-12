@@ -9,6 +9,7 @@ import { DatabaseService } from '../database/database.service';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
 import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
 import ErrorMessages from '../common/errors/errors.enum';
+import { hashPassword, comparePassword } from 'src/common/helpers/auth.helpers';
 
 @Injectable()
 export class ProfileService {
@@ -75,6 +76,37 @@ export class ProfileService {
   //---- UPDATE USER PASSWORD
   async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
     const { currentPassword, newPassword } = updatePasswordDto;
+    const { password } = await this.databaseService.user
+      .findUniqueOrThrow({
+        where: { userId: id },
+        select: { password: true },
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          if (err.code === 'P2025') {
+            throw new NotFoundException(ErrorMessages.UserNotFound);
+          }
+        }
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+
+    const isValid = await comparePassword(currentPassword, password);
+    if (!isValid) {
+      throw new BadRequestException();
+    }
+
+    const hashNewPassword = await hashPassword(newPassword);
+    await this.databaseService.user
+      .update({
+        where: { userId: id },
+        data: { password: hashNewPassword },
+      })
+      .catch((err) => {
+        console.log(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+
     return { message: 'ok' };
   }
 

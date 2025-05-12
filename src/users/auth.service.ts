@@ -5,10 +5,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { compare } from 'bcrypt';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { DatabaseService } from '../database/database.service';
 import ErrorMessages from '../common/errors/errors.enum';
+import { comparePassword } from 'src/common/helpers/auth.helpers';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,10 @@ export class AuthService {
         where: { email: loginUser.email },
       });
 
-      const comparePasswords = await compare(loginUser.password, user.password);
+      const comparePasswords = await comparePassword(
+        loginUser.password,
+        user.password,
+      );
       if (!comparePasswords) {
         throw new BadRequestException();
       }
