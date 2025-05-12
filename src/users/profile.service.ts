@@ -7,6 +7,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
 import ErrorMessages from '../common/errors/errors.enum';
 
 @Injectable()
@@ -69,6 +70,12 @@ export class ProfileService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+  }
+
+  //---- UPDATE USER PASSWORD
+  async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+    const { currentPassword, newPassword } = updatePasswordDto;
+    return { message: 'ok' };
   }
 
   //---- UPDATE USER PROFILE

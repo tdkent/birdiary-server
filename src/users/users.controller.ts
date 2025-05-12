@@ -16,6 +16,7 @@ import { ProfileService } from './profile.service';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
 import { UpdateFavoriteBirdDto } from './dtos/update-favorite-bird.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -58,11 +59,21 @@ export class UsersController {
   //---- PUT '/users/profile' :: UPDATE USER PROFILE
   @UseGuards(AuthGuard)
   @Put('profile')
-  update(
+  updateProfile(
     @CurrentUser('id') id: string,
     @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,
   ) {
     return this.profileService.updateProfile(id, updateProfileDto);
+  }
+
+  //---- PUT '/users/password' :: UPDATE USER PROFILE
+  @UseGuards(AuthGuard)
+  @Patch('password')
+  updatePassword(
+    @CurrentUser('id') id: string,
+    @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
+  ) {
+    return this.profileService.updatePassword(id, updatePasswordDto);
   }
 
   //---- PATCH '/users/profile/fav/:id' :: UPDATE USER'S FAVORITE BIRD
