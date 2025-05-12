@@ -76,38 +76,36 @@ export class ProfileService {
   //---- UPDATE USER PASSWORD
   async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
     const { currentPassword, newPassword } = updatePasswordDto;
-    const { password } = await this.databaseService.user
-      .findUniqueOrThrow({
+    try {
+      const { password } = await this.databaseService.user.findUniqueOrThrow({
         where: { userId: id },
         select: { password: true },
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          if (err.code === 'P2025') {
-            throw new NotFoundException(ErrorMessages.UserNotFound);
-          }
-        }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
 
-    const isValid = await comparePassword(currentPassword, password);
-    if (!isValid) {
-      throw new BadRequestException();
-    }
+      const isValid = await comparePassword(currentPassword, password);
+      if (!isValid) {
+        throw new BadRequestException();
+      }
 
-    const hashNewPassword = await hashPassword(newPassword);
-    await this.databaseService.user
-      .update({
+      const hashNewPassword = await hashPassword(newPassword);
+      await this.databaseService.user.update({
         where: { userId: id },
         data: { password: hashNewPassword },
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
 
-    return { message: 'ok' };
+      return { message: 'ok' };
+    } catch (err) {
+      console.error(err);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.UserNotFound);
+        }
+      } else if (err instanceof BadRequestException) {
+        throw new BadRequestException(ErrorMessages.IncorrectPassword);
+      } else {
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      }
+    }
   }
 
   //---- UPDATE USER PROFILE
