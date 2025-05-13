@@ -7,7 +7,9 @@ import {
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
 import ErrorMessages from '../common/errors/errors.enum';
+import { hashPassword, comparePassword } from 'src/common/helpers/auth.helpers';
 
 @Injectable()
 export class ProfileService {
@@ -20,6 +22,7 @@ export class ProfileService {
         where: { userId: id },
         select: {
           createdAt: true,
+          email: true,
           profile: {
             select: {
               name: true,
@@ -69,6 +72,41 @@ export class ProfileService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+  }
+
+  //---- UPDATE USER PASSWORD
+  async updatePassword(id: string, updatePasswordDto: UpdatePasswordDto) {
+    const { currentPassword, newPassword } = updatePasswordDto;
+    try {
+      const { password } = await this.databaseService.user.findUniqueOrThrow({
+        where: { userId: id },
+        select: { password: true },
+      });
+
+      const isValid = await comparePassword(currentPassword, password);
+      if (!isValid) {
+        throw new BadRequestException();
+      }
+
+      const hashNewPassword = await hashPassword(newPassword);
+      await this.databaseService.user.update({
+        where: { userId: id },
+        data: { password: hashNewPassword },
+      });
+
+      return { message: 'ok' };
+    } catch (err) {
+      console.error(err);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.UserNotFound);
+        }
+      } else if (err instanceof BadRequestException) {
+        throw new BadRequestException(ErrorMessages.IncorrectPassword);
+      } else {
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      }
+    }
   }
 
   //---- UPDATE USER PROFILE
