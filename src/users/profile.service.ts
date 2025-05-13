@@ -22,6 +22,7 @@ export class ProfileService {
         where: { userId: id },
         select: {
           createdAt: true,
+          email: true,
           profile: {
             select: {
               name: true,
