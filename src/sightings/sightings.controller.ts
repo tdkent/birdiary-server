@@ -44,7 +44,7 @@ export class SightingsController {
   //---- GET '/sightings?groupBy=date' :: Group user's sightings by date
   //---- GET '/sightings?groupBy=bird' :: Group user's sightings by bird
   //---- GET '/sightings?groupBy=location' :: Group user's sightings by location
-  //---- GET '/sightings?filterBy=lifelist :: Get user's life list
+  //---- GET '/sightings?groupyBy=lifelist :: Get user's life list
   @Get()
   findAllOrGroup(
     @CurrentUser('id') id: string,

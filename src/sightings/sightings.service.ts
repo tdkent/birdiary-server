@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -90,11 +91,29 @@ export class SightingsService {
         }
 
         case 'lifelist': {
-          return this.databaseService.sighting.findMany({
+          const { page } = query;
+          if (!page) throw new BadRequestException();
+
+          const getSightings = await this.databaseService.sighting.findMany({
             where: { userId: id },
             distinct: ['commName'],
-            orderBy: { commName: 'asc' },
           });
+
+          const countOfRecords = getSightings.length;
+
+          const paginatedSightings =
+            await this.databaseService.sighting.findMany({
+              where: { userId: id },
+              distinct: ['commName'],
+              orderBy: { commName: 'asc' },
+              take: 25,
+              skip: 25 * (page - 1),
+            });
+
+          return {
+            message: 'ok',
+            data: { countOfRecords, paginatedSightings },
+          };
         }
 
         default: {
@@ -106,6 +125,9 @@ export class SightingsService {
       }
     } catch (err) {
       console.log(err);
+      if (err instanceof BadRequestException) {
+        throw new BadRequestException(ErrorMessages.BadRequest);
+      }
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
