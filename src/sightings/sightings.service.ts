@@ -48,23 +48,26 @@ export class SightingsService {
   }
 
   //---- GET USER'S SIGHTINGS
+  // Group by date, location, bird, lifelist, or send all
+  // Note: Invalid query keys are ignored and the default case is used
   async findAllOrGroup(id: string, query: GroupSightingDto) {
+    const { groupBy } = query;
     try {
-      if (query.groupby) {
-        if (query.groupby === 'date') {
+      switch (groupBy) {
+        case 'date': {
           const data = await this.databaseService.sighting.groupBy({
             by: ['date'],
             orderBy: { date: 'desc' },
             where: { userId: id },
             _count: { _all: true },
           });
-
-          // Change {_count: { _all: number }} to { count: number }
           const formatData = data.map((sighting) => {
             return { date: sighting.date, count: sighting._count._all };
           });
           return { message: 'ok', data: formatData };
-        } else if (query.groupby === 'location') {
+        }
+
+        case 'location': {
           const locGroup = await this.databaseService.sighting.groupBy({
             by: ['locationId'],
             where: { userId: id },
@@ -75,39 +78,32 @@ export class SightingsService {
             loc['location_name'] = location.name;
           }
           return locGroup;
-        } else {
+        }
+
+        case 'bird': {
           const birdGroup = await this.databaseService.sighting.groupBy({
             by: ['commName'],
             where: { userId: id },
             _count: { _all: true },
           });
-          // for (const b of birdGroup) {
-          //   const bird = await this.birdService.findOne(b.birdId);
-          //   b['bird_name'] = bird.commName;
-          // }
           return birdGroup;
         }
+
+        case 'lifelist': {
+          return this.databaseService.sighting.findMany({
+            where: { userId: id },
+            distinct: ['commName'],
+            orderBy: { commName: 'asc' },
+          });
+        }
+
+        default: {
+          const data = await this.databaseService.sighting.findMany({
+            where: { userId: id },
+          });
+          return { message: 'ok', data };
+        }
       }
-      const data = await this.databaseService.sighting.findMany({
-        where: { userId: id },
-        select: {
-          id: true,
-          date: true,
-          bird: {
-            select: {
-              id: true,
-              commName: true,
-            },
-          },
-          location: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      });
-      return { message: 'ok', data };
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
@@ -129,38 +125,6 @@ export class SightingsService {
       });
 
     return { message: 'ok', data };
-  }
-
-  //---- FIND USER'S LIFE LIST
-  async findLifeList(id: string) {
-    return this.databaseService.sighting
-      .findMany({
-        where: { userId: id },
-        distinct: ['commName'],
-        select: {
-          id: true,
-          date: true,
-          bird: {
-            select: {
-              id: true,
-              commName: true,
-            },
-          },
-          location: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-        orderBy: {
-          date: 'asc',
-        },
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE DATE

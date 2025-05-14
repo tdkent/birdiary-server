@@ -41,9 +41,10 @@ export class SightingsController {
   }
 
   //---- GET '/sightings' :: Find all user's sightings
-  //---- GET '/sightings?groupby=date' :: Group user's sightings by date
-  //---- GET '/sightings?groupby=bird' :: Group user's sightings by bird
-  //---- GET '/sightings?groupby=location' :: Group user's sightings by location
+  //---- GET '/sightings?groupBy=date' :: Group user's sightings by date
+  //---- GET '/sightings?groupBy=bird' :: Group user's sightings by bird
+  //---- GET '/sightings?groupBy=location' :: Group user's sightings by location
+  //---- GET '/sightings?filterBy=lifelist :: Get user's life list
   @Get()
   findAllOrGroup(
     @CurrentUser('id') id: string,
@@ -62,12 +63,6 @@ export class SightingsController {
   ) {
     // return this.sightingsService.findRecent(id, params);
     return this.sightingsService.findRecent(id);
-  }
-
-  //---- GET '/sightings/lifelist' :: Find user's lifelist
-  @Get('lifelist')
-  findLifeList(@CurrentUser('id') id: string) {
-    return this.sightingsService.findLifeList(id);
   }
 
   //---- GET '/sightings/date/:date' :: Find all user's sightings by single date
