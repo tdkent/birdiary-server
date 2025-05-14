@@ -101,18 +101,17 @@ export class SightingsService {
 
           const countOfRecords = getSightings.length;
 
-          const paginatedSightings =
-            await this.databaseService.sighting.findMany({
-              where: { userId: id },
-              distinct: ['commName'],
-              orderBy: { commName: 'asc' },
-              take: 25,
-              skip: 25 * (page - 1),
-            });
+          const sightings = await this.databaseService.sighting.findMany({
+            where: { userId: id },
+            distinct: ['commName'],
+            orderBy: { commName: 'asc' },
+            take: 25,
+            skip: 25 * (page - 1),
+          });
 
           return {
             message: 'ok',
-            data: { countOfRecords, paginatedSightings },
+            data: { countOfRecords, items: sightings },
           };
         }
 
@@ -137,7 +136,6 @@ export class SightingsService {
     const data = await this.databaseService.sighting
       .findMany({
         where: { userId: id },
-        omit: { id: true },
         orderBy: { date: 'desc' },
         take: 10,
       })

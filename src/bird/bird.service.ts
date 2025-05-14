@@ -70,7 +70,7 @@ export class BirdService {
           const { _count, ...rest } = bird;
           return { ...rest, count: _count.sightings };
         });
-        return { message: 'ok', data: { countOfRecords, birds: addCount } };
+        return { message: 'ok', data: { countOfRecords, items: addCount } };
       }
 
       return { message: 'ok', data: { countOfRecords, birds } };
