@@ -7,6 +7,10 @@ export class GroupSightingDto {
   readonly groupBy?: string;
 
   @IsOptional()
+  @IsIn(['alphaAsc', 'alphaDesc', 'dateAsc', 'dateDesc'])
+  readonly sortBy: string;
+
+  @IsOptional()
   @Type(() => Number)
   @IsInt({ message: 'Invalid query' })
   @Min(1, { message: 'Invalid query' })

@@ -91,7 +91,7 @@ export class SightingsService {
         }
 
         case 'lifelist': {
-          const { page } = query;
+          const { page, sortBy } = query;
           if (!page) throw new BadRequestException();
 
           const getSightings = await this.databaseService.sighting.findMany({
@@ -104,7 +104,14 @@ export class SightingsService {
           const sightings = await this.databaseService.sighting.findMany({
             where: { userId: id },
             distinct: ['commName'],
-            orderBy: { commName: 'asc' },
+            orderBy:
+              sortBy === 'alphaDesc'
+                ? [{ commName: 'desc' }]
+                : sortBy === 'dateAsc'
+                  ? [{ date: 'asc' }, { commName: 'asc' }]
+                  : sortBy === 'dateDesc'
+                    ? [{ date: 'desc' }, { commName: 'asc' }]
+                    : [{ commName: 'asc' }],
             take: 25,
             skip: 25 * (page - 1),
           });
