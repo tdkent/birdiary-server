@@ -14,6 +14,7 @@ import { GroupSightingDto } from './dto/group-sighting.dto';
 // import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
+import type { ListResponse } from 'src/types/api';
 
 @Injectable()
 export class SightingsService {
@@ -69,16 +70,35 @@ export class SightingsService {
         }
 
         case 'location': {
-          const locGroup = await this.databaseService.sighting.groupBy({
+          const locationGroup = await this.databaseService.sighting.groupBy({
             by: ['locationId'],
-            where: { userId: id },
+            where: {
+              AND: [{ userId: id }, { locationId: { not: null } }],
+            },
             _count: { _all: true },
           });
-          for (const loc of locGroup) {
+
+          const locations = [];
+
+          for (const loc of locationGroup) {
             const location = await this.locationService.findOne(loc.locationId);
-            loc['location_name'] = location.name;
+            loc['name'] = location.name;
+            locations.push({
+              id: loc.locationId,
+              name: location.name,
+              count: loc._count._all,
+            });
           }
-          return locGroup;
+
+          const list: ListResponse = {
+            message: 'ok',
+            data: {
+              countOfRecords: locations.length,
+              items: locations,
+            },
+          };
+
+          return list;
         }
 
         case 'bird': {
@@ -118,7 +138,7 @@ export class SightingsService {
 
           return {
             message: 'ok',
-            data: { countOfRecords, items: sightings },
+            data: { countOfRecords, data: sightings },
           };
         }
 
