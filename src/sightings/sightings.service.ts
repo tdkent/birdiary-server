@@ -14,7 +14,7 @@ import { GroupSightingDto } from './dto/group-sighting.dto';
 // import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
-import type { ListResponse } from 'src/types/api';
+import type { ListResponse, Group } from 'src/types/api';
 
 @Injectable()
 export class SightingsService {
@@ -69,25 +69,66 @@ export class SightingsService {
           return { message: 'ok', data: formatData };
         }
 
+        // Note: Prisma cannot combine groupBy and select/include
+        // This makes sorting on location name impossible w/o multiple
+        // queries and JS array methods.
+        // count(*) is cast to int to prevent BigInt error
         case 'location': {
-          const locationGroup = await this.databaseService.sighting.groupBy({
-            by: ['locationId'],
-            where: {
-              AND: [{ userId: id }, { locationId: { not: null } }],
-            },
-            _count: { _all: true },
-          });
+          const { page, sortBy } = query;
 
-          const locations = [];
+          let locations: Group[];
 
-          for (const loc of locationGroup) {
-            const location = await this.locationService.findOne(loc.locationId);
-            loc['name'] = location.name;
-            locations.push({
-              id: loc.locationId,
-              name: location.name,
-              count: loc._count._all,
-            });
+          switch (sortBy) {
+            case 'alphaDesc': {
+              locations = await this.databaseService.$queryRaw`
+                SELECT
+                  s."locationId",
+                  l.name,
+                  CAST(count(*) AS int) AS count
+                FROM "Sighting" AS s
+                JOIN "Location" AS l ON s."locationId" = l.id
+                WHERE s."userId" = CAST(${id} AS uuid)
+                AND s."locationId" IS NOT NULL
+                GROUP BY s."locationId", l.name
+                ORDER BY l.name DESC
+                LIMIT 25
+                OFFSET ${25 * (page - 1)}
+                `;
+              break;
+            }
+            case 'count': {
+              locations = await this.databaseService.$queryRaw`
+                SELECT
+                  s."locationId",
+                  l.name,
+                  CAST(count(*) AS int) AS count
+                FROM "Sighting" AS s
+                JOIN "Location" AS l ON s."locationId" = l.id
+                WHERE s."userId" = CAST(${id} AS uuid)
+                AND s."locationId" IS NOT NULL
+                GROUP BY s."locationId", l.name
+                ORDER BY count DESC
+                LIMIT 25
+                OFFSET ${25 * (page - 1)}
+                `;
+              break;
+            }
+            default: {
+              locations = await this.databaseService.$queryRaw`
+                SELECT
+                  s."locationId",
+                  l.name,
+                  CAST(count(*) AS int) AS count
+                FROM "Sighting" AS s
+                JOIN "Location" AS l ON s."locationId" = l.id
+                WHERE s."userId" = CAST(${id} AS uuid)
+                AND s."locationId" IS NOT NULL
+                GROUP BY s."locationId", l.name
+                ORDER BY l.name ASC
+                LIMIT 25
+                OFFSET ${25 * (page - 1)}
+                `;
+            }
           }
 
           const list: ListResponse = {
