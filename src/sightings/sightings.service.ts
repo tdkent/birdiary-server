@@ -14,7 +14,7 @@ import { GroupSightingDto } from './dto/group-sighting.dto';
 // import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
-import type { ListResponse, Group } from 'src/types/api';
+import type { ListResponse } from 'src/types/api';
 
 @Injectable()
 export class SightingsService {
@@ -76,13 +76,21 @@ export class SightingsService {
         case 'location': {
           const { page, sortBy } = query;
 
-          let locations: Group[];
+          const distinctLocations =
+            await this.databaseService.sighting.findMany({
+              distinct: ['locationId'],
+              where: {
+                AND: [{ userId: id }, { locationId: { not: null } }],
+              },
+            });
+
+          let locations = [];
 
           switch (sortBy) {
             case 'alphaDesc': {
               locations = await this.databaseService.$queryRaw`
                 SELECT
-                  s."locationId",
+                  s."locationId" AS id,
                   l.name,
                   CAST(count(*) AS int) AS count
                 FROM "Sighting" AS s
@@ -99,7 +107,7 @@ export class SightingsService {
             case 'count': {
               locations = await this.databaseService.$queryRaw`
                 SELECT
-                  s."locationId",
+                  s."locationId" AS id,
                   l.name,
                   CAST(count(*) AS int) AS count
                 FROM "Sighting" AS s
@@ -116,7 +124,7 @@ export class SightingsService {
             default: {
               locations = await this.databaseService.$queryRaw`
                 SELECT
-                  s."locationId",
+                  s."locationId" AS id,
                   l.name,
                   CAST(count(*) AS int) AS count
                 FROM "Sighting" AS s
@@ -134,7 +142,7 @@ export class SightingsService {
           const list: ListResponse = {
             message: 'ok',
             data: {
-              countOfRecords: locations.length,
+              countOfRecords: distinctLocations.length,
               items: locations,
             },
           };
@@ -177,10 +185,12 @@ export class SightingsService {
             skip: 25 * (page - 1),
           });
 
-          return {
+          const list: ListResponse = {
             message: 'ok',
-            data: { countOfRecords, data: sightings },
+            data: { countOfRecords, items: sightings },
           };
+
+          return list;
         }
 
         default: {
