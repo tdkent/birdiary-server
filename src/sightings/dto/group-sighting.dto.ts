@@ -7,7 +7,7 @@ export class GroupSightingDto {
   readonly groupBy?: string;
 
   @IsOptional()
-  @IsIn(['alphaAsc', 'alphaDesc', 'dateAsc', 'dateDesc'])
+  @IsIn(['alphaAsc', 'alphaDesc', 'count', 'dateAsc', 'dateDesc'])
   readonly sortBy: string;
 
   @IsOptional()
