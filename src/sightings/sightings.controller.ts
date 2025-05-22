@@ -40,7 +40,7 @@ export class SightingsController {
     return this.sightingsService.create(id, createSightingDto);
   }
 
-  //---- GET '/sightings' :: Find all user's sightings
+  //---- GET '/sightings' :: Find user's recent sightings
   //---- GET '/sightings?groupBy=date' :: Group user's sightings by date
   //---- GET '/sightings?groupBy=bird' :: Group user's sightings by bird
   //---- GET '/sightings?groupBy=location' :: Group user's sightings by location

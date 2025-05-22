@@ -15,6 +15,7 @@ import { GroupSightingDto } from './dto/group-sighting.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
 import type { ListResponse } from 'src/types/api';
+import { TAKE_COUNT } from 'src/common/constants/api.constants';
 
 @Injectable()
 export class SightingsService {
@@ -99,8 +100,8 @@ export class SightingsService {
                 AND s."locationId" IS NOT NULL
                 GROUP BY s."locationId", l.name
                 ORDER BY l.name DESC
-                LIMIT 25
-                OFFSET ${25 * (page - 1)}
+                LIMIT ${TAKE_COUNT}
+                OFFSET ${TAKE_COUNT * (page - 1)}
                 `;
               break;
             }
@@ -116,8 +117,8 @@ export class SightingsService {
                 AND s."locationId" IS NOT NULL
                 GROUP BY s."locationId", l.name
                 ORDER BY count DESC
-                LIMIT 25
-                OFFSET ${25 * (page - 1)}
+                LIMIT ${TAKE_COUNT}
+                OFFSET ${TAKE_COUNT * (page - 1)}
                 `;
               break;
             }
@@ -133,8 +134,8 @@ export class SightingsService {
                 AND s."locationId" IS NOT NULL
                 GROUP BY s."locationId", l.name
                 ORDER BY l.name ASC
-                LIMIT 25
-                OFFSET ${25 * (page - 1)}
+                LIMIT ${TAKE_COUNT}
+                OFFSET ${TAKE_COUNT * (page - 1)}
                 `;
             }
           }
@@ -181,8 +182,8 @@ export class SightingsService {
                   : sortBy === 'dateDesc'
                     ? [{ date: 'desc' }, { commName: 'asc' }]
                     : [{ commName: 'asc' }],
-            take: 25,
-            skip: 25 * (page - 1),
+            take: TAKE_COUNT,
+            skip: TAKE_COUNT * (page - 1),
           });
 
           const list: ListResponse = {
@@ -215,7 +216,7 @@ export class SightingsService {
       .findMany({
         where: { userId: id },
         orderBy: { date: 'desc' },
-        take: 10,
+        take: TAKE_COUNT,
       })
       .catch((err) => {
         console.log(err);
