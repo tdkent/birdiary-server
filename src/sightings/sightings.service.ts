@@ -65,9 +65,21 @@ export class SightingsService {
             _count: { _all: true },
           });
           const formatData = data.map((sighting) => {
-            return { date: sighting.date, count: sighting._count._all };
+            return {
+              id: sighting.date,
+              date: sighting.date,
+              count: sighting._count._all,
+            };
           });
-          return { message: 'ok', data: formatData };
+
+          const list: ListResponse = {
+            message: 'ok',
+            data: {
+              countOfRecords: formatData.length,
+              items: formatData,
+            },
+          };
+          return list;
         }
 
         // Note: Prisma cannot combine groupBy and select/include
@@ -195,10 +207,16 @@ export class SightingsService {
         }
 
         default: {
-          const data = await this.databaseService.sighting.findMany({
+          const sightings = await this.databaseService.sighting.findMany({
             where: { userId: id },
+            orderBy: { date: 'desc' },
+            take: TAKE_COUNT,
           });
-          return { message: 'ok', data };
+          const list: ListResponse = {
+            message: 'ok',
+            data: { countOfRecords: sightings.length, items: sightings },
+          };
+          return list;
         }
       }
     } catch (err) {
@@ -249,7 +267,14 @@ export class SightingsService {
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
 
-    return { message: 'ok', data };
+    const list: ListResponse = {
+      message: 'ok',
+      data: {
+        countOfRecords: data.length,
+        items: data,
+      },
+    };
+    return list;
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
@@ -260,21 +285,21 @@ export class SightingsService {
           userId,
           commName,
         },
-        select: {
-          sightingId: true,
-          commName: true,
-          date: true,
-          desc: true,
-          location: {
-            omit: { id: true },
-          },
-        },
+        include: { location: true },
       })
       .catch((err) => {
         console.log(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
-    return { message: 'ok', data };
+
+    const list: ListResponse = {
+      message: 'ok',
+      data: {
+        countOfRecords: data.length,
+        items: data,
+      },
+    };
+    return list;
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE LOCATION
