@@ -16,6 +16,7 @@ import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
 import type { ListResponse, GroupedData } from 'src/types/api';
 import { TAKE_COUNT } from 'src/common/constants/api.constants';
+import { GetSightingByDateQueryDto } from 'src/sightings/dto/get-sighting-by-date-query.dto';
 
 @Injectable()
 export class SightingsService {
@@ -299,22 +300,29 @@ export class SightingsService {
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE DATE
-  async findSightingsBySingleDate(userId: string, date: Date) {
+  async findSightingsBySingleDate(
+    userId: string,
+    date: Date,
+    query: GetSightingByDateQueryDto,
+  ) {
+    const { page, sortBy } = query;
+    const count = await this.databaseService.sighting.findMany({
+      where: {
+        userId: userId,
+        date: new Date(date),
+      },
+    });
     const data = await this.databaseService.sighting
       .findMany({
         where: {
           userId: userId,
           date: new Date(date),
         },
-        select: {
-          sightingId: true,
-          commName: true,
-          date: true,
-          desc: true,
-          location: {
-            omit: { id: true },
-          },
-        },
+        include: { location: true },
+        orderBy:
+          sortBy === 'alphaAsc' ? { commName: 'asc' } : { commName: 'desc' },
+        take: TAKE_COUNT,
+        skip: TAKE_COUNT * (page - 1),
       })
       .catch((err) => {
         console.log(err);
@@ -324,7 +332,7 @@ export class SightingsService {
     const list: ListResponse = {
       message: 'ok',
       data: {
-        countOfRecords: data.length,
+        countOfRecords: count.length,
         items: data,
       },
     };

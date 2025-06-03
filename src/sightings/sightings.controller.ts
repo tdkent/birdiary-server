@@ -19,6 +19,7 @@ import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { GroupSightingDto } from './dto/group-sighting.dto';
 import { GetSightingByDateDto } from './dto/get-sighting-by-date.dto';
 import { GetSightingsByBirdDto } from './dto/get-sighting-by-bird.dto';
+import { GetSightingByDateQueryDto } from 'src/sightings/dto/get-sighting-by-date-query.dto';
 // import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
@@ -70,8 +71,13 @@ export class SightingsController {
   findAllByDate(
     @CurrentUser('id') id: string,
     @Param() params: GetSightingByDateDto,
+    @Query(new ValidationPipe()) query: GetSightingByDateQueryDto,
   ) {
-    return this.sightingsService.findSightingsBySingleDate(id, params.date);
+    return this.sightingsService.findSightingsBySingleDate(
+      id,
+      params.date,
+      query,
+    );
   }
 
   //---- GET '/sightings/bird/:commName' :: Find all user's sightings by single bird
