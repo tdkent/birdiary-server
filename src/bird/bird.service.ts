@@ -17,7 +17,8 @@ import {
   cloudinaryKey,
   cloudinarySecret,
 } from '../common/constants/env.constants';
-import { BIRD_COUNT } from 'src/common/constants/bird.constants';
+import { BIRD_COUNT, TAKE_COUNT } from 'src/common/constants/api.constants';
+import { ListResponse } from 'src/types/api';
 
 cloudinary.config({
   cloud_name: cloudinaryName,
@@ -43,7 +44,7 @@ export class BirdService {
       }
 
       const birds = await this.databaseService.bird.findMany({
-        // Conditionally use `where` clause to statement
+        // Conditionally add `where` clause to statement
         // https://brockherion.dev/blog/posts/how-to-do-conditional-where-statements-in-prisma/
         where: { ...(startsWith ? { commName: { startsWith } } : {}) },
         omit: { familyId: true },
@@ -60,8 +61,8 @@ export class BirdService {
               }
             : {}),
         },
-        take: 25,
-        skip: 25 * (page - 1),
+        take: TAKE_COUNT,
+        skip: TAKE_COUNT * (page - 1),
       });
 
       if (id) {
@@ -70,10 +71,18 @@ export class BirdService {
           const { _count, ...rest } = bird;
           return { ...rest, count: _count.sightings };
         });
-        return { message: 'ok', data: { countOfRecords, items: addCount } };
+        const list: ListResponse = {
+          message: 'ok',
+          data: { countOfRecords, items: addCount },
+        };
+        return list;
       }
 
-      return { message: 'ok', data: { countOfRecords, birds } };
+      const list: ListResponse = {
+        message: 'ok',
+        data: { countOfRecords, items: birds },
+      };
+      return list;
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
@@ -107,7 +116,6 @@ export class BirdService {
       .findUniqueOrThrow({
         where: { commName },
         include: { family: true },
-        omit: { familyId: true },
       })
       .then(async (prismaRes) => {
         // if bird has an image, fetch from cloudinary

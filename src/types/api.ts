@@ -5,3 +5,9 @@ export type ListResponse = {
     items: any[];
   };
 };
+
+export type GroupedData = {
+  id: number;
+  text: string;
+  count: number;
+};

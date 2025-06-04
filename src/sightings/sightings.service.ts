@@ -14,7 +14,10 @@ import { GroupSightingDto } from './dto/group-sighting.dto';
 // import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
-import type { ListResponse } from 'src/types/api';
+import type { ListResponse, GroupedData } from 'src/types/api';
+import { TAKE_COUNT } from 'src/common/constants/api.constants';
+import { GetSightingByDateQueryDto } from 'src/sightings/dto/get-sighting-by-date-query.dto';
+import { GetSightingByBirdQueryDto } from 'src/sightings/dto/get-sightings-by-bird-query.dto';
 
 @Injectable()
 export class SightingsService {
@@ -57,16 +60,82 @@ export class SightingsService {
     try {
       switch (groupBy) {
         case 'date': {
-          const data = await this.databaseService.sighting.groupBy({
-            by: ['date'],
-            orderBy: { date: 'desc' },
-            where: { userId: id },
-            _count: { _all: true },
-          });
-          const formatData = data.map((sighting) => {
-            return { date: sighting.date, count: sighting._count._all };
-          });
-          return { message: 'ok', data: formatData };
+          const { page, sortBy } = query;
+
+          const allDiaryEntries: { date: Date }[] = await this.databaseService
+            .$queryRaw`
+                SELECT date 
+                FROM "Sighting"
+                WHERE "userId" = CAST(${id} AS uuid)
+                GROUP BY date
+                `;
+
+          let data: GroupedData[] = [];
+
+          switch (sortBy) {
+            case 'count': {
+              data = await this.databaseService.$queryRaw`
+                SELECT
+                  CAST(
+                    REPLACE(
+                    LEFT(CAST(date AS text), 10), '-', ''
+                  ) AS int) AS id,
+                  date AS text, 
+                  CAST(count(*) AS int) AS count
+                FROM "Sighting"
+                WHERE "userId" = CAST(${id} AS uuid)
+                GROUP BY date
+                ORDER BY count DESC, date DESC
+                LIMIT ${TAKE_COUNT}
+                OFFSET ${TAKE_COUNT * (page - 1)}
+                `;
+              break;
+            }
+            case 'dateAsc': {
+              data = await this.databaseService.$queryRaw`
+                SELECT
+                  CAST(
+                    REPLACE(
+                    LEFT(CAST(date AS text), 10), '-', ''
+                  ) AS int) AS id,
+                  date AS text, 
+                  CAST(count(*) AS int) AS count
+                FROM "Sighting"
+                WHERE "userId" = CAST(${id} AS uuid)
+                GROUP BY date
+                ORDER BY date ASC
+                LIMIT ${TAKE_COUNT}
+                OFFSET ${TAKE_COUNT * (page - 1)}
+                `;
+              break;
+            }
+            default: {
+              data = await this.databaseService.$queryRaw`
+                SELECT
+                  CAST(
+                    REPLACE(
+                    LEFT(CAST(date AS text), 10), '-', ''
+                  ) AS int) AS id,
+                  date AS text, 
+                  CAST(count(*) AS int) AS count
+                FROM "Sighting"
+                WHERE "userId" = CAST(${id} AS uuid)
+                GROUP BY date
+                ORDER BY date DESC
+                LIMIT ${TAKE_COUNT}
+                OFFSET ${TAKE_COUNT * (page - 1)}
+                `;
+            }
+          }
+
+          const list: ListResponse = {
+            message: 'ok',
+            data: {
+              countOfRecords: allDiaryEntries.length,
+              items: data,
+            },
+          };
+          return list;
         }
 
         // Note: Prisma cannot combine groupBy and select/include
@@ -91,7 +160,7 @@ export class SightingsService {
               locations = await this.databaseService.$queryRaw`
                 SELECT
                   s."locationId" AS id,
-                  l.name,
+                  l.name AS text,
                   CAST(count(*) AS int) AS count
                 FROM "Sighting" AS s
                 JOIN "Location" AS l ON s."locationId" = l.id
@@ -99,8 +168,8 @@ export class SightingsService {
                 AND s."locationId" IS NOT NULL
                 GROUP BY s."locationId", l.name
                 ORDER BY l.name DESC
-                LIMIT 25
-                OFFSET ${25 * (page - 1)}
+                LIMIT ${TAKE_COUNT}
+                OFFSET ${TAKE_COUNT * (page - 1)}
                 `;
               break;
             }
@@ -108,7 +177,7 @@ export class SightingsService {
               locations = await this.databaseService.$queryRaw`
                 SELECT
                   s."locationId" AS id,
-                  l.name,
+                  l.name AS text,
                   CAST(count(*) AS int) AS count
                 FROM "Sighting" AS s
                 JOIN "Location" AS l ON s."locationId" = l.id
@@ -116,8 +185,8 @@ export class SightingsService {
                 AND s."locationId" IS NOT NULL
                 GROUP BY s."locationId", l.name
                 ORDER BY count DESC
-                LIMIT 25
-                OFFSET ${25 * (page - 1)}
+                LIMIT ${TAKE_COUNT}
+                OFFSET ${TAKE_COUNT * (page - 1)}
                 `;
               break;
             }
@@ -125,7 +194,7 @@ export class SightingsService {
               locations = await this.databaseService.$queryRaw`
                 SELECT
                   s."locationId" AS id,
-                  l.name,
+                  l.name AS text,
                   CAST(count(*) AS int) AS count
                 FROM "Sighting" AS s
                 JOIN "Location" AS l ON s."locationId" = l.id
@@ -133,8 +202,8 @@ export class SightingsService {
                 AND s."locationId" IS NOT NULL
                 GROUP BY s."locationId", l.name
                 ORDER BY l.name ASC
-                LIMIT 25
-                OFFSET ${25 * (page - 1)}
+                LIMIT ${TAKE_COUNT}
+                OFFSET ${TAKE_COUNT * (page - 1)}
                 `;
             }
           }
@@ -181,8 +250,8 @@ export class SightingsService {
                   : sortBy === 'dateDesc'
                     ? [{ date: 'desc' }, { commName: 'asc' }]
                     : [{ commName: 'asc' }],
-            take: 25,
-            skip: 25 * (page - 1),
+            take: TAKE_COUNT,
+            skip: TAKE_COUNT * (page - 1),
           });
 
           const list: ListResponse = {
@@ -194,10 +263,16 @@ export class SightingsService {
         }
 
         default: {
-          const data = await this.databaseService.sighting.findMany({
+          const sightings = await this.databaseService.sighting.findMany({
             where: { userId: id },
+            orderBy: { date: 'desc' },
+            take: TAKE_COUNT,
           });
-          return { message: 'ok', data };
+          const list: ListResponse = {
+            message: 'ok',
+            data: { countOfRecords: sightings.length, items: sightings },
+          };
+          return list;
         }
       }
     } catch (err) {
@@ -215,7 +290,7 @@ export class SightingsService {
       .findMany({
         where: { userId: id },
         orderBy: { date: 'desc' },
-        take: 10,
+        take: TAKE_COUNT,
       })
       .catch((err) => {
         console.log(err);
@@ -226,54 +301,76 @@ export class SightingsService {
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE DATE
-  async findSightingsBySingleDate(userId: string, date: Date) {
+  async findSightingsBySingleDate(
+    userId: string,
+    date: Date,
+    query: GetSightingByDateQueryDto,
+  ) {
+    const { page, sortBy } = query;
+    const count = await this.databaseService.sighting.count({
+      where: { userId: userId, date: new Date(date) },
+    });
     const data = await this.databaseService.sighting
       .findMany({
         where: {
           userId: userId,
           date: new Date(date),
         },
-        select: {
-          sightingId: true,
-          commName: true,
-          date: true,
-          desc: true,
-          location: {
-            omit: { id: true },
-          },
-        },
+        include: { location: true },
+        orderBy:
+          sortBy === 'alphaAsc' ? { commName: 'asc' } : { commName: 'desc' },
+        take: TAKE_COUNT,
+        skip: TAKE_COUNT * (page - 1),
       })
       .catch((err) => {
         console.log(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
 
-    return { message: 'ok', data };
+    const list: ListResponse = {
+      message: 'ok',
+      data: {
+        countOfRecords: count,
+        items: data,
+      },
+    };
+    return list;
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
-  async findSightingsBySingleBird(userId: string, commName: string) {
+  async findSightingsBySingleBird(
+    userId: string,
+    commName: string,
+    query: GetSightingByBirdQueryDto,
+  ) {
+    const { page, sortBy } = query;
+    const count = await this.databaseService.sighting.count({
+      where: { userId, commName },
+    });
     const data = await this.databaseService.sighting
       .findMany({
         where: {
           userId,
           commName,
         },
-        select: {
-          sightingId: true,
-          commName: true,
-          date: true,
-          desc: true,
-          location: {
-            omit: { id: true },
-          },
-        },
+        include: { location: true },
+        orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
+        take: TAKE_COUNT,
+        skip: TAKE_COUNT * (page - 1),
       })
       .catch((err) => {
         console.log(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
-    return { message: 'ok', data };
+
+    const list: ListResponse = {
+      message: 'ok',
+      data: {
+        countOfRecords: count,
+        items: data,
+      },
+    };
+    return list;
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE LOCATION
