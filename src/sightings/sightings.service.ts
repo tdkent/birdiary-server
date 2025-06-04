@@ -17,6 +17,7 @@ import ErrorMessages from '../common/errors/errors.enum';
 import type { ListResponse, GroupedData } from 'src/types/api';
 import { TAKE_COUNT } from 'src/common/constants/api.constants';
 import { GetSightingByDateQueryDto } from 'src/sightings/dto/get-sighting-by-date-query.dto';
+import { GetSightingByBirdQueryDto } from 'src/sightings/dto/get-sightings-by-bird-query.dto';
 
 @Injectable()
 export class SightingsService {
@@ -306,11 +307,8 @@ export class SightingsService {
     query: GetSightingByDateQueryDto,
   ) {
     const { page, sortBy } = query;
-    const count = await this.databaseService.sighting.findMany({
-      where: {
-        userId: userId,
-        date: new Date(date),
-      },
+    const count = await this.databaseService.sighting.count({
+      where: { userId: userId, date: new Date(date) },
     });
     const data = await this.databaseService.sighting
       .findMany({
@@ -332,7 +330,7 @@ export class SightingsService {
     const list: ListResponse = {
       message: 'ok',
       data: {
-        countOfRecords: count.length,
+        countOfRecords: count,
         items: data,
       },
     };
@@ -340,7 +338,15 @@ export class SightingsService {
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
-  async findSightingsBySingleBird(userId: string, commName: string) {
+  async findSightingsBySingleBird(
+    userId: string,
+    commName: string,
+    query: GetSightingByBirdQueryDto,
+  ) {
+    const { page, sortBy } = query;
+    const count = await this.databaseService.sighting.count({
+      where: { userId, commName },
+    });
     const data = await this.databaseService.sighting
       .findMany({
         where: {
@@ -348,6 +354,9 @@ export class SightingsService {
           commName,
         },
         include: { location: true },
+        orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
+        take: TAKE_COUNT,
+        skip: TAKE_COUNT * (page - 1),
       })
       .catch((err) => {
         console.log(err);
@@ -357,7 +366,7 @@ export class SightingsService {
     const list: ListResponse = {
       message: 'ok',
       data: {
-        countOfRecords: data.length,
+        countOfRecords: count,
         items: data,
       },
     };
