@@ -18,6 +18,7 @@ import type { ListResponse, GroupedData } from 'src/types/api';
 import { TAKE_COUNT } from 'src/common/constants/api.constants';
 import { GetSightingByDateQueryDto } from 'src/sightings/dto/get-sighting-by-date-query.dto';
 import { GetSightingByBirdQueryDto } from 'src/sightings/dto/get-sightings-by-bird-query.dto';
+import { GetSightingByLocationQueryDto } from 'src/sightings/dto/get-sightings-by-location-query.dto';
 
 @Injectable()
 export class SightingsService {
@@ -374,30 +375,29 @@ export class SightingsService {
   }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE LOCATION
-  async findSightingsBySingleLocation(userId: string, locationId: number) {
-    return this.databaseService.sighting
+  async findSightingsBySingleLocation(
+    userId: string,
+    locationId: number,
+    query: GetSightingByLocationQueryDto,
+  ) {
+    console.log(query);
+    const { page, sortBy } = query;
+    const count = await this.databaseService.sighting.count({
+      where: { userId, locationId },
+    });
+    const sightings = await this.databaseService.sighting
       .findMany({
-        where: {
-          userId: userId,
-          locationId: locationId,
-        },
-        select: {
-          id: true,
-          date: true,
-          desc: true,
-          bird: {
-            select: {
-              id: true,
-              commName: true,
-            },
-          },
-        },
-      })
-      .then((res) => {
-        if (!res.length) {
-          throw new NotFoundException();
-        }
-        return res;
+        where: { userId, locationId },
+        orderBy:
+          sortBy === 'alphaDesc'
+            ? [{ commName: 'desc' }]
+            : sortBy === 'dateAsc'
+              ? [{ date: 'asc' }, { commName: 'asc' }]
+              : sortBy === 'dateDesc'
+                ? [{ date: 'desc' }, { commName: 'asc' }]
+                : [{ commName: 'asc' }],
+        take: TAKE_COUNT,
+        skip: TAKE_COUNT * (page - 1),
       })
       .catch((err) => {
         console.log(err);
@@ -406,6 +406,15 @@ export class SightingsService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+
+    const list: ListResponse = {
+      message: 'ok',
+      data: {
+        countOfRecords: count,
+        items: sightings,
+      },
+    };
+    return list;
   }
 
   //---- GROUP USER'S SIGHTINGS BY SINGLE LOCATION
