@@ -380,7 +380,6 @@ export class SightingsService {
     locationId: number,
     query: GetSightingByLocationQueryDto,
   ) {
-    console.log(query);
     const { page, sortBy } = query;
     const count = await this.databaseService.sighting.count({
       where: { userId, locationId },

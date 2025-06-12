@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   ParseIntPipe,
+  Put,
   Query,
   UseGuards,
   ValidationPipe,
@@ -145,8 +146,8 @@ export class SightingsController {
     return this.sightingsService.findOne(userId, sightingId);
   }
 
-  //---- PATCH 'sightings/:id' :: Update a single sighting
-  @Patch(':id')
+  //---- PUT 'sightings/:id' :: Update a single sighting
+  @Put(':id')
   update(
     @CurrentUser('id') userId: string,
     @Param('id', ParseIntPipe) sightingId: number,
