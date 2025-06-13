@@ -23,7 +23,6 @@ export class LocationService {
         create: {
           ...locationDto,
         },
-        select: { id: true },
       })
       .catch((err) => {
         console.log(err);
@@ -53,16 +52,18 @@ export class LocationService {
   //? Upserts the location and changes location id of user's related sightings
   async update(userId: string, locationId: number, locationDto: LocationDto) {
     try {
-      const newLocationId = await this.upsert(locationDto);
-      return this.databaseService.sighting.updateMany({
+      const location = await this.upsert(locationDto);
+      // Will be { count: 1 } on success
+      await this.databaseService.sighting.updateMany({
         where: {
           userId: userId,
           locationId: locationId,
         },
         data: {
-          locationId: newLocationId.id,
+          locationId: location.id,
         },
       });
+      return { message: 'ok', location };
     } catch (err) {
       console.log(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);

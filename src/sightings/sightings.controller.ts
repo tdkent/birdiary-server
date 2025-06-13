@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Post,
-  Patch,
   Param,
   ParseIntPipe,
   Put,
@@ -126,8 +125,8 @@ export class SightingsController {
     return this.sightingsService.groupBirdsByLocation(id, locationId);
   }
 
-  //---- PATCH 'sightings/locations/:id' :: Update a single location
-  @Patch('locations/:id')
+  //---- PUT 'sightings/locations/:id' :: Update a single location
+  @Put('locations/:id')
   updateLocation(
     @CurrentUser('id') id: string,
     @Param('id', ParseIntPipe) locationId: number,
