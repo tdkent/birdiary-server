@@ -135,6 +135,14 @@ export class SightingsController {
     return this.locationsService.update(id, locationId, locationDto);
   }
 
+  @Delete('locations/:id')
+  removeLocation(
+    @CurrentUser('id') id: string,
+    @Param('id', ParseIntPipe) locationId: number,
+  ) {
+    return this.locationsService.remove(id, locationId);
+  }
+
   //---- GET '/sightings/:id' :: Find a single sighting
   //! Remove this route?
   @Get(':id')

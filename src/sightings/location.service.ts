@@ -69,4 +69,18 @@ export class LocationService {
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
+
+  /** Removes the location from user's sightings */
+  async remove(userId: string, locationId: number) {
+    try {
+      const count = await this.databaseService.sighting.updateMany({
+        where: { userId, locationId },
+        data: { locationId: null },
+      });
+      return { message: 'ok', count };
+    } catch (err) {
+      console.log(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
+  }
 }
