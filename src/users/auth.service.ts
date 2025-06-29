@@ -16,20 +16,29 @@ export class AuthService {
 
   //---- SIGN IN A USER. ERROR ON FAIL, TOKEN ON SUCCESS.
   async signin(loginUser: CreateUserDto) {
+    const { email, password, storageData } = loginUser;
     try {
       const user = await this.databaseService.user.findUniqueOrThrow({
-        where: { email: loginUser.email },
+        where: { email },
       });
 
-      const comparePasswords = await comparePassword(
-        loginUser.password,
-        user.password,
-      );
+      const comparePasswords = await comparePassword(password, user.password);
       if (!comparePasswords) {
         throw new BadRequestException();
       }
 
-      return { id: user.userId };
+      let count = null;
+      if (storageData && storageData.length) {
+        const addUserId = storageData.map((s) => {
+          return { userId: user.userId, ...s };
+        });
+        const addSightings = await this.databaseService.sighting.createMany({
+          data: addUserId,
+        });
+        count = addSightings.count;
+      }
+
+      return { id: user.userId, count };
     } catch (err) {
       console.log(err);
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
