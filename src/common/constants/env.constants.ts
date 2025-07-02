@@ -1,5 +1,6 @@
 export const port = process.env.PORT;
-export const testUserPw = process.env.TEST_USER_PW;
+export const testUserEmail = process.env.TEST_USER_EMAIL;
+export const testUserPassword = process.env.TEST_USER_PW;
 // Cloudinary
 export const cloudinaryName = process.env.CLOUDINARY_NAME;
 export const cloudinaryKey = process.env.CLOUDINARY_KEY;
