@@ -16,20 +16,19 @@ import { AuthGuard } from 'src/common/guards/auth.guard';
 export class BirdController {
   constructor(private readonly birdService: BirdService) {}
 
-  //---- GET '/birds?page=:1-34 :: FETCH BIRDS PAGINATED
-  //---- GET '/birds?page=:1-34&startsWith=:A-Z' :: FETCH BIRDS BY ALPHA CHAR
+  /** GET /birds - Get all birds */
   @UseGuards(AuthGuard)
   @Get()
-  findAllByAlpha(
+  getBirds(
     @CurrentUser('id') id: string,
     @Query(new ValidationPipe()) query: GetBirdsByAlphaDto,
   ) {
     return this.birdService.findAllByAlpha(id, query);
   }
 
-  //---- GET '/birds/:commName' :: FETCH A SINGLE BIRD
-  @Get(':commName')
-  findOne(@Param(new ValidationPipe()) params: GetSightingsByBirdDto) {
+  /** GET '/birds/:id' - Get bird */
+  @Get(':id')
+  getBird(@Param(new ValidationPipe()) params: GetSightingsByBirdDto) {
     return this.birdService.findOneWithImage(params.commName);
   }
 }

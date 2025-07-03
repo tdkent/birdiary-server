@@ -29,60 +29,60 @@ export class UsersController {
     private readonly authService: AuthService,
   ) {}
 
-  //---- POST '/users' :: CREATE A NEW USER
-  @Post()
-  create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+  /** POST '/users/signup' - Create new user */
+  @Post('signup')
+  signup(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
 
-  //---- DELETE '/users' :: DELETE A USER
-  @UseGuards(AuthGuard)
-  @Delete()
-  remove(@CurrentUser('id') id: string) {
-    return this.usersService.remove(id);
-  }
-
-  //---- POST '/users/auth/signin' :: SIGN IN A USER
-  @Post('auth/signin')
+  /** POST '/users/signin' - Sign in user */
+  @Post('signin')
   @HttpCode(200)
   signin(@Body(ValidationPipe) loginUser: CreateUserDto) {
     return this.authService.signin(loginUser);
   }
 
-  //---- GET '/users/profile' :: FETCH USER PROFILE
+  /** GET '/users/:id' - Get user */
   @UseGuards(AuthGuard)
-  @Get('profile')
-  findOne(@CurrentUser('id') id: string) {
+  @Get(':id')
+  getUser(@CurrentUser('id') id: string) {
     return this.profileService.findById(id);
   }
 
-  //---- PUT '/users/profile' :: UPDATE USER PROFILE
+  /** PUT '/users/:id' - Update user */
   @UseGuards(AuthGuard)
-  @Put('profile')
-  updateProfile(
+  @Put(':id')
+  updateUser(
     @CurrentUser('id') id: string,
     @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,
   ) {
     return this.profileService.updateProfile(id, updateProfileDto);
   }
 
-  //---- PUT '/users/password' :: UPDATE USER PROFILE
+  /** DELETE '/users/:id' - Delete user */
   @UseGuards(AuthGuard)
-  @Patch('password')
-  updatePassword(
-    @CurrentUser('id') id: string,
-    @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
-  ) {
-    return this.profileService.updatePassword(id, updatePasswordDto);
+  @Delete(':id')
+  deleteUser(@CurrentUser('id') id: string) {
+    return this.usersService.remove(id);
   }
 
+  //---- PUT '/users/password' :: UPDATE USER PROFILE
+  // @UseGuards(AuthGuard)
+  // @Patch('password')
+  // updatePassword(
+  //   @CurrentUser('id') id: string,
+  //   @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
+  // ) {
+  //   return this.profileService.updatePassword(id, updatePasswordDto);
+  // }
+
   //---- PATCH '/users/profile/fav/:id' :: UPDATE USER'S FAVORITE BIRD
-  @UseGuards(AuthGuard)
-  @Patch('profile/fav/:id')
-  upsertFavoriteBird(
-    @CurrentUser('id') id: string,
-    @Param(new ValidationPipe()) params: UpdateFavoriteBirdDto,
-  ) {
-    return this.profileService.updateFavoriteBird(id, params.id);
-  }
+  // @UseGuards(AuthGuard)
+  // @Patch('profile/fav/:id')
+  // upsertFavoriteBird(
+  //   @CurrentUser('id') id: string,
+  //   @Param(new ValidationPipe()) params: UpdateFavoriteBirdDto,
+  // ) {
+  //   return this.profileService.updateFavoriteBird(id, params.id);
+  // }
 }
