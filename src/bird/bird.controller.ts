@@ -7,8 +7,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BirdService } from './bird.service';
-import { GetSightingsByBirdDto } from '../sightings/dto/get-sighting-by-bird.dto';
-import { GetBirdsByAlphaDto } from 'src/bird/dto/get-birds-by-alpha.dto';
+import GetBirdsDto from 'src/bird/dto/getBirds.dto';
+import GetBirdDto from 'src/bird/dto/getBird.dto';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 
@@ -20,15 +20,15 @@ export class BirdController {
   @UseGuards(AuthGuard)
   @Get()
   getBirds(
-    @CurrentUser('id') id: string,
-    @Query(new ValidationPipe()) query: GetBirdsByAlphaDto,
+    @CurrentUser('id') id: number,
+    @Query(new ValidationPipe()) query: GetBirdsDto,
   ) {
-    return this.birdService.findAllByAlpha(id, query);
+    return this.birdService.getBirds(id, query);
   }
 
-  /** GET '/birds/:id' - Get bird */
+  /** GET '/birds/:id' - Get single bird w/image */
   @Get(':id')
-  getBird(@Param(new ValidationPipe()) params: GetSightingsByBirdDto) {
-    return this.birdService.findOneWithImage(params.commName);
+  getBird(@Param(new ValidationPipe()) params: GetBirdDto) {
+    return this.birdService.getBird(params.id);
   }
 }
