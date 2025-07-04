@@ -22,25 +22,29 @@ export class LocationsController {
   /** GET 'locations/:id' - Get location */
   @Get(':id')
   getLocation(@Param('id', ParseIntPipe) id: number) {
-    return this.locationsService.findOne(id);
+    return this.locationsService.getLocation(id);
   }
 
   /** PUT 'locations/:id' - Update location */
   @Put(':id')
   updateLocation(
-    @CurrentUser('id') id: string,
+    @CurrentUser('id') userId: number,
     @Param('id', ParseIntPipe) locationId: number,
     @Body(ValidationPipe) locationDto: LocationDto,
   ) {
-    return this.locationsService.update(id, locationId, locationDto);
+    return this.locationsService.updateLocation(
+      userId,
+      locationId,
+      locationDto,
+    );
   }
 
   /** DELETE 'locations/:id' - Delete location */
   @Delete(':id')
   deleteLocation(
-    @CurrentUser('id') id: string,
+    @CurrentUser('id') userId: number,
     @Param('id', ParseIntPipe) locationId: number,
   ) {
-    return this.locationsService.remove(id, locationId);
+    return this.locationsService.deleteLocation(userId, locationId);
   }
 }
