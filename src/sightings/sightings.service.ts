@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
-import { LocationService } from './location.service';
+import { LocationService } from 'src/locations/locations.service';
 import { BirdService } from '../bird/bird.service';
 import { CreateSightingDto } from './dto/create-sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
@@ -27,21 +27,22 @@ export class SightingsService {
     private readonly locationService: LocationService,
     private readonly birdService: BirdService,
   ) {}
-  //---- CREATE NEW SIGHTING
-  async create(id: string, createSightingDto: CreateSightingDto) {
-    const { commName, date, desc, location } = createSightingDto;
+
+  /** Create a new sighting */
+  async createSighting(userId: number, createSightingDto: CreateSightingDto) {
+    const { birdId, date, description, location } = createSightingDto;
     let locationId: { id: number } | null = null;
     try {
       if (location) {
-        locationId = await this.locationService.upsert(location);
+        locationId = await this.locationService.createLocation(location);
       }
 
       await this.databaseService.sighting.create({
         data: {
-          userId: id,
-          commName,
+          userId,
+          birdId,
           date,
-          desc,
+          description,
           locationId: locationId?.id || null,
         },
       });
@@ -53,26 +54,28 @@ export class SightingsService {
     }
   }
 
-  //---- GET USER'S SIGHTINGS
-  // Group by date, location, bird, lifelist, or send all
-  // Note: Invalid query keys are ignored and the default case is used
-  async findAllOrGroup(id: string, query: GroupSightingDto) {
+  /**
+   * Get a paginated list of user's sightings.
+   * Use queries to group data by date, bird, location, or life list.
+   */
+  async getSightings(userId: number, query: GroupSightingDto) {
     const { groupBy } = query;
     try {
       switch (groupBy) {
         case 'date': {
           const { page, sortBy } = query;
-
           const allDiaryEntries: { date: Date }[] = await this.databaseService
             .$queryRaw`
                 SELECT date 
                 FROM "Sighting"
-                WHERE "userId" = CAST(${id} AS uuid)
+                WHERE "userId" = ${userId}
                 GROUP BY date
                 `;
-
           let data: GroupedData[] = [];
-
+          // use queryRaw bc Prisma use both groupBy and select/include.
+          // Separate queries are used for each sort option.
+          //? Can they be combined?
+          // count(*) is cast to int to prevent BigInt error.
           switch (sortBy) {
             case 'count': {
               data = await this.databaseService.$queryRaw`
@@ -84,7 +87,7 @@ export class SightingsService {
                   date AS text, 
                   CAST(count(*) AS int) AS count
                 FROM "Sighting"
-                WHERE "userId" = CAST(${id} AS uuid)
+                WHERE "userId" = ${userId}
                 GROUP BY date
                 ORDER BY count DESC, date DESC
                 LIMIT ${TAKE_COUNT}
@@ -102,7 +105,7 @@ export class SightingsService {
                   date AS text, 
                   CAST(count(*) AS int) AS count
                 FROM "Sighting"
-                WHERE "userId" = CAST(${id} AS uuid)
+                WHERE "userId" = ${userId}
                 GROUP BY date
                 ORDER BY date ASC
                 LIMIT ${TAKE_COUNT}
@@ -120,7 +123,7 @@ export class SightingsService {
                   date AS text, 
                   CAST(count(*) AS int) AS count
                 FROM "Sighting"
-                WHERE "userId" = CAST(${id} AS uuid)
+                WHERE "userId" = ${userId}
                 GROUP BY date
                 ORDER BY date DESC
                 LIMIT ${TAKE_COUNT}
@@ -128,7 +131,6 @@ export class SightingsService {
                 `;
             }
           }
-
           const list: ListResponse = {
             message: 'ok',
             data: {
@@ -138,11 +140,6 @@ export class SightingsService {
           };
           return list;
         }
-
-        // Note: Prisma cannot combine groupBy and select/include
-        // This makes sorting on location name impossible w/o multiple
-        // queries and JS array methods.
-        // count(*) is cast to int to prevent BigInt error
         case 'location': {
           const { page, sortBy } = query;
 
@@ -150,7 +147,7 @@ export class SightingsService {
             await this.databaseService.sighting.findMany({
               distinct: ['locationId'],
               where: {
-                AND: [{ userId: id }, { locationId: { not: null } }],
+                AND: [{ userId }, { locationId: { not: null } }],
               },
             });
 
@@ -165,7 +162,7 @@ export class SightingsService {
                   CAST(count(*) AS int) AS count
                 FROM "Sighting" AS s
                 JOIN "Location" AS l ON s."locationId" = l.id
-                WHERE s."userId" = CAST(${id} AS uuid)
+                WHERE s."userId" = ${userId}
                 AND s."locationId" IS NOT NULL
                 GROUP BY s."locationId", l.name
                 ORDER BY l.name DESC
@@ -182,7 +179,7 @@ export class SightingsService {
                   CAST(count(*) AS int) AS count
                 FROM "Sighting" AS s
                 JOIN "Location" AS l ON s."locationId" = l.id
-                WHERE s."userId" = CAST(${id} AS uuid)
+                WHERE s."userId" = ${userId}
                 AND s."locationId" IS NOT NULL
                 GROUP BY s."locationId", l.name
                 ORDER BY count DESC
@@ -199,7 +196,7 @@ export class SightingsService {
                   CAST(count(*) AS int) AS count
                 FROM "Sighting" AS s
                 JOIN "Location" AS l ON s."locationId" = l.id
-                WHERE s."userId" = CAST(${id} AS uuid)
+                WHERE s."userId" = ${userId}
                 AND s."locationId" IS NOT NULL
                 GROUP BY s."locationId", l.name
                 ORDER BY l.name ASC
@@ -222,8 +219,8 @@ export class SightingsService {
 
         case 'bird': {
           const birdGroup = await this.databaseService.sighting.groupBy({
-            by: ['commName'],
-            where: { userId: id },
+            by: ['birdId'],
+            where: { userId },
             _count: { _all: true },
           });
           return birdGroup;
@@ -233,24 +230,26 @@ export class SightingsService {
           const { page, sortBy } = query;
           if (!page) throw new BadRequestException();
 
+          //? Replace with count?
           const getSightings = await this.databaseService.sighting.findMany({
-            where: { userId: id },
-            distinct: ['commName'],
+            where: { userId },
+            distinct: ['birdId'],
           });
 
           const countOfRecords = getSightings.length;
 
           const sightings = await this.databaseService.sighting.findMany({
-            where: { userId: id },
-            distinct: ['commName'],
+            where: { userId },
+            distinct: ['birdId'],
+            include: { bird: true },
             orderBy:
               sortBy === 'alphaDesc'
-                ? [{ commName: 'desc' }]
+                ? [{ bird: { commonName: 'desc' } }]
                 : sortBy === 'dateAsc'
-                  ? [{ date: 'asc' }, { commName: 'asc' }]
+                  ? [{ date: 'asc' }, { bird: { commonName: 'asc' } }]
                   : sortBy === 'dateDesc'
-                    ? [{ date: 'desc' }, { commName: 'asc' }]
-                    : [{ commName: 'asc' }],
+                    ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
+                    : [{ bird: { commonName: 'asc' } }],
             take: TAKE_COUNT,
             skip: TAKE_COUNT * (page - 1),
           });
@@ -265,7 +264,7 @@ export class SightingsService {
 
         default: {
           const sightings = await this.databaseService.sighting.findMany({
-            where: { userId: id },
+            where: { userId },
             orderBy: { date: 'desc' },
             take: TAKE_COUNT,
           });
@@ -286,30 +285,30 @@ export class SightingsService {
   }
 
   //---- FIND USER'S RECENT SIGHTINGS
-  async findRecent(id: string) {
-    const data = await this.databaseService.sighting
-      .findMany({
-        where: { userId: id },
-        orderBy: { date: 'desc' },
-        take: TAKE_COUNT,
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
+  // async findRecent(userId: number) {
+  //   const data = await this.databaseService.sighting
+  //     .findMany({
+  //       where: { userId },
+  //       orderBy: { date: 'desc' },
+  //       take: TAKE_COUNT,
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+  //     });
 
-    return { message: 'ok', data };
-  }
+  //   return { message: 'ok', data };
+  // }
 
   //---- FIND USER'S SIGHTINGS BY SINGLE DATE
   async findSightingsBySingleDate(
-    userId: string,
+    userId: number,
     date: Date,
     query: GetSightingByDateQueryDto,
   ) {
     const { page, sortBy } = query;
     const count = await this.databaseService.sighting.count({
-      where: { userId: userId, date: new Date(date) },
+      where: { userId, date: new Date(date) },
     });
     const data = await this.databaseService.sighting
       .findMany({
@@ -317,9 +316,11 @@ export class SightingsService {
           userId: userId,
           date: new Date(date),
         },
-        include: { location: true },
+        include: { bird: true, location: true },
         orderBy:
-          sortBy === 'alphaAsc' ? { commName: 'asc' } : { commName: 'desc' },
+          sortBy === 'alphaAsc'
+            ? { bird: { commonName: 'asc' } }
+            : { bird: { commonName: 'desc' } },
         take: TAKE_COUNT,
         skip: TAKE_COUNT * (page - 1),
       })
@@ -340,20 +341,17 @@ export class SightingsService {
 
   //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
   async findSightingsBySingleBird(
-    userId: string,
-    commName: string,
+    userId: number,
+    birdId: number,
     query: GetSightingByBirdQueryDto,
   ) {
     const { page, sortBy } = query;
     const count = await this.databaseService.sighting.count({
-      where: { userId, commName },
+      where: { userId, birdId },
     });
     const data = await this.databaseService.sighting
       .findMany({
-        where: {
-          userId,
-          commName,
-        },
+        where: { userId, birdId },
         include: { location: true },
         orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
         take: TAKE_COUNT,
@@ -376,7 +374,7 @@ export class SightingsService {
 
   //---- FIND USER'S SIGHTINGS BY SINGLE LOCATION
   async findSightingsBySingleLocation(
-    userId: string,
+    userId: number,
     locationId: number,
     query: GetSightingByLocationQueryDto,
   ) {
@@ -387,14 +385,15 @@ export class SightingsService {
     const sightings = await this.databaseService.sighting
       .findMany({
         where: { userId, locationId },
+        include: { bird: true },
         orderBy:
           sortBy === 'alphaDesc'
-            ? [{ commName: 'desc' }]
+            ? [{ bird: { commonName: 'desc' } }]
             : sortBy === 'dateAsc'
-              ? [{ date: 'asc' }, { commName: 'asc' }]
+              ? [{ date: 'asc' }, { bird: { commonName: 'asc' } }]
               : sortBy === 'dateDesc'
-                ? [{ date: 'desc' }, { commName: 'asc' }]
-                : [{ commName: 'asc' }],
+                ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
+                : [{ bird: { commonName: 'asc' } }],
         take: TAKE_COUNT,
         skip: TAKE_COUNT * (page - 1),
       })
@@ -418,10 +417,10 @@ export class SightingsService {
 
   //---- GROUP USER'S SIGHTINGS BY SINGLE LOCATION
   //? Prisma does not support include or select with groupBy()
-  async groupBirdsByLocation(userId: string, locationId: number) {
+  async groupBirdsByLocation(userId: number, locationId: number) {
     return this.databaseService.sighting
       .groupBy({
-        by: ['commName'],
+        by: ['birdId'],
         where: {
           userId: userId,
           locationId: locationId,
@@ -432,10 +431,6 @@ export class SightingsService {
         if (!res.length) {
           throw new NotFoundException();
         }
-        // for (const el of res) {
-        //   const bird = await this.birdService.findOne(el.commName);
-        //   el['commName'] = bird.commName;
-        // }
         return res;
       })
       .catch((err) => {
@@ -445,16 +440,15 @@ export class SightingsService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
-    return;
   }
 
   //---- FIND A SINGLE SIGHTING
   //? Currently this method is only used in testing
-  async findOne(userId: string, sightingId: number) {
+  async findOne(userId: number, sightingId: number) {
     return this.databaseService.sighting
       .findFirstOrThrow({
         where: {
-          AND: [{ userId: userId }, { id: sightingId }],
+          AND: [{ userId }, { id: sightingId }],
         },
       })
       .catch((err) => {
@@ -468,11 +462,9 @@ export class SightingsService {
       });
   }
 
-  //---- UPDATE A SIGHTING
-  // result is an object with updated count :: { count: 0 } or { count: 1 }
-  //? using updateMany in order to have multiple WHERE clauses
-  async update(
-    userId: string,
+  /** Update a sighting. */
+  async updateSighting(
+    userId: number,
     sightingId: number,
     updateSightingDto: UpdateSightingDto,
   ) {
@@ -481,9 +473,11 @@ export class SightingsService {
     let locationId: { id: number } | null = null;
     try {
       if (location) {
-        locationId = await this.locationService.upsert(location);
+        locationId = await this.locationService.createLocation(location);
         updateSightingData['locationId'] = locationId.id;
       }
+
+      // updateMany is required when using multiple `where` clauses
       const res = await this.databaseService.sighting.updateMany({
         data: {
           ...updateSightingData,
@@ -503,10 +497,9 @@ export class SightingsService {
     }
   }
 
-  //---- DELETE A SIGHTING
-  // result is an object with updated count :: { count: 0 } or { count: 1 }
-  //? using deleteMany in order to have multiple WHERE clauses
-  async remove(userId: string, sightingId: number) {
+  /** Delete a sighting. */
+  async deleteSighting(userId: number, sightingId: number) {
+    // deleteMany is required when using multiple `where` clauses
     return this.databaseService.sighting
       .deleteMany({
         where: { id: sightingId, userId: userId },
