@@ -1,6 +1,6 @@
 import { IsString, MaxLength } from 'class-validator';
 
-export class UpdateProfileDto {
+export class UpdateUserDto {
   @IsString()
   @MaxLength(24, {
     message: 'Name cannot be longer than 60 characters',

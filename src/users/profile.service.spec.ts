@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 import { ProfileService } from './profile.service';
 import { UsersService } from './users.service';
 import { DatabaseService } from '../database/database.service';
-import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { UpdateProfileDto } from './dtos/update-user.dto';
 
 describe('ProfileService', () => {
   let profileService: ProfileService;

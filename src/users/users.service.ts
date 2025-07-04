@@ -2,32 +2,29 @@ import {
   Injectable,
   BadRequestException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { hashPassword } from '../common/helpers/auth.helpers';
+import { CreateUserDto } from 'src/users/dtos/create-user.dto';
+import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
+import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
+import { hashPassword, comparePassword } from '../common/helpers/auth.helpers';
 import ErrorMessages from '../common/errors/errors.enum';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  //---- CREATE A NEW USER W/DEFAULT PROFILE
-  async create(createUserDto: CreateUserDto) {
+  /** Create a new user */
+  async signup(createUserDto: CreateUserDto) {
     return await this.databaseService.user
       .create({
         data: {
           email: createUserDto.email,
           password: await hashPassword(createUserDto.password),
-          profile: { create: {} },
-          favBird: {
-            create: {
-              birdId: null,
-            },
-          },
         },
-        select: { userId: true },
+        select: { id: true },
       })
       .catch((err) => {
         console.log(err);
@@ -40,17 +37,147 @@ export class UsersService {
       });
   }
 
-  //---- DELETE USER (CASCADES PROFILE, FAVORITE)
-  //? Note: Prisma throws an unhandled error when using
-  //? delete method on a resource that no longer exists.
-  //? https://github.com/prisma/prisma/issues/4072
-  async remove(id: string) {
+  /** Confirm user credentials and send token */
+  async signin(loginUser: CreateUserDto) {
+    const { email, password, storageData } = loginUser;
+    try {
+      const user = await this.databaseService.user.findUniqueOrThrow({
+        where: { email },
+      });
+
+      const comparePasswords = await comparePassword(password, user.password);
+      if (!comparePasswords) {
+        throw new BadRequestException();
+      }
+
+      let count = null;
+      if (storageData && storageData.length) {
+        const addUserId = storageData.map((sighting) => {
+          return { userId: user.id, ...sighting };
+        });
+        const addSightings = await this.databaseService.sighting.createMany({
+          data: addUserId,
+        });
+        count = addSightings.count;
+      }
+
+      return { id: user.id, count };
+    } catch (err) {
+      console.log(err);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.UserNotFound);
+        }
+      } else if (err instanceof BadRequestException) {
+        throw new BadRequestException(ErrorMessages.IncorrectPassword);
+      } else {
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      }
+    }
+  }
+
+  /** Get user by id; omits password */
+  async getUserById(id: number) {
     return this.databaseService.user
-      .delete({
-        where: { userId: id },
-        select: { userId: true },
+      .findUniqueOrThrow({
+        where: { id },
+        omit: { password: true },
+        include: { sightings: true },
+      })
+      .then((res) => {
+        // Prisma cannot combine `_count` and `distinct`
+        // https://github.com/prisma/prisma/issues/4228
+        //? Replace with raw query
+        const { sightings, ...rest } = res;
+        const totalSightings = sightings.length;
+        const totalDistinctSightings = new Set(
+          sightings.map((sighting) => sighting.id),
+        ).size;
+
+        const response = {
+          ...rest,
+          count: {
+            totalSightings,
+            totalDistinctSightings,
+          },
+        };
+        return response;
       })
       .catch((err) => {
+        console.log(err);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          if (err.code === 'P2025') {
+            throw new NotFoundException(ErrorMessages.UserNotFound);
+          }
+        }
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+  }
+
+  /** Update user */
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    await this.databaseService.user
+      .update({
+        where: { id },
+        data: { name: updateUserDto.name },
+        select: { id: true },
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err instanceof Prisma.PrismaClientKnownRequestError) {
+          if (err.code === 'P2025') {
+            throw new NotFoundException(ErrorMessages.UserNotFound);
+          }
+        }
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+
+    return { message: 'ok' };
+  }
+
+  /** Update user's password */
+  async updateUserPassword(id: number, updatePasswordDto: UpdatePasswordDto) {
+    const { currentPassword, newPassword } = updatePasswordDto;
+    try {
+      const { password } = await this.databaseService.user.findUniqueOrThrow({
+        where: { id },
+        select: { password: true },
+      });
+
+      const isValid = await comparePassword(currentPassword, password);
+      if (!isValid) {
+        throw new BadRequestException();
+      }
+
+      const hashNewPassword = await hashPassword(newPassword);
+      await this.databaseService.user.update({
+        where: { id },
+        data: { password: hashNewPassword },
+      });
+
+      return { message: 'ok' };
+    } catch (err) {
+      console.error(err);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.UserNotFound);
+        }
+      } else if (err instanceof BadRequestException) {
+        throw new BadRequestException(ErrorMessages.IncorrectPassword);
+      } else {
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      }
+    }
+  }
+
+  /** Delete user */
+  async deleteUser(id: number) {
+    return this.databaseService.user
+      .delete({
+        where: { id },
+      })
+      .catch((err) => {
+        //? Note: Prisma delete bad error: https://github.com/prisma/prisma/issues/4072
         console.log(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
