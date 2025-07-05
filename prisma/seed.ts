@@ -6,7 +6,7 @@ import {
   testUserPassword,
 } from '../src/common/constants/env.constants';
 import { birds } from '../db/birds.json';
-import type { Bird, Sighting } from 'src/common/models/db.model';
+import type { Bird, Location, Sighting } from 'src/common/models/db.model';
 
 const prisma = new PrismaClient();
 
@@ -24,17 +24,23 @@ async function main() {
     },
   });
 
+  const locations: Omit<Location, 'id'>[] = Array.from({ length: 25 }, () => ({
+    name: `${faker.location.city()}, ${faker.location.state()} ${faker.location.zipCode()}`,
+    lat: faker.location.latitude(),
+    lng: faker.location.longitude(),
+  }));
+
+  await prisma.location.createMany({ data: locations });
+
   const sightings: Omit<Sighting, 'id'>[] = Array.from({ length: 100 }, () => ({
     userId: 1,
     birdId: Math.floor(Math.random() * birds.length) + 1,
-    locationId: null,
+    locationId: Math.floor(Math.random() * 25) + 1,
     date: faker.date.past({ years: 5 }),
     description: faker.lorem.sentences({ min: 1, max: 2 }),
   }));
 
-  await prisma.sighting.createMany({
-    data: sightings,
-  });
+  await prisma.sighting.createMany({ data: sightings });
 }
 
 main()
