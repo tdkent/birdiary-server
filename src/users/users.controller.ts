@@ -4,39 +4,36 @@ import {
   Delete,
   Get,
   HttpCode,
+  Patch,
   Post,
-  Put,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-// import { ProfileService } from './profile.service';
-// import { AuthService } from './auth.service';
-import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
-import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
+import {
+  AuthDto,
+  AuthWithSightingsDto,
+  UpdateUserProfileDto,
+  UpdateUserPasswordDto,
+} from 'src/users/dto/user.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    // private readonly profileService: ProfileService,
-    private readonly usersService: UsersService,
-    // private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   /** POST '/users/signup' - Sign up user */
   @Post('signup')
-  signup(@Body(ValidationPipe) createUserDto: CreateUserDto) {
-    return this.usersService.signup(createUserDto);
+  signup(@Body(ValidationPipe) reqBody: AuthDto) {
+    return this.usersService.signup(reqBody);
   }
 
   /** POST '/users/signin' - Sign in user */
   @Post('signin')
   @HttpCode(200)
-  signin(@Body(ValidationPipe) loginUser: CreateUserDto) {
-    return this.usersService.signin(loginUser);
+  signin(@Body(ValidationPipe) reqBody: AuthWithSightingsDto) {
+    return this.usersService.signin(reqBody);
   }
 
   /** GET '/users/:id' - Get user by id */
@@ -46,14 +43,14 @@ export class UsersController {
     return this.usersService.getUserById(id);
   }
 
-  /** PUT '/users/:id' - Update user */
+  /** PATCH '/users/:id' - Update user */
   @UseGuards(AuthGuard)
-  @Put(':id')
+  @Patch(':id')
   updateUser(
     @CurrentUser('id') id: number,
-    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
+    @Body(ValidationPipe) reqBody: UpdateUserProfileDto,
   ) {
-    return this.usersService.updateUser(id, updateUserDto);
+    return this.usersService.updateUser(id, reqBody);
   }
 
   /** DELETE '/users/:id' - Delete user */
@@ -63,13 +60,13 @@ export class UsersController {
     return this.usersService.deleteUser(id);
   }
 
-  /** PUT '/users/:id' - Update user's password */
+  /** PATCH '/users/:id/password' - Update user's password */
   @UseGuards(AuthGuard)
-  @Put(':id/password')
+  @Patch(':id/password')
   updateUserPassword(
     @CurrentUser('id') id: number,
-    @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
+    @Body(ValidationPipe) reqBody: UpdateUserPasswordDto,
   ) {
-    return this.usersService.updateUserPassword(id, updatePasswordDto);
+    return this.usersService.updateUserPassword(id, reqBody);
   }
 }

@@ -38,7 +38,6 @@ export class AuthGuard implements CanActivate {
       const { payload } = await jwtVerify(token, encodedKey, {
         algorithms: ['HS256'],
       });
-      // assign the payload to the request object
       request['user'] = payload;
     } catch {
       throw new UnauthorizedException(ErrorMessages.InvalidToken);
