@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Patch,
   Post,
   Put,
   UseGuards,
@@ -12,6 +13,7 @@ import {
 import { UsersService } from './users.service';
 // import { ProfileService } from './profile.service';
 // import { AuthService } from './auth.service';
+import { AuthDto, AuthWithSightingsDto } from 'src/users/dtos/user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
 import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
@@ -28,15 +30,15 @@ export class UsersController {
 
   /** POST '/users/signup' - Sign up user */
   @Post('signup')
-  signup(@Body(ValidationPipe) createUserDto: CreateUserDto) {
-    return this.usersService.signup(createUserDto);
+  signup(@Body(ValidationPipe) reqBody: AuthDto) {
+    return this.usersService.signup(reqBody);
   }
 
   /** POST '/users/signin' - Sign in user */
   @Post('signin')
   @HttpCode(200)
-  signin(@Body(ValidationPipe) loginUser: CreateUserDto) {
-    return this.usersService.signin(loginUser);
+  signin(@Body(ValidationPipe) reqBody: AuthWithSightingsDto) {
+    return this.usersService.signin(reqBody);
   }
 
   /** GET '/users/:id' - Get user by id */
@@ -46,9 +48,9 @@ export class UsersController {
     return this.usersService.getUserById(id);
   }
 
-  /** PUT '/users/:id' - Update user */
+  /** PATCH '/users/:id' - Update user */
   @UseGuards(AuthGuard)
-  @Put(':id')
+  @Patch(':id')
   updateUser(
     @CurrentUser('id') id: number,
     @Body(ValidationPipe) updateUserDto: UpdateUserDto,
@@ -63,9 +65,9 @@ export class UsersController {
     return this.usersService.deleteUser(id);
   }
 
-  /** PUT '/users/:id' - Update user's password */
+  /** PATCH '/users/:id/password' - Update user's password */
   @UseGuards(AuthGuard)
-  @Put(':id/password')
+  @Patch(':id/password')
   updateUserPassword(
     @CurrentUser('id') id: number,
     @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,

@@ -44,7 +44,6 @@ export class SightingsController {
   }
 
   /** GET '/sightings' - Get user's sightings */
-
   @Get()
   getSightings(
     @CurrentUser('id') userId: number,
