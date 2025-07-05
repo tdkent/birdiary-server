@@ -50,3 +50,23 @@ export class AuthWithSightingsDto extends AuthDto {
   @Type(() => CreateSightingDto)
   readonly storageData: CreateSightingDto[];
 }
+
+export class UpdateUserProfileDto extends PickType(UserDto, [
+  'name',
+  'favoriteBirdId',
+  'locationId',
+] as const) {}
+
+export class UpdateUserPasswordDto {
+  @IsString()
+  @Length(8, 36, {
+    message: 'Password must be between 8 and 36 characters.',
+  })
+  readonly currentPassword: string;
+
+  @IsString()
+  @Length(8, 36, {
+    message: 'Password must be between 8 and 36 characters.',
+  })
+  readonly newPassword: string;
+}

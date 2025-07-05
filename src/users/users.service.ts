@@ -6,9 +6,15 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
-import { CreateUserDto } from 'src/users/dtos/create-user.dto';
-import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
-import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
+import {
+  AuthDto,
+  AuthWithSightingsDto,
+  UpdateUserProfileDto,
+  UpdateUserPasswordDto,
+} from 'src/users/dtos/user.dto';
+// import { CreateUserDto } from 'src/users/dtos/create-user.dto';
+// import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
+// import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
 import { hashPassword, comparePassword } from '../common/helpers/auth.helpers';
 import ErrorMessages from '../common/errors/errors.enum';
 
@@ -16,13 +22,13 @@ import ErrorMessages from '../common/errors/errors.enum';
 export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  /** Create a new user */
-  async signup(createUserDto: CreateUserDto) {
+  /** Create a new user. */
+  async signup(reqBody: AuthDto) {
     return await this.databaseService.user
       .create({
         data: {
-          email: createUserDto.email,
-          password: await hashPassword(createUserDto.password),
+          email: reqBody.email,
+          password: await hashPassword(reqBody.password),
         },
         select: { id: true },
       })
@@ -37,9 +43,9 @@ export class UsersService {
       });
   }
 
-  /** Confirm user credentials and send token */
-  async signin(loginUser: CreateUserDto) {
-    const { email, password, storageData } = loginUser;
+  /** Confirm user credentials and send token. */
+  async signin(reqBody: AuthWithSightingsDto) {
+    const { email, password, storageData } = reqBody;
     try {
       const user = await this.databaseService.user.findUniqueOrThrow({
         where: { email },
@@ -76,7 +82,7 @@ export class UsersService {
     }
   }
 
-  /** Get user by id; omits password */
+  /** Get user by id. Includes sighting count, omits password. */
   async getUserById(id: number) {
     return this.databaseService.user
       .findUniqueOrThrow({
@@ -114,12 +120,12 @@ export class UsersService {
       });
   }
 
-  /** Update user */
-  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+  /** Update user's name, location, favorite bird. */
+  async updateUser(id: number, reqBody: UpdateUserProfileDto) {
     await this.databaseService.user
       .update({
         where: { id },
-        data: { name: updateUserDto.name },
+        data: { ...reqBody },
         select: { id: true },
       })
       .catch((err) => {
@@ -136,8 +142,8 @@ export class UsersService {
   }
 
   /** Update user's password */
-  async updateUserPassword(id: number, updatePasswordDto: UpdatePasswordDto) {
-    const { currentPassword, newPassword } = updatePasswordDto;
+  async updateUserPassword(id: number, reqBody: UpdateUserPasswordDto) {
+    const { currentPassword, newPassword } = reqBody;
     try {
       const { password } = await this.databaseService.user.findUniqueOrThrow({
         where: { id },
@@ -170,7 +176,7 @@ export class UsersService {
     }
   }
 
-  /** Delete user */
+  /** Delete user. Cascades to sightings. */
   async deleteUser(id: number) {
     return this.databaseService.user
       .delete({
