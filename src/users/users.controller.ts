@@ -10,27 +10,18 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-// import { ProfileService } from './profile.service';
-// import { AuthService } from './auth.service';
 import {
   AuthDto,
   AuthWithSightingsDto,
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
-} from 'src/users/dtos/user.dto';
-// import { CreateUserDto } from './dtos/create-user.dto';
-// import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
-// import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
+} from 'src/users/dto/user.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    // private readonly profileService: ProfileService,
-    private readonly usersService: UsersService,
-    // private readonly authService: AuthService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   /** POST '/users/signup' - Sign up user */
   @Post('signup')

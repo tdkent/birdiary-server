@@ -11,10 +11,7 @@ import {
   AuthWithSightingsDto,
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
-} from 'src/users/dtos/user.dto';
-// import { CreateUserDto } from 'src/users/dtos/create-user.dto';
-// import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
-// import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
+} from 'src/users/dto/user.dto';
 import { hashPassword, comparePassword } from '../common/helpers/auth.helpers';
 import ErrorMessages from '../common/errors/errors.enum';
 
