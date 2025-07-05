@@ -1,23 +1,26 @@
 import {
   IsDate,
-  IsIn,
+  IsInt,
   IsObject,
   IsOptional,
   IsString,
   MaxDate,
   MaxLength,
+  Min,
+  Max,
   MinDate,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { LocationDto } from './create-location.dto';
-import birdNames from 'db/birds';
+import { LocationDto } from '../../locations/dto/location.dto';
+import { BIRD_COUNT } from 'src/common/constants/api.constants';
 
 export class CreateSightingDto {
-  @IsIn(birdNames, {
-    message: 'Not a valid bird',
-  })
-  readonly commName: string;
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(BIRD_COUNT)
+  readonly birdId: number;
 
   @IsDate()
   @Type(() => Date)
@@ -28,7 +31,7 @@ export class CreateSightingDto {
   @IsOptional()
   @IsString()
   @MaxLength(150)
-  readonly desc: string;
+  readonly description: string;
 
   @IsOptional()
   @IsObject()

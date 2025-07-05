@@ -7,7 +7,7 @@ import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { DatabaseService } from '../database/database.service';
 import ErrorMessages from '../common/errors/errors.enum';
-import { GetBirdsByAlphaDto } from 'src/bird/dto/get-birds-by-alpha.dto';
+import GetBirdsDto from 'src/bird/dto/getBirds.dto';
 import {
   CloudinaryResponse,
   CloudinaryError,
@@ -30,27 +30,22 @@ cloudinary.config({
 export class BirdService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  //---- FETCH ALL BIRDS OR All BY FIRST ALPHA CHARACTER
-  //---- PAGINATE RESULTS: 25 RESULTS PER PAGE
-  //---- IF USER ID PRESENT, INCLUDE SIGHTING COUNT FOR EACH BIRD
-  async findAllByAlpha(id: string, query: GetBirdsByAlphaDto) {
+  /**
+   * Get paginated list of all birds or all by first letter.
+   * Include sighting count if token present.
+   */
+  async getBirds(id: number, query: GetBirdsDto) {
     const { startsWith, page } = query;
     try {
       let countOfRecords = BIRD_COUNT;
       if (startsWith) {
         countOfRecords = await this.databaseService.bird.count({
-          where: { commName: { startsWith } },
+          where: { commonName: { startsWith } },
         });
       }
-
       const birds = await this.databaseService.bird.findMany({
-        // Conditionally add `where` clause to statement
-        // https://brockherion.dev/blog/posts/how-to-do-conditional-where-statements-in-prisma/
-        where: { ...(startsWith ? { commName: { startsWith } } : {}) },
-        omit: { familyId: true },
+        where: { ...(startsWith ? { commonName: { startsWith } } : {}) },
         include: {
-          family: true,
-          // Conditionally add '_count' clause if 'id' is defined
           ...(id
             ? {
                 _count: {
@@ -64,10 +59,8 @@ export class BirdService {
         take: TAKE_COUNT,
         skip: TAKE_COUNT * (page - 1),
       });
-
       if (id) {
         const addCount = birds.map((bird) => {
-          // Remove _count field from `bird` object
           const { _count, ...rest } = bird;
           return { ...rest, count: _count.sightings };
         });
@@ -77,7 +70,6 @@ export class BirdService {
         };
         return list;
       }
-
       const list: ListResponse = {
         message: 'ok',
         data: { countOfRecords, items: birds },
@@ -90,56 +82,50 @@ export class BirdService {
   }
 
   //---- FETCH A SINGLE BIRD
-  async findOne(id: number) {
-    return this.databaseService.bird
-      .findUniqueOrThrow({
-        where: { id },
-        select: {
-          id: true,
-          commName: true,
-        },
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          if (err.code === 'P2025') {
-            throw new NotFoundException(ErrorMessages.ResourceNotFound);
-          }
-        }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
-  }
+  // async findOne(id: number) {
+  //   return this.databaseService.bird
+  //     .findUniqueOrThrow({
+  //       where: { id },
+  //       select: {
+  //         id: true,
+  //         commName: true,
+  //       },
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       if (err instanceof Prisma.PrismaClientKnownRequestError) {
+  //         if (err.code === 'P2025') {
+  //           throw new NotFoundException(ErrorMessages.ResourceNotFound);
+  //         }
+  //       }
+  //       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+  //     });
+  // }
 
-  //---- FETCH A SINGLE BIRD WITH IMAGE
-  async findOneWithImage(commName: string) {
+  /** Get bird with image URL (if exists) */
+  async getBird(id: number) {
     return this.databaseService.bird
-      .findUniqueOrThrow({
-        where: { commName },
-        include: { family: true },
-      })
-      .then(async (prismaRes) => {
+      .findUnique({ where: { id } })
+      .then(async (bird) => {
         // if bird has an image, fetch from cloudinary
-        if (prismaRes.imgAttr) {
+        if (bird.imgAttribute) {
           const img = (await cloudinary.api
-            .resources_by_asset_folder(prismaRes.commName)
-            .then((res) => {
-              const cloudinaryRes = res as unknown as CloudinaryResponse;
-              console.log(cloudinaryRes);
-              console.log('rate limit:', cloudinaryRes.rate_limit_remaining);
-              return cloudinaryRes.resources[0].secure_url;
+            .resources_by_asset_folder(bird.commonName)
+            .then((cloudinary) => {
+              const imageData = cloudinary as unknown as CloudinaryResponse;
+              return imageData.resources[0].secure_url;
             })
             .catch((err) => {
               const {
                 error: { message, http_code },
               } = err as CloudinaryError;
-              console.log('Cloudinary error: ', http_code, message);
+              console.error('Cloudinary error: ', http_code, message);
             })) as CloudinaryResponse | void;
-          return { message: 'ok', data: { ...prismaRes, imgUrl: img } };
+          return { message: 'ok', data: { ...bird, imgUrl: img } };
         }
-
         return {
           message: 'ok',
-          data: { ...prismaRes, imgAttr: null, imgUrl: null },
+          data: { ...bird },
         };
       })
       .catch((err) => {

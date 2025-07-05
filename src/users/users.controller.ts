@@ -4,85 +4,72 @@ import {
   Delete,
   Get,
   HttpCode,
-  Param,
-  Patch,
   Post,
   Put,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ProfileService } from './profile.service';
-import { AuthService } from './auth.service';
+// import { ProfileService } from './profile.service';
+// import { AuthService } from './auth.service';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { UpdateProfileDto } from './dtos/update-profile.dto';
+import { UpdateUserDto } from 'src/users/dtos/update-user.dto';
 import { UpdatePasswordDto } from 'src/users/dtos/update-password.dto';
-import { UpdateFavoriteBirdDto } from './dtos/update-favorite-bird.dto';
 import { AuthGuard } from '../common/guards/auth.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
   constructor(
-    private readonly profileService: ProfileService,
+    // private readonly profileService: ProfileService,
     private readonly usersService: UsersService,
-    private readonly authService: AuthService,
+    // private readonly authService: AuthService,
   ) {}
 
-  //---- POST '/users' :: CREATE A NEW USER
-  @Post()
-  create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  /** POST '/users/signup' - Sign up user */
+  @Post('signup')
+  signup(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+    return this.usersService.signup(createUserDto);
   }
 
-  //---- DELETE '/users' :: DELETE A USER
-  @UseGuards(AuthGuard)
-  @Delete()
-  remove(@CurrentUser('id') id: string) {
-    return this.usersService.remove(id);
-  }
-
-  //---- POST '/users/auth/signin' :: SIGN IN A USER
-  @Post('auth/signin')
+  /** POST '/users/signin' - Sign in user */
+  @Post('signin')
   @HttpCode(200)
   signin(@Body(ValidationPipe) loginUser: CreateUserDto) {
-    return this.authService.signin(loginUser);
+    return this.usersService.signin(loginUser);
   }
 
-  //---- GET '/users/profile' :: FETCH USER PROFILE
+  /** GET '/users/:id' - Get user by id */
   @UseGuards(AuthGuard)
-  @Get('profile')
-  findOne(@CurrentUser('id') id: string) {
-    return this.profileService.findById(id);
+  @Get(':id')
+  getUserById(@CurrentUser('id') id: number) {
+    return this.usersService.getUserById(id);
   }
 
-  //---- PUT '/users/profile' :: UPDATE USER PROFILE
+  /** PUT '/users/:id' - Update user */
   @UseGuards(AuthGuard)
-  @Put('profile')
-  updateProfile(
-    @CurrentUser('id') id: string,
-    @Body(ValidationPipe) updateProfileDto: UpdateProfileDto,
+  @Put(':id')
+  updateUser(
+    @CurrentUser('id') id: number,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
   ) {
-    return this.profileService.updateProfile(id, updateProfileDto);
+    return this.usersService.updateUser(id, updateUserDto);
   }
 
-  //---- PUT '/users/password' :: UPDATE USER PROFILE
+  /** DELETE '/users/:id' - Delete user */
   @UseGuards(AuthGuard)
-  @Patch('password')
-  updatePassword(
-    @CurrentUser('id') id: string,
+  @Delete(':id')
+  deleteUser(@CurrentUser('id') id: number) {
+    return this.usersService.deleteUser(id);
+  }
+
+  /** PUT '/users/:id' - Update user's password */
+  @UseGuards(AuthGuard)
+  @Put(':id/password')
+  updateUserPassword(
+    @CurrentUser('id') id: number,
     @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
   ) {
-    return this.profileService.updatePassword(id, updatePasswordDto);
-  }
-
-  //---- PATCH '/users/profile/fav/:id' :: UPDATE USER'S FAVORITE BIRD
-  @UseGuards(AuthGuard)
-  @Patch('profile/fav/:id')
-  upsertFavoriteBird(
-    @CurrentUser('id') id: string,
-    @Param(new ValidationPipe()) params: UpdateFavoriteBirdDto,
-  ) {
-    return this.profileService.updateFavoriteBird(id, params.id);
+    return this.usersService.updateUserPassword(id, updatePasswordDto);
   }
 }

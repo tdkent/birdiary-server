@@ -1,7 +1,7 @@
 import { IsInt, IsOptional, Length, Matches, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class GetBirdsByAlphaDto {
+export default class GetBirdsDto {
   @IsOptional()
   @Length(1, 1, {
     message: '"startsWith" query must be a single character A-Z',
