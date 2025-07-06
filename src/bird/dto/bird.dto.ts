@@ -1,7 +1,16 @@
-import { IsInt, IsOptional, Length, Matches, Max, Min } from 'class-validator';
+import { IsInt, IsOptional, Length, Matches, Min, Max } from 'class-validator';
 import { Type } from 'class-transformer';
+import { BIRD_COUNT } from 'src/common/constants/api.constants';
 
-export default class GetBirdsDto {
+export class BirdIdDto {
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  @Max(BIRD_COUNT)
+  readonly id: number;
+}
+
+export class GetBirdsDto {
   @IsOptional()
   @Length(1, 1, {
     message: '"startsWith" query must be a single character A-Z',
