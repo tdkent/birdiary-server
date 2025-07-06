@@ -8,9 +8,12 @@ import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { LocationService } from 'src/locations/locations.service';
 import { BirdService } from '../bird/bird.service';
-import { CreateSightingDto } from './dto/create-sighting.dto';
+import {
+  CreateSightingDto,
+  GetSightingsDto,
+} from 'src/sightings/dto/sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
-import { GroupSightingDto } from './dto/group-sighting.dto';
+// import { GroupSightingDto } from './dto/group-sighting.dto';
 // import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
@@ -29,8 +32,8 @@ export class SightingsService {
   ) {}
 
   /** Create a new sighting */
-  async createSighting(userId: number, createSightingDto: CreateSightingDto) {
-    const { birdId, date, description, location } = createSightingDto;
+  async createSighting(userId: number, reqBody: CreateSightingDto) {
+    const { birdId, date, description, location } = reqBody;
     let locationId: { id: number } | null = null;
     try {
       if (location) {
@@ -57,13 +60,14 @@ export class SightingsService {
   /**
    * Get a paginated list of user's sightings.
    * Use queries to group data by date, bird, location, or life list.
+   * If no queries provided, returns most recent sightings.
    */
-  async getSightings(userId: number, query: GroupSightingDto) {
-    const { groupBy } = query;
+  async getSightings(userId: number, reqQuery: GetSightingsDto) {
+    const { groupBy } = reqQuery;
     try {
       switch (groupBy) {
         case 'date': {
-          const { page, sortBy } = query;
+          const { page, sortBy } = reqQuery;
           const allDiaryEntries: { date: Date }[] = await this.databaseService
             .$queryRaw`
                 SELECT date 
@@ -71,67 +75,30 @@ export class SightingsService {
                 WHERE "userId" = ${userId}
                 GROUP BY date
                 `;
-          let data: GroupedData[] = [];
-          // use queryRaw bc Prisma use both groupBy and select/include.
-          // Separate queries are used for each sort option.
-          //? Can they be combined?
-          // count(*) is cast to int to prevent BigInt error.
-          switch (sortBy) {
-            case 'count': {
-              data = await this.databaseService.$queryRaw`
+
+          let inputString = Prisma.raw(`date DESC`);
+          if (sortBy === 'count')
+            inputString = Prisma.raw(`count DESC, date DESC`);
+          if (sortBy === 'dateAsc') inputString = Prisma.raw(`date ASC`);
+
+          const query = Prisma.sql`
                 SELECT
                   CAST(
                     REPLACE(
                     LEFT(CAST(date AS text), 10), '-', ''
                   ) AS int) AS id,
-                  date AS text, 
+                  date AS text,
                   CAST(count(*) AS int) AS count
                 FROM "Sighting"
                 WHERE "userId" = ${userId}
                 GROUP BY date
-                ORDER BY count DESC, date DESC
+                ORDER BY ${inputString}
                 LIMIT ${TAKE_COUNT}
                 OFFSET ${TAKE_COUNT * (page - 1)}
                 `;
-              break;
-            }
-            case 'dateAsc': {
-              data = await this.databaseService.$queryRaw`
-                SELECT
-                  CAST(
-                    REPLACE(
-                    LEFT(CAST(date AS text), 10), '-', ''
-                  ) AS int) AS id,
-                  date AS text, 
-                  CAST(count(*) AS int) AS count
-                FROM "Sighting"
-                WHERE "userId" = ${userId}
-                GROUP BY date
-                ORDER BY date ASC
-                LIMIT ${TAKE_COUNT}
-                OFFSET ${TAKE_COUNT * (page - 1)}
-                `;
-              break;
-            }
-            default: {
-              data = await this.databaseService.$queryRaw`
-                SELECT
-                  CAST(
-                    REPLACE(
-                    LEFT(CAST(date AS text), 10), '-', ''
-                  ) AS int) AS id,
-                  date AS text, 
-                  CAST(count(*) AS int) AS count
-                FROM "Sighting"
-                WHERE "userId" = ${userId}
-                GROUP BY date
-                ORDER BY date DESC
-                LIMIT ${TAKE_COUNT}
-                OFFSET ${TAKE_COUNT * (page - 1)}
-                `;
-            }
-          }
-          const list: ListResponse = {
+          const data: GroupedData[] =
+            await this.databaseService.$queryRaw(query);
+          const list = {
             message: 'ok',
             data: {
               countOfRecords: allDiaryEntries.length,
@@ -141,7 +108,7 @@ export class SightingsService {
           return list;
         }
         case 'location': {
-          const { page, sortBy } = query;
+          const { page, sortBy } = reqQuery;
 
           const distinctLocations =
             await this.databaseService.sighting.findMany({
@@ -227,7 +194,7 @@ export class SightingsService {
         }
 
         case 'lifelist': {
-          const { page, sortBy } = query;
+          const { page, sortBy } = reqQuery;
           if (!page) throw new BadRequestException();
 
           //? Replace with count?
