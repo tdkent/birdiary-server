@@ -7,21 +7,15 @@ import {
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { LocationService } from 'src/locations/locations.service';
-import { BirdService } from '../bird/bird.service';
 import {
   CreateSightingDto,
   GetSightingsDto,
 } from 'src/sightings/dto/sighting.dto';
 import { UpdateSightingDto } from './dto/update-sighting.dto';
-// import { GroupSightingDto } from './dto/group-sighting.dto';
-// import { GetRecentSightingsDto } from './dto/get-recent-sightings.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
-import type { ListResponse, GroupedData } from 'src/types/api';
+import type { GroupedData } from 'src/types/api';
 import { TAKE_COUNT } from 'src/common/constants/api.constants';
-import { GetSightingByDateQueryDto } from 'src/sightings/dto/get-sighting-by-date-query.dto';
-import { GetSightingByBirdQueryDto } from 'src/sightings/dto/get-sightings-by-bird-query.dto';
-import { GetSightingByLocationQueryDto } from 'src/sightings/dto/get-sightings-by-location-query.dto';
 import {
   getCountOfSightingsByDate,
   getCountOfSightingsByLocation,
@@ -35,7 +29,6 @@ export class SightingsService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly locationService: LocationService,
-    private readonly birdService: BirdService,
   ) {}
 
   /** Create a new sighting */
@@ -66,67 +59,54 @@ export class SightingsService {
 
   /**
    * Get a paginated list of user's sightings.
-   * Use queries to group data by date, bird, location, or lifelist.
-   * If no queries provided, returns most recent sightings.
+   * Use optional `groupBy` queries 'date', 'location', 'lifelist' to get grouped data.
+   * Use optional `birdId`, `locationId`, `date` queries to get filtered data.
+   * If none of these queries provided, return user's recent sightings.
+   * `page` and `sortBy` queries are required.
    */
-  async getSightings(userId: number, reqQuery: GetSightingsDto) {
-    const { groupBy } = reqQuery;
+  async getSightings(
+    userId: number,
+    reqQuery: GetSightingsDto,
+  ): Promise<{ countOfRecords: number; data: any[] }> {
     try {
-      switch (groupBy) {
-        case 'date': {
-          const { page, sortBy } = reqQuery;
-
+      if (!Object.keys(reqQuery).length) {
+        const data = await this.databaseService.sighting.findMany({
+          where: { userId },
+          orderBy: { date: 'desc' },
+          take: TAKE_COUNT,
+        });
+        return { countOfRecords: data.length, data };
+      }
+      const { groupBy, birdId, locationId, dateId, page, sortBy } = reqQuery;
+      if (!page || !sortBy || Object.keys(reqQuery).length !== 3)
+        throw new BadRequestException();
+      if (groupBy) {
+        if (groupBy === 'date') {
           const [count]: { count: number }[] =
             await this.databaseService.$queryRaw(
               getCountOfSightingsByDate(userId),
             );
-
           const data: GroupedData[] = await this.databaseService.$queryRaw(
             getSightingsGroupedByDate(userId, sortBy, page),
           );
-
-          const list = {
-            message: 'ok',
-            data: {
-              countOfRecords: count.count,
-              items: data,
-            },
-          };
-          return list;
+          return { countOfRecords: count.count, data };
         }
-        case 'location': {
-          const { page, sortBy } = reqQuery;
-
+        if (groupBy === 'location') {
           const [count]: { count: number }[] =
             await this.databaseService.$queryRaw(
               getCountOfSightingsByLocation(userId),
             );
-
           const data: GroupedData[] = await this.databaseService.$queryRaw(
             getSightingsGroupedByLocation(userId, sortBy, page),
           );
-
-          const list: ListResponse = {
-            message: 'ok',
-            data: {
-              countOfRecords: count[0],
-              items: data,
-            },
-          };
-
-          return list;
+          return { countOfRecords: count.count, data };
         }
-
-        case 'lifelist': {
-          const { page, sortBy } = reqQuery;
-          if (!page) throw new BadRequestException();
-
+        if (groupBy === 'lifelist') {
           const [count]: { count: number }[] =
             await this.databaseService.$queryRaw(
               getCountOfSightingsByDistinctBird(userId),
             );
-
-          const sightings = await this.databaseService.sighting.findMany({
+          const data = await this.databaseService.sighting.findMany({
             where: { userId },
             distinct: ['birdId'],
             include: { bird: true },
@@ -141,28 +121,61 @@ export class SightingsService {
             take: TAKE_COUNT,
             skip: TAKE_COUNT * (page - 1),
           });
-
-          const list: ListResponse = {
-            message: 'ok',
-            data: { countOfRecords: count[0], items: sightings },
-          };
-
-          return list;
-        }
-
-        default: {
-          const sightings = await this.databaseService.sighting.findMany({
-            where: { userId },
-            orderBy: { date: 'desc' },
-            take: TAKE_COUNT,
-          });
-          const list: ListResponse = {
-            message: 'ok',
-            data: { countOfRecords: sightings.length, items: sightings },
-          };
-          return list;
+          return { countOfRecords: count.count, data };
         }
       }
+      if (birdId) {
+        const count = await this.databaseService.sighting.count({
+          where: { userId, birdId },
+        });
+        const data = await this.databaseService.sighting.findMany({
+          where: { userId, birdId },
+          include: { location: true },
+          orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
+          take: TAKE_COUNT,
+          skip: TAKE_COUNT * (page - 1),
+        });
+        return { countOfRecords: count, data };
+      }
+      if (locationId) {
+        const count = await this.databaseService.sighting.count({
+          where: { userId, locationId },
+        });
+        const data = await this.databaseService.sighting.findMany({
+          where: { userId, locationId },
+          include: { bird: true },
+          orderBy:
+            sortBy === 'alphaDesc'
+              ? [{ bird: { commonName: 'desc' } }]
+              : sortBy === 'dateAsc'
+                ? [{ date: 'asc' }, { bird: { commonName: 'asc' } }]
+                : sortBy === 'dateDesc'
+                  ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
+                  : [{ bird: { commonName: 'asc' } }],
+          take: TAKE_COUNT,
+          skip: TAKE_COUNT * (page - 1),
+        });
+        return { countOfRecords: count, data };
+      }
+      if (dateId) {
+        const count = await this.databaseService.sighting.count({
+          where: { userId, date: new Date(dateId) },
+        });
+        const data = await this.databaseService.sighting.findMany({
+          where: {
+            userId: userId,
+            date: new Date(dateId),
+          },
+          include: { bird: true, location: true },
+          orderBy:
+            sortBy === 'alphaAsc'
+              ? { bird: { commonName: 'asc' } }
+              : { bird: { commonName: 'desc' } },
+          take: TAKE_COUNT,
+          skip: TAKE_COUNT * (page - 1),
+        });
+        return { countOfRecords: count, data };
+      } else throw new BadRequestException();
     } catch (err) {
       console.log(err);
       if (err instanceof BadRequestException) {
@@ -170,137 +183,6 @@ export class SightingsService {
       }
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
-  }
-
-  //---- FIND USER'S RECENT SIGHTINGS
-  // async findRecent(userId: number) {
-  //   const data = await this.databaseService.sighting
-  //     .findMany({
-  //       where: { userId },
-  //       orderBy: { date: 'desc' },
-  //       take: TAKE_COUNT,
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-  //     });
-
-  //   return { message: 'ok', data };
-  // }
-
-  //---- FIND USER'S SIGHTINGS BY SINGLE DATE
-  async findSightingsBySingleDate(
-    userId: number,
-    date: Date,
-    query: GetSightingByDateQueryDto,
-  ) {
-    const { page, sortBy } = query;
-    const count = await this.databaseService.sighting.count({
-      where: { userId, date: new Date(date) },
-    });
-    const data = await this.databaseService.sighting
-      .findMany({
-        where: {
-          userId: userId,
-          date: new Date(date),
-        },
-        include: { bird: true, location: true },
-        orderBy:
-          sortBy === 'alphaAsc'
-            ? { bird: { commonName: 'asc' } }
-            : { bird: { commonName: 'desc' } },
-        take: TAKE_COUNT,
-        skip: TAKE_COUNT * (page - 1),
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
-
-    const list: ListResponse = {
-      message: 'ok',
-      data: {
-        countOfRecords: count,
-        items: data,
-      },
-    };
-    return list;
-  }
-
-  //---- FIND USER'S SIGHTINGS BY SINGLE BIRD
-  async findSightingsBySingleBird(
-    userId: number,
-    birdId: number,
-    query: GetSightingByBirdQueryDto,
-  ) {
-    const { page, sortBy } = query;
-    const count = await this.databaseService.sighting.count({
-      where: { userId, birdId },
-    });
-    const data = await this.databaseService.sighting
-      .findMany({
-        where: { userId, birdId },
-        include: { location: true },
-        orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
-        take: TAKE_COUNT,
-        skip: TAKE_COUNT * (page - 1),
-      })
-      .catch((err) => {
-        console.log(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
-
-    const list: ListResponse = {
-      message: 'ok',
-      data: {
-        countOfRecords: count,
-        items: data,
-      },
-    };
-    return list;
-  }
-
-  //---- FIND USER'S SIGHTINGS BY SINGLE LOCATION
-  async findSightingsBySingleLocation(
-    userId: number,
-    locationId: number,
-    query: GetSightingByLocationQueryDto,
-  ) {
-    const { page, sortBy } = query;
-    const count = await this.databaseService.sighting.count({
-      where: { userId, locationId },
-    });
-    const sightings = await this.databaseService.sighting
-      .findMany({
-        where: { userId, locationId },
-        include: { bird: true },
-        orderBy:
-          sortBy === 'alphaDesc'
-            ? [{ bird: { commonName: 'desc' } }]
-            : sortBy === 'dateAsc'
-              ? [{ date: 'asc' }, { bird: { commonName: 'asc' } }]
-              : sortBy === 'dateDesc'
-                ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
-                : [{ bird: { commonName: 'asc' } }],
-        take: TAKE_COUNT,
-        skip: TAKE_COUNT * (page - 1),
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err instanceof NotFoundException) {
-          throw new NotFoundException(ErrorMessages.ResourceNotFound);
-        }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
-
-    const list: ListResponse = {
-      message: 'ok',
-      data: {
-        countOfRecords: count,
-        items: sightings,
-      },
-    };
-    return list;
   }
 
   //---- GROUP USER'S SIGHTINGS BY SINGLE LOCATION
