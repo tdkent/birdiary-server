@@ -22,6 +22,13 @@ import { TAKE_COUNT } from 'src/common/constants/api.constants';
 import { GetSightingByDateQueryDto } from 'src/sightings/dto/get-sighting-by-date-query.dto';
 import { GetSightingByBirdQueryDto } from 'src/sightings/dto/get-sightings-by-bird-query.dto';
 import { GetSightingByLocationQueryDto } from 'src/sightings/dto/get-sightings-by-location-query.dto';
+import {
+  getCountOfSightingsByDate,
+  getCountOfSightingsByLocation,
+  getCountOfSightingsByDistinctBird,
+  getSightingsGroupedByDate,
+  getSightingsGroupedByLocation,
+} from 'src/sightings/sql/sighting.sql';
 
 @Injectable()
 export class SightingsService {
@@ -59,7 +66,7 @@ export class SightingsService {
 
   /**
    * Get a paginated list of user's sightings.
-   * Use queries to group data by date, bird, location, or life list.
+   * Use queries to group data by date, bird, location, or lifelist.
    * If no queries provided, returns most recent sightings.
    */
   async getSightings(userId: number, reqQuery: GetSightingsDto) {
@@ -68,40 +75,20 @@ export class SightingsService {
       switch (groupBy) {
         case 'date': {
           const { page, sortBy } = reqQuery;
-          const allDiaryEntries: { date: Date }[] = await this.databaseService
-            .$queryRaw`
-                SELECT date 
-                FROM "Sighting"
-                WHERE "userId" = ${userId}
-                GROUP BY date
-                `;
 
-          let inputString = Prisma.raw(`date DESC`);
-          if (sortBy === 'count')
-            inputString = Prisma.raw(`count DESC, date DESC`);
-          if (sortBy === 'dateAsc') inputString = Prisma.raw(`date ASC`);
+          const [count]: { count: number }[] =
+            await this.databaseService.$queryRaw(
+              getCountOfSightingsByDate(userId),
+            );
 
-          const query = Prisma.sql`
-                SELECT
-                  CAST(
-                    REPLACE(
-                    LEFT(CAST(date AS text), 10), '-', ''
-                  ) AS int) AS id,
-                  date AS text,
-                  CAST(count(*) AS int) AS count
-                FROM "Sighting"
-                WHERE "userId" = ${userId}
-                GROUP BY date
-                ORDER BY ${inputString}
-                LIMIT ${TAKE_COUNT}
-                OFFSET ${TAKE_COUNT * (page - 1)}
-                `;
-          const data: GroupedData[] =
-            await this.databaseService.$queryRaw(query);
+          const data: GroupedData[] = await this.databaseService.$queryRaw(
+            getSightingsGroupedByDate(userId, sortBy, page),
+          );
+
           const list = {
             message: 'ok',
             data: {
-              countOfRecords: allDiaryEntries.length,
+              countOfRecords: count.count,
               items: data,
             },
           };
@@ -110,100 +97,34 @@ export class SightingsService {
         case 'location': {
           const { page, sortBy } = reqQuery;
 
-          const distinctLocations =
-            await this.databaseService.sighting.findMany({
-              distinct: ['locationId'],
-              where: {
-                AND: [{ userId }, { locationId: { not: null } }],
-              },
-            });
+          const [count]: { count: number }[] =
+            await this.databaseService.$queryRaw(
+              getCountOfSightingsByLocation(userId),
+            );
 
-          let locations = [];
-
-          switch (sortBy) {
-            case 'alphaDesc': {
-              locations = await this.databaseService.$queryRaw`
-                SELECT
-                  s."locationId" AS id,
-                  l.name AS text,
-                  CAST(count(*) AS int) AS count
-                FROM "Sighting" AS s
-                JOIN "Location" AS l ON s."locationId" = l.id
-                WHERE s."userId" = ${userId}
-                AND s."locationId" IS NOT NULL
-                GROUP BY s."locationId", l.name
-                ORDER BY l.name DESC
-                LIMIT ${TAKE_COUNT}
-                OFFSET ${TAKE_COUNT * (page - 1)}
-                `;
-              break;
-            }
-            case 'count': {
-              locations = await this.databaseService.$queryRaw`
-                SELECT
-                  s."locationId" AS id,
-                  l.name AS text,
-                  CAST(count(*) AS int) AS count
-                FROM "Sighting" AS s
-                JOIN "Location" AS l ON s."locationId" = l.id
-                WHERE s."userId" = ${userId}
-                AND s."locationId" IS NOT NULL
-                GROUP BY s."locationId", l.name
-                ORDER BY count DESC
-                LIMIT ${TAKE_COUNT}
-                OFFSET ${TAKE_COUNT * (page - 1)}
-                `;
-              break;
-            }
-            default: {
-              locations = await this.databaseService.$queryRaw`
-                SELECT
-                  s."locationId" AS id,
-                  l.name AS text,
-                  CAST(count(*) AS int) AS count
-                FROM "Sighting" AS s
-                JOIN "Location" AS l ON s."locationId" = l.id
-                WHERE s."userId" = ${userId}
-                AND s."locationId" IS NOT NULL
-                GROUP BY s."locationId", l.name
-                ORDER BY l.name ASC
-                LIMIT ${TAKE_COUNT}
-                OFFSET ${TAKE_COUNT * (page - 1)}
-                `;
-            }
-          }
+          const data: GroupedData[] = await this.databaseService.$queryRaw(
+            getSightingsGroupedByLocation(userId, sortBy, page),
+          );
 
           const list: ListResponse = {
             message: 'ok',
             data: {
-              countOfRecords: distinctLocations.length,
-              items: locations,
+              countOfRecords: count[0],
+              items: data,
             },
           };
 
           return list;
         }
 
-        case 'bird': {
-          const birdGroup = await this.databaseService.sighting.groupBy({
-            by: ['birdId'],
-            where: { userId },
-            _count: { _all: true },
-          });
-          return birdGroup;
-        }
-
         case 'lifelist': {
           const { page, sortBy } = reqQuery;
           if (!page) throw new BadRequestException();
 
-          //? Replace with count?
-          const getSightings = await this.databaseService.sighting.findMany({
-            where: { userId },
-            distinct: ['birdId'],
-          });
-
-          const countOfRecords = getSightings.length;
+          const [count]: { count: number }[] =
+            await this.databaseService.$queryRaw(
+              getCountOfSightingsByDistinctBird(userId),
+            );
 
           const sightings = await this.databaseService.sighting.findMany({
             where: { userId },
@@ -223,7 +144,7 @@ export class SightingsService {
 
           const list: ListResponse = {
             message: 'ok',
-            data: { countOfRecords, items: sightings },
+            data: { countOfRecords: count[0], items: sightings },
           };
 
           return list;
