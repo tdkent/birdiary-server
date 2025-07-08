@@ -1,17 +1,16 @@
-import { IsNumber, IsString, Max, MaxLength, Min } from 'class-validator';
+import { IsNumber, IsString, Max, Min } from 'class-validator';
 
 export class LocationDto {
-  @IsString()
-  @MaxLength(255)
+  @IsString({ message: 'Invalid request.' })
   readonly name: string;
 
-  @IsNumber()
-  @Min(-90)
-  @Max(90)
+  @IsNumber({}, { message: 'Invalid request.' })
+  @Min(-90, { message: 'Invalid request.' })
+  @Max(90, { message: 'Invalid request.' })
   readonly lat: number;
 
-  @IsNumber()
-  @Min(-180)
-  @Max(180)
+  @IsNumber({}, { message: 'Invalid request.' })
+  @Min(-180, { message: 'Invalid request.' })
+  @Max(180, { message: 'Invalid request.' })
   readonly lng: number;
 }

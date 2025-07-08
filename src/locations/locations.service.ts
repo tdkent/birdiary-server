@@ -6,7 +6,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { LocationDto } from '../locations/dto/location.dto';
 import { DatabaseService } from '../database/database.service';
-import { ErrorMessages } from 'src/common/models';
+import { ErrorMessages, Location } from 'src/common/models';
 
 @Injectable()
 export class LocationService {
@@ -29,7 +29,7 @@ export class LocationService {
   }
 
   /** Get location. */
-  async getLocation(id: number) {
+  async getLocation(id: number): Promise<Location> {
     return this.databaseService.location
       .findUniqueOrThrow({ where: { id } })
       .catch((err) => {
@@ -48,15 +48,14 @@ export class LocationService {
     userId: number,
     locationId: number,
     locationDto: LocationDto,
-  ) {
+  ): Promise<Location> {
     try {
       const location = await this.createLocation(locationDto);
-      // Returns { count: number }
       await this.databaseService.sighting.updateMany({
         where: { userId, locationId },
         data: { locationId: location.id },
       });
-      return { message: 'ok', location };
+      return location;
     } catch (err) {
       console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
@@ -67,13 +66,16 @@ export class LocationService {
    * Delete location from user's sightings.
    * Location remains in database.
    */
-  async deleteLocation(userId: number, locationId: number) {
+  async deleteLocation(
+    userId: number,
+    locationId: number,
+  ): Promise<{ count: number }> {
     try {
       const count = await this.databaseService.sighting.updateMany({
         where: { userId, locationId },
         data: { locationId: null },
       });
-      return { message: 'ok', count };
+      return count;
     } catch (err) {
       console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
