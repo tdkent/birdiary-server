@@ -6,22 +6,27 @@ import {
   IsOptional,
   IsString,
   Length,
+  Max,
+  Min,
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { CreateSightingDto } from 'src/sightings/dto/sighting.dto';
+import { BIRD_COUNT } from 'src/common/constants';
 
 class UserDto {
-  @IsInt()
+  @Type(() => Number) // cast id type to use in params DTO
+  @IsInt({ message: 'Invalid request.' })
+  @Min(1, { message: 'Invalid request.' })
   readonly id: number;
 
-  @IsEmail({}, { message: 'Please submit a valid email address.' })
+  @IsEmail({}, { message: 'Not a valid email.' })
   readonly email: string;
 
   @IsString()
   @Length(8, 36, {
-    message: 'Password must be between 8 and 36 characters.',
+    message: 'Not a valid password.',
   })
   readonly password: string;
 
@@ -30,10 +35,13 @@ class UserDto {
   readonly name: string;
 
   @IsInt()
+  @Min(1, { message: 'Invalid request.' })
   @ValidateIf((_, value) => value !== null)
   readonly locationId: number;
 
   @IsInt()
+  @Min(1, { message: 'Invalid request.' })
+  @Max(BIRD_COUNT, { message: 'Invalid request.' })
   @ValidateIf((_, value) => value !== null)
   readonly favoriteBirdId: number;
 }
@@ -45,11 +53,13 @@ export class AuthDto extends PickType(UserDto, [
 
 export class AuthWithSightingsDto extends AuthDto {
   @IsOptional()
-  @IsArray()
+  @IsArray({ message: 'Invalid request.' })
   @ValidateNested({ each: true })
   @Type(() => CreateSightingDto)
   readonly storageData: CreateSightingDto[];
 }
+
+export class UserIdDto extends PickType(UserDto, ['id'] as const) {}
 
 export class UpdateUserProfileDto extends PickType(UserDto, [
   'name',
@@ -60,13 +70,13 @@ export class UpdateUserProfileDto extends PickType(UserDto, [
 export class UpdateUserPasswordDto {
   @IsString()
   @Length(8, 36, {
-    message: 'Password must be between 8 and 36 characters.',
+    message: 'Not a valid password.',
   })
   readonly currentPassword: string;
 
   @IsString()
   @Length(8, 36, {
-    message: 'Password must be between 8 and 36 characters.',
+    message: 'Not a valid password.',
   })
   readonly newPassword: string;
 }

@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  Param,
   Patch,
   Post,
   UseGuards,
@@ -15,6 +16,7 @@ import {
   AuthWithSightingsDto,
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
+  UserIdDto,
 } from 'src/users/dto/user.dto';
 import AuthGuard from '../common/guard/auth.guard';
 import CurrentUser from 'src/common/decorators';
@@ -39,8 +41,11 @@ export class UsersController {
   /** GET '/users/:id' - Get user by id */
   @UseGuards(AuthGuard)
   @Get(':id')
-  getUserById(@CurrentUser('id') id: number) {
-    return this.usersService.getUserById(id);
+  getUserById(
+    @CurrentUser('id') id: number,
+    @Param(new ValidationPipe()) params: UserIdDto,
+  ) {
+    return this.usersService.getUserById(id, params.id);
   }
 
   /** PATCH '/users/:id' - Update user */
@@ -48,16 +53,20 @@ export class UsersController {
   @Patch(':id')
   updateUser(
     @CurrentUser('id') id: number,
+    @Param(new ValidationPipe()) params: UserIdDto,
     @Body(ValidationPipe) reqBody: UpdateUserProfileDto,
   ) {
-    return this.usersService.updateUser(id, reqBody);
+    return this.usersService.updateUser(id, params.id, reqBody);
   }
 
   /** DELETE '/users/:id' - Delete user */
   @UseGuards(AuthGuard)
   @Delete(':id')
-  deleteUser(@CurrentUser('id') id: number) {
-    return this.usersService.deleteUser(id);
+  deleteUser(
+    @CurrentUser('id') id: number,
+    @Param(new ValidationPipe()) params: UserIdDto,
+  ) {
+    return this.usersService.deleteUser(id, params.id);
   }
 
   /** PATCH '/users/:id/password' - Update user's password */
@@ -65,8 +74,9 @@ export class UsersController {
   @Patch(':id/password')
   updateUserPassword(
     @CurrentUser('id') id: number,
+    @Param(new ValidationPipe()) params: UserIdDto,
     @Body(ValidationPipe) reqBody: UpdateUserPasswordDto,
   ) {
-    return this.usersService.updateUserPassword(id, reqBody);
+    return this.usersService.updateUserPassword(id, params.id, reqBody);
   }
 }
