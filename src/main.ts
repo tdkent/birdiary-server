@@ -1,6 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import {
+  BadRequestException,
+  ValidationError,
+  ValidationPipe,
+} from '@nestjs/common';
 import { PORT } from 'src/common/constants';
 
 async function bootstrap() {
@@ -9,6 +13,13 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      exceptionFactory: (validationErrors: ValidationError[] = []) => {
+        console.error(validationErrors);
+        // Return first validation exception only
+        return new BadRequestException(
+          validationErrors.map((error) => Object.values(error.constraints)[0]),
+        );
+      },
     }),
   );
   app.setGlobalPrefix('/api');

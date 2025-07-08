@@ -3,6 +3,7 @@ import {
   BadRequestException,
   InternalServerErrorException,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
@@ -13,14 +14,14 @@ import {
   UpdateUserPasswordDto,
 } from 'src/users/dto/user.dto';
 import { hashPassword, comparePassword } from '../common/helpers';
-import { ErrorMessages } from 'src/common/models';
+import { ErrorMessages, User } from 'src/common/models';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   /** Create a new user. */
-  async signup(reqBody: AuthDto) {
+  async signup(reqBody: AuthDto): Promise<{ id: number }> {
     return await this.databaseService.user
       .create({
         data: {
@@ -41,7 +42,9 @@ export class UsersService {
   }
 
   /** Confirm user credentials and send token. */
-  async signin(reqBody: AuthWithSightingsDto) {
+  async signin(
+    reqBody: AuthWithSightingsDto,
+  ): Promise<{ id: number; count: number | null }> {
     const { email, password, storageData } = reqBody;
     try {
       const user = await this.databaseService.user.findUniqueOrThrow({
@@ -80,7 +83,16 @@ export class UsersService {
   }
 
   /** Get user by id. Includes sighting count, omits password. */
-  async getUserById(id: number) {
+  async getUserById(
+    id: number,
+    userId: number,
+  ): Promise<
+    Omit<User, 'password'> & {
+      totalSightings: number;
+      totalDistinctSightings: number;
+    }
+  > {
+    if (id !== userId) throw new ForbiddenException();
     return this.databaseService.user
       .findUniqueOrThrow({
         where: { id },
@@ -88,23 +100,16 @@ export class UsersService {
         include: { sightings: true },
       })
       .then((res) => {
-        // Prisma cannot combine `_count` and `distinct`
-        // https://github.com/prisma/prisma/issues/4228
-        //? Replace with raw query
         const { sightings, ...rest } = res;
         const totalSightings = sightings.length;
         const totalDistinctSightings = new Set(
           sightings.map((sighting) => sighting.id),
         ).size;
-
-        const response = {
+        return {
           ...rest,
-          count: {
-            totalSightings,
-            totalDistinctSightings,
-          },
+          totalSightings,
+          totalDistinctSightings,
         };
-        return response;
       })
       .catch((err) => {
         console.error(err);
@@ -118,7 +123,8 @@ export class UsersService {
   }
 
   /** Update user's name, location, favorite bird. */
-  async updateUser(id: number, reqBody: UpdateUserProfileDto) {
+  async updateUser(id: number, userId: number, reqBody: UpdateUserProfileDto) {
+    if (id !== userId) throw new ForbiddenException();
     await this.databaseService.user
       .update({
         where: { id },
@@ -139,7 +145,12 @@ export class UsersService {
   }
 
   /** Update user's password */
-  async updateUserPassword(id: number, reqBody: UpdateUserPasswordDto) {
+  async updateUserPassword(
+    id: number,
+    userId: number,
+    reqBody: UpdateUserPasswordDto,
+  ) {
+    if (id !== userId) throw new ForbiddenException();
     const { currentPassword, newPassword } = reqBody;
     try {
       const { password } = await this.databaseService.user.findUniqueOrThrow({
@@ -174,7 +185,8 @@ export class UsersService {
   }
 
   /** Delete user. Cascades to sightings. */
-  async deleteUser(id: number) {
+  async deleteUser(id: number, userId: number) {
+    if (id !== userId) throw new ForbiddenException();
     return this.databaseService.user
       .delete({
         where: { id },

@@ -10,6 +10,8 @@ import {
   ErrorMessages,
   CloudinaryError,
   CloudinaryResponse,
+  ListWithCount,
+  Bird,
 } from 'src/common/models';
 import { GetBirdsDto } from 'src/bird/dto/bird.dto';
 import {
@@ -19,7 +21,6 @@ import {
   BIRD_COUNT,
   TAKE_COUNT,
 } from 'src/common/constants';
-import { ListResponse } from 'src/types/api';
 
 cloudinary.config({
   cloud_name: CLOUDINARY_NAME,
@@ -35,7 +36,7 @@ export class BirdService {
    * Get paginated list of all birds or all by first letter.
    * Include sighting count if token present.
    */
-  async getBirds(id: number, query: GetBirdsDto) {
+  async getBirds(id: number, query: GetBirdsDto): Promise<ListWithCount<Bird>> {
     const { startsWith, page } = query;
     try {
       let countOfRecords = BIRD_COUNT;
@@ -61,21 +62,13 @@ export class BirdService {
         skip: TAKE_COUNT * (page - 1),
       });
       if (id) {
-        const addCount = birds.map((bird) => {
+        const birdsWithCount = birds.map((bird) => {
           const { _count, ...rest } = bird;
           return { ...rest, count: _count.sightings };
         });
-        const list: ListResponse = {
-          message: 'ok',
-          data: { countOfRecords, items: addCount },
-        };
-        return list;
+        return { countOfRecords, data: birdsWithCount };
       }
-      const list: ListResponse = {
-        message: 'ok',
-        data: { countOfRecords, items: birds },
-      };
-      return list;
+      return { countOfRecords, data: birds };
     } catch (err) {
       console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
@@ -83,7 +76,7 @@ export class BirdService {
   }
 
   /** Get bird with image URL (if exists) */
-  async getBird(id: number) {
+  async getBird(id: number): Promise<Bird> {
     return this.databaseService.bird
       .findUnique({ where: { id } })
       .then(async (bird) => {
@@ -101,12 +94,9 @@ export class BirdService {
               } = err as CloudinaryError;
               console.error('Cloudinary error: ', http_code, message);
             })) as CloudinaryResponse | void;
-          return { message: 'ok', data: { ...bird, imgUrl: img } };
+          return { ...bird, imgUrl: img };
         }
-        return {
-          message: 'ok',
-          data: { ...bird },
-        };
+        return bird;
       })
       .catch((err) => {
         console.error(err);

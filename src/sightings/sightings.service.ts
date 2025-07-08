@@ -12,7 +12,12 @@ import {
   GetSightingsDto,
   UpdateSightingDto,
 } from 'src/sightings/dto/sighting.dto';
-import { ErrorMessages, type Sighting, type Group } from 'src/common/models';
+import {
+  ErrorMessages,
+  type Sighting,
+  type Group,
+  ListWithCount,
+} from 'src/common/models';
 import { TAKE_COUNT } from 'src/common/constants';
 import {
   getCountOfSightingsByDate,
@@ -30,7 +35,10 @@ export class SightingsService {
   ) {}
 
   /** Create a new sighting */
-  async createSighting(userId: number, reqBody: CreateSightingDto) {
+  async createSighting(
+    userId: number,
+    reqBody: CreateSightingDto,
+  ): Promise<Sighting> {
     const { birdId, date, description, location } = reqBody;
     let locationId: { id: number } | null = null;
     try {
@@ -38,7 +46,7 @@ export class SightingsService {
         locationId = await this.locationService.createLocation(location);
       }
 
-      await this.databaseService.sighting.create({
+      const sighting = await this.databaseService.sighting.create({
         data: {
           userId,
           birdId,
@@ -48,7 +56,7 @@ export class SightingsService {
         },
       });
 
-      return { message: 'ok' };
+      return sighting;
     } catch (err) {
       console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
@@ -65,7 +73,7 @@ export class SightingsService {
   async getSightings(
     userId: number,
     reqQuery: GetSightingsDto,
-  ): Promise<{ countOfRecords: number; data: Group[] | Sighting[] }> {
+  ): Promise<ListWithCount<Sighting | Group>> {
     try {
       if (!Object.keys(reqQuery).length) {
         const data = await this.databaseService.sighting.findMany({
@@ -183,36 +191,8 @@ export class SightingsService {
     }
   }
 
-  //---- GROUP USER'S SIGHTINGS BY SINGLE LOCATION
-  //? Prisma does not support include or select with groupBy()
-  async groupBirdsByLocation(userId: number, locationId: number) {
-    return this.databaseService.sighting
-      .groupBy({
-        by: ['birdId'],
-        where: {
-          userId: userId,
-          locationId: locationId,
-        },
-        _count: { _all: true },
-      })
-      .then(async (res) => {
-        if (!res.length) {
-          throw new NotFoundException();
-        }
-        return res;
-      })
-      .catch((err) => {
-        console.error(err);
-        if (err instanceof NotFoundException) {
-          throw new NotFoundException(ErrorMessages.ResourceNotFound);
-        }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
-  }
-
-  //---- FIND A SINGLE SIGHTING
-  //? Currently this method is only used in testing
-  async findOne(userId: number, sightingId: number) {
+  /** Get a sighting */
+  async getSighting(userId: number, sightingId: number): Promise<Sighting> {
     return this.databaseService.sighting
       .findFirstOrThrow({
         where: {
@@ -235,7 +215,7 @@ export class SightingsService {
     userId: number,
     sightingId: number,
     reqBody: UpdateSightingDto,
-  ) {
+  ): Promise<{ count: number }> {
     const { location, ...requestData } = reqBody;
     const updateSightingData = requestData;
     let locationId: { id: number } | null = null;
@@ -266,7 +246,10 @@ export class SightingsService {
   }
 
   /** Delete a sighting. */
-  async deleteSighting(userId: number, sightingId: number) {
+  async deleteSighting(
+    userId: number,
+    sightingId: number,
+  ): Promise<{ count: number }> {
     // deleteMany is required when using multiple `where` clauses
     return this.databaseService.sighting
       .deleteMany({

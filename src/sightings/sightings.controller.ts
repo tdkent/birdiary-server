@@ -5,7 +5,6 @@ import {
   Get,
   Post,
   Param,
-  ParseIntPipe,
   Put,
   Query,
   UseGuards,
@@ -17,6 +16,7 @@ import {
   CreateSightingDto,
   GetSightingsDto,
   UpdateSightingDto,
+  SightingIdDto,
 } from 'src/sightings/dto/sighting.dto';
 import AuthGuard from '../common/guard/auth.guard';
 import CurrentUser from 'src/common/decorators';
@@ -51,27 +51,27 @@ export class SightingsController {
   @Get(':id')
   getSighting(
     @CurrentUser('id') userId: number,
-    @Param('id', ParseIntPipe) sightingId: number,
+    @Param(new ValidationPipe()) params: SightingIdDto,
   ) {
-    return this.sightingsService.findOne(userId, sightingId);
+    return this.sightingsService.getSighting(userId, params.id);
   }
 
   /** PUT '/sightings/:id' - Update sighting */
   @Put(':id')
   updateSighting(
     @CurrentUser('id') userId: number,
-    @Param('id', ParseIntPipe) sightingId: number,
+    @Param(new ValidationPipe()) params: SightingIdDto,
     @Body() reqBody: UpdateSightingDto,
   ) {
-    return this.sightingsService.updateSighting(userId, sightingId, reqBody);
+    return this.sightingsService.updateSighting(userId, params.id, reqBody);
   }
 
   /** DELETE '/sightings/:id' - Delete sighting */
   @Delete(':id')
   deleteSighting(
     @CurrentUser('id') userId: number,
-    @Param('id', ParseIntPipe) sightingId: number,
+    @Param(new ValidationPipe()) params: SightingIdDto,
   ) {
-    return this.sightingsService.deleteSighting(userId, sightingId);
+    return this.sightingsService.deleteSighting(userId, params.id);
   }
 }

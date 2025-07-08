@@ -6,22 +6,28 @@ import {
   IsOptional,
   IsString,
   Length,
+  Max,
+  Min,
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ErrorMessages } from 'src/common/models';
 import { CreateSightingDto } from 'src/sightings/dto/sighting.dto';
+import { BIRD_COUNT } from 'src/common/constants';
 
 class UserDto {
-  @IsInt()
+  @Type(() => Number) // cast id type to use in params DTO
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
   readonly id: number;
 
-  @IsEmail({}, { message: 'Please submit a valid email address.' })
+  @IsEmail({}, { message: ErrorMessages.InvalidEmail })
   readonly email: string;
 
   @IsString()
   @Length(8, 36, {
-    message: 'Password must be between 8 and 36 characters.',
+    message: ErrorMessages.InvalidPassword,
   })
   readonly password: string;
 
@@ -30,10 +36,13 @@ class UserDto {
   readonly name: string;
 
   @IsInt()
+  @Min(1, { message: ErrorMessages.BadRequest })
   @ValidateIf((_, value) => value !== null)
   readonly locationId: number;
 
   @IsInt()
+  @Min(1, { message: ErrorMessages.BadRequest })
+  @Max(BIRD_COUNT, { message: ErrorMessages.BadRequest })
   @ValidateIf((_, value) => value !== null)
   readonly favoriteBirdId: number;
 }
@@ -45,11 +54,13 @@ export class AuthDto extends PickType(UserDto, [
 
 export class AuthWithSightingsDto extends AuthDto {
   @IsOptional()
-  @IsArray()
+  @IsArray({ message: ErrorMessages.BadRequest })
   @ValidateNested({ each: true })
   @Type(() => CreateSightingDto)
   readonly storageData: CreateSightingDto[];
 }
+
+export class UserIdDto extends PickType(UserDto, ['id'] as const) {}
 
 export class UpdateUserProfileDto extends PickType(UserDto, [
   'name',
@@ -60,13 +71,13 @@ export class UpdateUserProfileDto extends PickType(UserDto, [
 export class UpdateUserPasswordDto {
   @IsString()
   @Length(8, 36, {
-    message: 'Password must be between 8 and 36 characters.',
+    message: ErrorMessages.InvalidPassword,
   })
   readonly currentPassword: string;
 
   @IsString()
   @Length(8, 36, {
-    message: 'Password must be between 8 and 36 characters.',
+    message: ErrorMessages.InvalidPassword,
   })
   readonly newPassword: string;
 }

@@ -4,13 +4,12 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Put,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { LocationService } from './locations.service';
-import { LocationDto } from './dto/location.dto';
+import { UpsertLocationDto, LocationIdDto } from './dto/location.dto';
 import AuthGuard from '../common/guard/auth.guard';
 import CurrentUser from 'src/common/decorators';
 
@@ -21,30 +20,26 @@ export class LocationsController {
 
   /** GET 'locations/:id' - Get location */
   @Get(':id')
-  getLocation(@Param('id', ParseIntPipe) id: number) {
-    return this.locationsService.getLocation(id);
+  getLocation(@Param(new ValidationPipe()) params: LocationIdDto) {
+    return this.locationsService.getLocation(params.id);
   }
 
   /** PUT 'locations/:id' - Update location */
   @Put(':id')
   updateLocation(
     @CurrentUser('id') userId: number,
-    @Param('id', ParseIntPipe) locationId: number,
-    @Body(ValidationPipe) locationDto: LocationDto,
+    @Param(new ValidationPipe()) params: LocationIdDto,
+    @Body(ValidationPipe) reqBody: UpsertLocationDto,
   ) {
-    return this.locationsService.updateLocation(
-      userId,
-      locationId,
-      locationDto,
-    );
+    return this.locationsService.updateLocation(userId, params.id, reqBody);
   }
 
   /** DELETE 'locations/:id' - Delete location */
   @Delete(':id')
   deleteLocation(
     @CurrentUser('id') userId: number,
-    @Param('id', ParseIntPipe) locationId: number,
+    @Param(new ValidationPipe()) params: LocationIdDto,
   ) {
-    return this.locationsService.deleteLocation(userId, locationId);
+    return this.locationsService.deleteLocation(userId, params.id);
   }
 }
