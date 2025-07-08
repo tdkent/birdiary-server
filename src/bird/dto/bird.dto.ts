@@ -1,24 +1,25 @@
 import { IsInt, IsOptional, Length, Matches, Min, Max } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ErrorMessages } from 'src/common/models';
 import { BIRD_COUNT } from 'src/common/constants';
 
 export class BirdIdDto {
   @Type(() => Number) // cast id type to use in params DTO
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
-  @Max(BIRD_COUNT, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
+  @Max(BIRD_COUNT, { message: ErrorMessages.BadRequest })
   readonly id: number;
 }
 
 export class GetBirdsDto {
   @IsOptional()
-  @Length(1, 1, { message: 'Invalid request.' })
-  @Matches(/[A-Z]/, { message: 'Invalid request.' })
+  @Length(1, 1, { message: ErrorMessages.BadRequest })
+  @Matches(/[A-Z]/, { message: ErrorMessages.BadRequest })
   readonly startsWith: string;
 
   @Type(() => Number)
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
-  @Max(34, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
+  @Max(34, { message: ErrorMessages.BadRequest })
   readonly page: number;
 }

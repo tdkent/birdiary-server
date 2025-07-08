@@ -12,21 +12,22 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ErrorMessages } from 'src/common/models';
 import { CreateSightingDto } from 'src/sightings/dto/sighting.dto';
 import { BIRD_COUNT } from 'src/common/constants';
 
 class UserDto {
   @Type(() => Number) // cast id type to use in params DTO
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
   readonly id: number;
 
-  @IsEmail({}, { message: 'Not a valid email.' })
+  @IsEmail({}, { message: ErrorMessages.InvalidEmail })
   readonly email: string;
 
   @IsString()
   @Length(8, 36, {
-    message: 'Not a valid password.',
+    message: ErrorMessages.InvalidPassword,
   })
   readonly password: string;
 
@@ -35,13 +36,13 @@ class UserDto {
   readonly name: string;
 
   @IsInt()
-  @Min(1, { message: 'Invalid request.' })
+  @Min(1, { message: ErrorMessages.BadRequest })
   @ValidateIf((_, value) => value !== null)
   readonly locationId: number;
 
   @IsInt()
-  @Min(1, { message: 'Invalid request.' })
-  @Max(BIRD_COUNT, { message: 'Invalid request.' })
+  @Min(1, { message: ErrorMessages.BadRequest })
+  @Max(BIRD_COUNT, { message: ErrorMessages.BadRequest })
   @ValidateIf((_, value) => value !== null)
   readonly favoriteBirdId: number;
 }
@@ -53,7 +54,7 @@ export class AuthDto extends PickType(UserDto, [
 
 export class AuthWithSightingsDto extends AuthDto {
   @IsOptional()
-  @IsArray({ message: 'Invalid request.' })
+  @IsArray({ message: ErrorMessages.BadRequest })
   @ValidateNested({ each: true })
   @Type(() => CreateSightingDto)
   readonly storageData: CreateSightingDto[];
@@ -70,13 +71,13 @@ export class UpdateUserProfileDto extends PickType(UserDto, [
 export class UpdateUserPasswordDto {
   @IsString()
   @Length(8, 36, {
-    message: 'Not a valid password.',
+    message: ErrorMessages.InvalidPassword,
   })
   readonly currentPassword: string;
 
   @IsString()
   @Length(8, 36, {
-    message: 'Not a valid password.',
+    message: ErrorMessages.InvalidPassword,
   })
   readonly newPassword: string;
 }

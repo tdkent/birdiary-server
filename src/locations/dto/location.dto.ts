@@ -1,24 +1,25 @@
 import { IsInt, IsNumber, IsString, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { OmitType, PickType } from '@nestjs/swagger';
+import { ErrorMessages } from 'src/common/models';
 
 export class LocationDto {
   @Type(() => Number) // cast id type to use in params DTO
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
   readonly id: number;
 
-  @IsString({ message: 'Invalid request.' })
+  @IsString({ message: ErrorMessages.BadRequest })
   readonly name: string;
 
-  @IsNumber({}, { message: 'Invalid request.' })
-  @Min(-90, { message: 'Invalid request.' })
-  @Max(90, { message: 'Invalid request.' })
+  @IsNumber({}, { message: ErrorMessages.BadRequest })
+  @Min(-90, { message: ErrorMessages.BadRequest })
+  @Max(90, { message: ErrorMessages.BadRequest })
   readonly lat: number;
 
-  @IsNumber({}, { message: 'Invalid request.' })
-  @Min(-180, { message: 'Invalid request.' })
-  @Max(180, { message: 'Invalid request.' })
+  @IsNumber({}, { message: ErrorMessages.BadRequest })
+  @Min(-180, { message: ErrorMessages.BadRequest })
+  @Max(180, { message: ErrorMessages.BadRequest })
   readonly lng: number;
 }
 

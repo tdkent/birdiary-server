@@ -15,36 +15,37 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { ErrorMessages } from 'src/common/models';
 import { UpsertLocationDto } from '../../locations/dto/location.dto';
 import { BIRD_COUNT } from 'src/common/constants';
 
 class SightingDto {
   @Type(() => Number) // cast id type to use in params DTO
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
   readonly id: number;
 
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
   readonly userId: number;
 
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
-  @Max(BIRD_COUNT, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
+  @Max(BIRD_COUNT, { message: ErrorMessages.BadRequest })
   readonly birdId: number;
 
   @ValidateIf((_, value) => value !== null)
-  @IsInt({ message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
   readonly locationId: number;
 
   @Type(() => Date)
-  @IsDate({ message: 'Invalid request.' })
-  @MinDate(new Date('1950-01-01'), { message: 'Invalid request.' })
-  @MaxDate(() => new Date(), { message: 'Invalid request.' })
+  @IsDate({ message: ErrorMessages.BadRequest })
+  @MinDate(new Date('1950-01-01'), { message: ErrorMessages.BadRequest })
+  @MaxDate(() => new Date(), { message: ErrorMessages.BadRequest })
   readonly date: Date;
 
-  @IsString({ message: 'Invalid request.' })
-  @MaxLength(150, { message: 'Invalid request.' })
+  @IsString({ message: ErrorMessages.BadRequest })
+  @MaxLength(150, { message: ErrorMessages.BadRequest })
   @ValidateIf((_, value) => value !== null)
   readonly description: string;
 }
@@ -55,47 +56,47 @@ export class CreateSightingDto extends PickType(SightingDto, [
   'description',
 ] as const) {
   @IsOptional()
-  @IsObject({ message: 'Invalid request.' })
-  @ValidateNested({ message: 'Invalid request.' })
+  @IsObject({ message: ErrorMessages.BadRequest })
+  @ValidateNested({ message: ErrorMessages.BadRequest })
   @Type(() => UpsertLocationDto)
   location: UpsertLocationDto;
 }
 
 export class GetSightingsDto {
   @IsOptional()
-  @IsIn(['date', 'location', 'lifelist'], { message: 'Invalid request.' })
+  @IsIn(['date', 'location', 'lifelist'], { message: ErrorMessages.BadRequest })
   readonly groupBy?: string;
 
   @IsOptional()
   @Type(() => Number)
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
-  @Max(BIRD_COUNT, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
+  @Max(BIRD_COUNT, { message: ErrorMessages.BadRequest })
   readonly birdId?: number;
 
   @IsOptional()
   @Type(() => Number)
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
   readonly locationId?: number;
 
   @IsOptional()
   @Type(() => Date)
-  @IsDate({ message: 'Invalid request.' })
-  @MinDate(new Date('1950-01-01'), { message: 'Invalid request.' })
-  @MaxDate(() => new Date(), { message: 'Invalid request.' })
+  @IsDate({ message: ErrorMessages.BadRequest })
+  @MinDate(new Date('1950-01-01'), { message: ErrorMessages.BadRequest })
+  @MaxDate(() => new Date(), { message: ErrorMessages.BadRequest })
   readonly dateId?: Date;
 
   @IsOptional()
   @IsIn(['alphaAsc', 'alphaDesc', 'count', 'dateAsc', 'dateDesc'], {
-    message: 'Invalid request.',
+    message: ErrorMessages.BadRequest,
   })
   readonly sortBy?: string;
 
   @IsOptional()
   @Type(() => Number)
-  @IsInt({ message: 'Invalid request.' })
-  @Min(1, { message: 'Invalid request.' })
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
   readonly page?: number;
 }
 
