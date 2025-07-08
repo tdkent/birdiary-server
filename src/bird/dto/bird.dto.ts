@@ -1,6 +1,6 @@
 import { IsInt, IsOptional, Length, Matches, Min, Max } from 'class-validator';
 import { Type } from 'class-transformer';
-import { BIRD_COUNT } from 'src/common/constants/api.constants';
+import { BIRD_COUNT } from 'src/common/constants';
 
 export class BirdIdDto {
   @Type(() => Number)

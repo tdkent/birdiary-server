@@ -16,7 +16,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { LocationDto } from '../../locations/dto/location.dto';
-import { BIRD_COUNT } from 'src/common/constants/api.constants';
+import { BIRD_COUNT } from 'src/common/constants';
 
 class SightingDto {
   @Type(() => Number)

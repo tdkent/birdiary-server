@@ -18,8 +18,8 @@ import {
   GetSightingsDto,
   UpdateSightingDto,
 } from 'src/sightings/dto/sighting.dto';
-import { AuthGuard } from '../common/guards/auth.guard';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
+import AuthGuard from '../common/guard/auth.guard';
+import CurrentUser from 'src/common/decorators';
 
 @UseGuards(AuthGuard)
 @Controller('sightings')

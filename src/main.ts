@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { port } from './common/constants/env.constants';
+import { PORT } from 'src/common/constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,17 +9,11 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      //? Optional: Extract the first validation error message
-      // exceptionFactory: (validationErrors: ValidationError[] = []) => {
-      //   return new BadRequestException(
-      //     validationErrors.map((error) => Object.values(error.constraints)[0]),
-      //   );
-      // },
     }),
   );
   app.setGlobalPrefix('/api');
-  await app.listen(port, () => {
-    console.log('Birdiary API is listening! Port:', port);
+  await app.listen(PORT, () => {
+    console.log('Birdiary API is listening! Port:', PORT);
   });
 }
 bootstrap();

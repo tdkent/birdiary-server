@@ -5,13 +5,13 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { jwtVerify } from 'jose';
-import { sessionKey } from '../constants/env.constants';
-import ErrorMessages from '../errors/errors.enum';
+import { JWT_SESSION_KEY } from 'src/common/constants';
+import { ErrorMessages } from 'src/common/models';
 
-const encodedKey = new TextEncoder().encode(sessionKey);
+const encodedKey = new TextEncoder().encode(JWT_SESSION_KEY);
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export default class AuthGuard implements CanActivate {
   constructor() {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

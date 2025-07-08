@@ -12,10 +12,8 @@ import {
   GetSightingsDto,
   UpdateSightingDto,
 } from 'src/sightings/dto/sighting.dto';
-import { UpdateSighting } from '../common/models/update-sighting.model';
-import ErrorMessages from '../common/errors/errors.enum';
-import type { GroupedData } from 'src/types/api';
-import { TAKE_COUNT } from 'src/common/constants/api.constants';
+import { ErrorMessages, type Sighting, type Group } from 'src/common/models';
+import { TAKE_COUNT } from 'src/common/constants';
 import {
   getCountOfSightingsByDate,
   getCountOfSightingsByLocation,
@@ -67,7 +65,7 @@ export class SightingsService {
   async getSightings(
     userId: number,
     reqQuery: GetSightingsDto,
-  ): Promise<{ countOfRecords: number; data: any[] }> {
+  ): Promise<{ countOfRecords: number; data: Group[] | Sighting[] }> {
     try {
       if (!Object.keys(reqQuery).length) {
         const data = await this.databaseService.sighting.findMany({
@@ -86,7 +84,7 @@ export class SightingsService {
             await this.databaseService.$queryRaw(
               getCountOfSightingsByDate(userId),
             );
-          const data: GroupedData[] = await this.databaseService.$queryRaw(
+          const data: Group[] = await this.databaseService.$queryRaw(
             getSightingsGroupedByDate(userId, sortBy, page),
           );
           return { countOfRecords: count.count, data };
@@ -96,7 +94,7 @@ export class SightingsService {
             await this.databaseService.$queryRaw(
               getCountOfSightingsByLocation(userId),
             );
-          const data: GroupedData[] = await this.databaseService.$queryRaw(
+          const data: Group[] = await this.databaseService.$queryRaw(
             getSightingsGroupedByLocation(userId, sortBy, page),
           );
           return { countOfRecords: count.count, data };
@@ -239,7 +237,7 @@ export class SightingsService {
     reqBody: UpdateSightingDto,
   ) {
     const { location, ...requestData } = reqBody;
-    const updateSightingData: UpdateSighting = requestData;
+    const updateSightingData = requestData;
     let locationId: { id: number } | null = null;
     try {
       if (location) {

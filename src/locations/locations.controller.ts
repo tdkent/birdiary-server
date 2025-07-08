@@ -11,8 +11,8 @@ import {
 } from '@nestjs/common';
 import { LocationService } from './locations.service';
 import { LocationDto } from './dto/location.dto';
-import { AuthGuard } from '../common/guards/auth.guard';
-import { CurrentUser } from '../common/decorators/current-user.decorator';
+import AuthGuard from '../common/guard/auth.guard';
+import CurrentUser from 'src/common/decorators';
 
 @UseGuards(AuthGuard)
 @Controller('locations')

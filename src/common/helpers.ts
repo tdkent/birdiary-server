@@ -1,5 +1,5 @@
 import { hash, compare } from 'bcrypt';
-import { SALT_ROUNDS } from '../constants/auth.constants';
+import { SALT_ROUNDS } from 'src/common/constants';
 
 export async function hashPassword(password: string) {
   const hashedPassword = await hash(password, SALT_ROUNDS);

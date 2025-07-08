@@ -12,8 +12,8 @@ import {
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
 } from 'src/users/dto/user.dto';
-import { hashPassword, comparePassword } from '../common/helpers/auth.helpers';
-import ErrorMessages from '../common/errors/errors.enum';
+import { hashPassword, comparePassword } from '../common/helpers';
+import { ErrorMessages } from 'src/common/models';
 
 @Injectable()
 export class UsersService {
