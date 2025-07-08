@@ -23,7 +23,7 @@ export class LocationService {
         },
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }
@@ -33,7 +33,7 @@ export class LocationService {
     return this.databaseService.location
       .findUniqueOrThrow({ where: { id } })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
             throw new NotFoundException(ErrorMessages.ResourceNotFound);
@@ -58,7 +58,7 @@ export class LocationService {
       });
       return { message: 'ok', location };
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
@@ -75,7 +75,7 @@ export class LocationService {
       });
       return { message: 'ok', count };
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }

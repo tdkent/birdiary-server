@@ -76,7 +76,7 @@ export class BirdService {
       };
       return list;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
@@ -108,7 +108,7 @@ export class BirdService {
         };
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
             throw new NotFoundException(ErrorMessages.ResourceNotFound);

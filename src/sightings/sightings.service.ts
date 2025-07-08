@@ -52,7 +52,7 @@ export class SightingsService {
 
       return { message: 'ok' };
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
@@ -177,7 +177,7 @@ export class SightingsService {
         return { countOfRecords: count, data };
       } else throw new BadRequestException();
     } catch (err) {
-      console.log(err);
+      console.error(err);
       if (err instanceof BadRequestException) {
         throw new BadRequestException(ErrorMessages.BadRequest);
       }
@@ -204,7 +204,7 @@ export class SightingsService {
         return res;
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         if (err instanceof NotFoundException) {
           throw new NotFoundException(ErrorMessages.ResourceNotFound);
         }
@@ -222,7 +222,7 @@ export class SightingsService {
         },
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
             throw new NotFoundException(ErrorMessages.ResourceNotFound);
@@ -259,7 +259,7 @@ export class SightingsService {
       }
       return res;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       if (err instanceof NotFoundException) {
         throw new NotFoundException(ErrorMessages.ResourceNotFound);
       }
@@ -281,7 +281,7 @@ export class SightingsService {
         return res;
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         if (err instanceof NotFoundException) {
           throw new NotFoundException(ErrorMessages.ResourceNotFound);
         }
