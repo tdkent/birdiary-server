@@ -10,7 +10,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CreateSightingDto } from 'src/sightings/dto/create-sighting.dto';
+import { CreateSightingDto } from 'src/sightings/dto/sighting.dto';
 
 class UserDto {
   @IsInt()

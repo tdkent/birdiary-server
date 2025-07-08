@@ -8,8 +8,6 @@ import {
 } from '@nestjs/common';
 import { BirdService } from './bird.service';
 import { BirdIdDto, GetBirdsDto } from 'src/bird/dto/bird.dto';
-// import GetBirdsDto from 'src/bird/dto/getBirds.dto';
-// import GetBirdDto from 'src/bird/dto/getBird.dto';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { AuthGuard } from 'src/common/guards/auth.guard';
 

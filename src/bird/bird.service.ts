@@ -7,7 +7,7 @@ import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { DatabaseService } from '../database/database.service';
 import ErrorMessages from '../common/errors/errors.enum';
-import GetBirdsDto from 'src/bird/dto/getBirds.dto';
+import { GetBirdsDto } from 'src/bird/dto/bird.dto';
 import {
   CloudinaryResponse,
   CloudinaryError,
@@ -80,27 +80,6 @@ export class BirdService {
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
-
-  //---- FETCH A SINGLE BIRD
-  // async findOne(id: number) {
-  //   return this.databaseService.bird
-  //     .findUniqueOrThrow({
-  //       where: { id },
-  //       select: {
-  //         id: true,
-  //         commName: true,
-  //       },
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-  //         if (err.code === 'P2025') {
-  //           throw new NotFoundException(ErrorMessages.ResourceNotFound);
-  //         }
-  //       }
-  //       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-  //     });
-  // }
 
   /** Get bird with image URL (if exists) */
   async getBird(id: number) {

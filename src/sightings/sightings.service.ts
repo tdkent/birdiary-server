@@ -10,8 +10,8 @@ import { LocationService } from 'src/locations/locations.service';
 import {
   CreateSightingDto,
   GetSightingsDto,
+  UpdateSightingDto,
 } from 'src/sightings/dto/sighting.dto';
-import { UpdateSightingDto } from './dto/update-sighting.dto';
 import { UpdateSighting } from '../common/models/update-sighting.model';
 import ErrorMessages from '../common/errors/errors.enum';
 import type { GroupedData } from 'src/types/api';
@@ -236,9 +236,9 @@ export class SightingsService {
   async updateSighting(
     userId: number,
     sightingId: number,
-    updateSightingDto: UpdateSightingDto,
+    reqBody: UpdateSightingDto,
   ) {
-    const { location, ...requestData } = updateSightingDto;
+    const { location, ...requestData } = reqBody;
     const updateSightingData: UpdateSighting = requestData;
     let locationId: { id: number } | null = null;
     try {

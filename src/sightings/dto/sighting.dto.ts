@@ -100,3 +100,5 @@ export class GetSightingsDto {
   @Min(1, { message: 'Invalid query' })
   readonly page?: number;
 }
+
+export class UpdateSightingDto extends CreateSightingDto {}
