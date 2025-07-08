@@ -3,7 +3,7 @@ import { Type } from 'class-transformer';
 import { BIRD_COUNT } from 'src/common/constants';
 
 export class BirdIdDto {
-  @Type(() => Number)
+  @Type(() => Number) // cast id type to use in params DTO
   @IsInt({ message: 'Invalid request.' })
   @Min(1, { message: 'Invalid request.' })
   @Max(BIRD_COUNT, { message: 'Invalid request.' })

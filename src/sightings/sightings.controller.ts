@@ -53,7 +53,7 @@ export class SightingsController {
     @CurrentUser('id') userId: number,
     @Param('id', ParseIntPipe) sightingId: number,
   ) {
-    return this.sightingsService.findOne(userId, sightingId);
+    return this.sightingsService.getSighting(userId, sightingId);
   }
 
   /** PUT '/sightings/:id' - Update sighting */
