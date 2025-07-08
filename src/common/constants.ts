@@ -1,0 +1,11 @@
+import { birds } from '../../db/birds.json';
+export const BIRD_COUNT = birds.length;
+export const TAKE_COUNT = 25;
+export const SALT_ROUNDS = 10;
+export const PORT = process.env.PORT;
+export const TEST_USER_EMAIL = process.env.TEST_USER_EMAIL;
+export const TEST_USER_PASSWORD = process.env.TEST_USER_PW;
+export const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME;
+export const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY;
+export const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET;
+export const JWT_SESSION_KEY = process.env.SESSION_KEY;

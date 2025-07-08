@@ -12,8 +12,8 @@ import {
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
 } from 'src/users/dto/user.dto';
-import { hashPassword, comparePassword } from '../common/helpers/auth.helpers';
-import ErrorMessages from '../common/errors/errors.enum';
+import { hashPassword, comparePassword } from '../common/helpers';
+import { ErrorMessages } from 'src/common/models';
 
 @Injectable()
 export class UsersService {
@@ -30,7 +30,7 @@ export class UsersService {
         select: { id: true },
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2002') {
             throw new BadRequestException(ErrorMessages.EmailIsRegistered);
@@ -66,7 +66,7 @@ export class UsersService {
 
       return { id: user.id, count };
     } catch (err) {
-      console.log(err);
+      console.error(err);
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
         if (err.code === 'P2025') {
           throw new NotFoundException(ErrorMessages.UserNotFound);
@@ -107,7 +107,7 @@ export class UsersService {
         return response;
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
             throw new NotFoundException(ErrorMessages.UserNotFound);
@@ -126,7 +126,7 @@ export class UsersService {
         select: { id: true },
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
             throw new NotFoundException(ErrorMessages.UserNotFound);
@@ -181,7 +181,7 @@ export class UsersService {
       })
       .catch((err) => {
         //? Note: Prisma delete bad error: https://github.com/prisma/prisma/issues/4072
-        console.log(err);
+        console.error(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }

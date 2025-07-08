@@ -6,24 +6,25 @@ import {
 import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { DatabaseService } from '../database/database.service';
-import ErrorMessages from '../common/errors/errors.enum';
-import GetBirdsDto from 'src/bird/dto/getBirds.dto';
 import {
-  CloudinaryResponse,
+  ErrorMessages,
   CloudinaryError,
-} from '../common/models/cloudinary.model';
+  CloudinaryResponse,
+} from 'src/common/models';
+import { GetBirdsDto } from 'src/bird/dto/bird.dto';
 import {
-  cloudinaryName,
-  cloudinaryKey,
-  cloudinarySecret,
-} from '../common/constants/env.constants';
-import { BIRD_COUNT, TAKE_COUNT } from 'src/common/constants/api.constants';
+  CLOUDINARY_NAME,
+  CLOUDINARY_KEY,
+  CLOUDINARY_SECRET,
+  BIRD_COUNT,
+  TAKE_COUNT,
+} from 'src/common/constants';
 import { ListResponse } from 'src/types/api';
 
 cloudinary.config({
-  cloud_name: cloudinaryName,
-  api_key: cloudinaryKey,
-  api_secret: cloudinarySecret,
+  cloud_name: CLOUDINARY_NAME,
+  api_key: CLOUDINARY_KEY,
+  api_secret: CLOUDINARY_SECRET,
 });
 
 @Injectable()
@@ -76,31 +77,10 @@ export class BirdService {
       };
       return list;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
-
-  //---- FETCH A SINGLE BIRD
-  // async findOne(id: number) {
-  //   return this.databaseService.bird
-  //     .findUniqueOrThrow({
-  //       where: { id },
-  //       select: {
-  //         id: true,
-  //         commName: true,
-  //       },
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       if (err instanceof Prisma.PrismaClientKnownRequestError) {
-  //         if (err.code === 'P2025') {
-  //           throw new NotFoundException(ErrorMessages.ResourceNotFound);
-  //         }
-  //       }
-  //       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-  //     });
-  // }
 
   /** Get bird with image URL (if exists) */
   async getBird(id: number) {
@@ -129,7 +109,7 @@ export class BirdService {
         };
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
           if (err.code === 'P2025') {
             throw new NotFoundException(ErrorMessages.ResourceNotFound);

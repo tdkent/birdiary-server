@@ -7,10 +7,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BirdService } from './bird.service';
-import GetBirdsDto from 'src/bird/dto/getBirds.dto';
-import GetBirdDto from 'src/bird/dto/getBird.dto';
-import { CurrentUser } from 'src/common/decorators/current-user.decorator';
-import { AuthGuard } from 'src/common/guards/auth.guard';
+import { BirdIdDto, GetBirdsDto } from 'src/bird/dto/bird.dto';
+import CurrentUser from 'src/common/decorators';
+import AuthGuard from 'src/common/guard/auth.guard';
 
 @Controller('birds')
 export class BirdController {
@@ -28,7 +27,7 @@ export class BirdController {
 
   /** GET '/birds/:id' - Get single bird w/image */
   @Get(':id')
-  getBird(@Param(new ValidationPipe()) params: GetBirdDto) {
+  getBird(@Param(new ValidationPipe()) params: BirdIdDto) {
     return this.birdService.getBird(params.id);
   }
 }
