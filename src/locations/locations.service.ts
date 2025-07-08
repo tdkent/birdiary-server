@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { LocationDto } from '../locations/dto/location.dto';
+import { UpsertLocationDto } from '../locations/dto/location.dto';
 import { DatabaseService } from '../database/database.service';
 import { ErrorMessages, Location } from 'src/common/models';
 
@@ -13,13 +13,13 @@ export class LocationService {
   constructor(private readonly databaseService: DatabaseService) {}
 
   /** Create location using upsert method. */
-  async createLocation(locationDto: LocationDto) {
+  async createLocation(reqBody: UpsertLocationDto) {
     return this.databaseService.location
       .upsert({
-        where: { name: locationDto.name },
+        where: { name: reqBody.name },
         update: {},
         create: {
-          ...locationDto,
+          ...reqBody,
         },
       })
       .catch((err) => {
@@ -47,10 +47,10 @@ export class LocationService {
   async updateLocation(
     userId: number,
     locationId: number,
-    locationDto: LocationDto,
+    reqBody: UpsertLocationDto,
   ): Promise<Location> {
     try {
-      const location = await this.createLocation(locationDto);
+      const location = await this.createLocation(reqBody);
       await this.databaseService.sighting.updateMany({
         where: { userId, locationId },
         data: { locationId: location.id },

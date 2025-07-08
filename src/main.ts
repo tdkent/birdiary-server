@@ -14,6 +14,7 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
+        console.error(validationErrors);
         // Return first validation exception only
         return new BadRequestException(
           validationErrors.map((error) => Object.values(error.constraints)[0]),

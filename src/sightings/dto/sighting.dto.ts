@@ -15,7 +15,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { LocationDto } from '../../locations/dto/location.dto';
+import { UpsertLocationDto } from '../../locations/dto/location.dto';
 import { BIRD_COUNT } from 'src/common/constants';
 
 class SightingDto {
@@ -57,8 +57,8 @@ export class CreateSightingDto extends PickType(SightingDto, [
   @IsOptional()
   @IsObject({ message: 'Invalid request.' })
   @ValidateNested({ message: 'Invalid request.' })
-  @Type(() => LocationDto)
-  location: LocationDto;
+  @Type(() => UpsertLocationDto)
+  location: UpsertLocationDto;
 }
 
 export class GetSightingsDto {
@@ -99,4 +99,5 @@ export class GetSightingsDto {
   readonly page?: number;
 }
 
+export class SightingIdDto extends PickType(SightingDto, ['id'] as const) {}
 export class UpdateSightingDto extends CreateSightingDto {}

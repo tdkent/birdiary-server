@@ -1,6 +1,13 @@
-import { IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsInt, IsNumber, IsString, Max, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import { OmitType, PickType } from '@nestjs/swagger';
 
 export class LocationDto {
+  @Type(() => Number) // cast id type to use in params DTO
+  @IsInt({ message: 'Invalid request.' })
+  @Min(1, { message: 'Invalid request.' })
+  readonly id: number;
+
   @IsString({ message: 'Invalid request.' })
   readonly name: string;
 
@@ -14,3 +21,6 @@ export class LocationDto {
   @Max(180, { message: 'Invalid request.' })
   readonly lng: number;
 }
+
+export class LocationIdDto extends PickType(LocationDto, ['id'] as const) {}
+export class UpsertLocationDto extends OmitType(LocationDto, ['id'] as const) {}
