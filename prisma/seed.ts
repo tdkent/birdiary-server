@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   await prisma.bird.createMany({
-    data: birds as unknown as Omit<Bird, 'id'>,
+    data: birds as unknown as Bird,
   });
 
   await prisma.user.create({
