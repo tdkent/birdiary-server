@@ -12,9 +12,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ErrorMessages } from 'src/common/models';
-import { CreateSightingDto } from 'src/sightings/dto/sighting.dto';
-import { BIRD_COUNT } from 'src/common/constants';
+import { ErrorMessages } from '../../common/models';
+import { CreateSightingDto } from '../../sightings/dto/sighting.dto';
+import { BIRD_COUNT } from '../../common/constants';
 
 class UserDto {
   @Type(() => Number) // cast id type to use in params DTO

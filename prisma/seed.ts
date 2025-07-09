@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import { faker } from '@faker-js/faker';
 import { hashPassword } from '../src/common/helpers';
-import { TEST_USER_EMAIL, TEST_USER_PASSWORD } from 'src/common/constants';
+import { TEST_USER_EMAIL, TEST_USER_PASSWORD } from '../src/common/constants';
 import { birds } from '../db/birds.json';
-import type { Bird, Location, Sighting } from 'src/common/models';
+import type { Bird, Location, Sighting } from '../src/common/models';
 
 const prisma = new PrismaClient();
 

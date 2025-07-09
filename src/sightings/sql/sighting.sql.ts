@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { TAKE_COUNT } from 'src/common/constants';
+import { TAKE_COUNT } from '../../common/constants';
 
 export function getCountOfSightingsByDate(userId: number): Prisma.Sql {
   return Prisma.sql`

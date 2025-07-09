@@ -5,8 +5,8 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { jwtVerify } from 'jose';
-import { JWT_SESSION_KEY } from 'src/common/constants';
-import { ErrorMessages } from 'src/common/models';
+import { JWT_SESSION_KEY } from '../constants';
+import { ErrorMessages } from '../models';
 
 const encodedKey = new TextEncoder().encode(JWT_SESSION_KEY);
 

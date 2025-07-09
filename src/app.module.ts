@@ -7,7 +7,7 @@ import { BirdModule } from './bird/bird.module';
 import { BirdController } from './bird/bird.controller';
 import { BirdService } from './bird/bird.service';
 import { SightingsModule } from './sightings/sightings.module';
-import { LocationService } from 'src/locations/locations.service';
+import { LocationService } from './locations/locations.service';
 
 @Module({
   imports: [UsersModule, DatabaseModule, BirdModule, SightingsModule],

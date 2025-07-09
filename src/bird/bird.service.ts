@@ -12,15 +12,15 @@ import {
   CloudinaryResponse,
   ListWithCount,
   Bird,
-} from 'src/common/models';
-import { GetBirdsDto } from 'src/bird/dto/bird.dto';
+} from '../common/models';
+import { GetBirdsDto } from '../bird/dto/bird.dto';
 import {
   CLOUDINARY_NAME,
   CLOUDINARY_KEY,
   CLOUDINARY_SECRET,
   BIRD_COUNT,
   TAKE_COUNT,
-} from 'src/common/constants';
+} from '../common/constants';
 
 cloudinary.config({
   cloud_name: CLOUDINARY_NAME,

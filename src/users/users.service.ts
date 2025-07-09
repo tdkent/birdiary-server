@@ -12,9 +12,9 @@ import {
   AuthWithSightingsDto,
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
-} from 'src/users/dto/user.dto';
+} from '../users/dto/user.dto';
 import { hashPassword, comparePassword } from '../common/helpers';
-import { ErrorMessages, User } from 'src/common/models';
+import { ErrorMessages, type User } from '../common/models';
 
 @Injectable()
 export class UsersService {
