@@ -7,9 +7,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { BirdService } from './bird.service';
-import { BirdIdDto, GetBirdsDto } from 'src/bird/dto/bird.dto';
-import CurrentUser from 'src/common/decorators';
-import AuthGuard from 'src/common/guard/auth.guard';
+import { BirdIdDto, GetBirdsDto } from './dto/bird.dto';
+import CurrentUser from '../common/decorators';
+import AuthGuard from '../common/guard/auth.guard';
 
 @Controller('birds')
 export class BirdController {

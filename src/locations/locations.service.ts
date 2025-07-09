@@ -6,7 +6,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { UpsertLocationDto } from '../locations/dto/location.dto';
 import { DatabaseService } from '../database/database.service';
-import { ErrorMessages, Location } from 'src/common/models';
+import { ErrorMessages, Location } from '../common/models';
 
 @Injectable()
 export class LocationService {

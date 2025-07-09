@@ -6,26 +6,26 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
-import { LocationService } from 'src/locations/locations.service';
+import { LocationService } from '../locations/locations.service';
 import {
   CreateSightingDto,
   GetSightingsDto,
   UpdateSightingDto,
-} from 'src/sightings/dto/sighting.dto';
+} from '../sightings/dto/sighting.dto';
 import {
   ErrorMessages,
   type Sighting,
   type Group,
-  ListWithCount,
-} from 'src/common/models';
-import { TAKE_COUNT } from 'src/common/constants';
+  type ListWithCount,
+} from '../common/models';
+import { TAKE_COUNT } from '../common/constants';
 import {
   getCountOfSightingsByDate,
   getCountOfSightingsByLocation,
   getCountOfSightingsByDistinctBird,
   getSightingsGroupedByDate,
   getSightingsGroupedByLocation,
-} from 'src/sightings/sql/sighting.sql';
+} from '../sightings/sql/sighting.sql';
 
 @Injectable()
 export class SightingsService {

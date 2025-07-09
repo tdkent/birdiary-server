@@ -1,7 +1,7 @@
 import { IsInt, IsNumber, IsString, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { OmitType, PickType } from '@nestjs/swagger';
-import { ErrorMessages } from 'src/common/models';
+import { ErrorMessages } from '../../common/models';
 
 export class LocationDto {
   @Type(() => Number) // cast id type to use in params DTO

@@ -17,9 +17,9 @@ import {
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
   UserIdDto,
-} from 'src/users/dto/user.dto';
+} from '../users/dto/user.dto';
 import AuthGuard from '../common/guard/auth.guard';
-import CurrentUser from 'src/common/decorators';
+import CurrentUser from '../common/decorators';
 
 @Controller('users')
 export class UsersController {
