@@ -80,6 +80,7 @@ export class SightingsService {
           where: { userId },
           orderBy: { date: 'desc' },
           take: TAKE_COUNT,
+          include: { bird: true },
         });
         return { countOfRecords: data.length, data };
       }
