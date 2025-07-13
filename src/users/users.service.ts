@@ -88,8 +88,10 @@ export class UsersService {
     userId: number,
   ): Promise<
     Omit<User, 'password'> & {
-      totalSightings: number;
-      totalDistinctSightings: number;
+      count: {
+        totalSightings: number;
+        totalDistinctSightings: number;
+      };
     }
   > {
     if (id !== userId) throw new ForbiddenException();
@@ -97,7 +99,7 @@ export class UsersService {
       .findUniqueOrThrow({
         where: { id },
         omit: { password: true },
-        include: { sightings: true },
+        include: { sightings: true, bird: true, location: true },
       })
       .then((res) => {
         const { sightings, ...rest } = res;
@@ -107,8 +109,10 @@ export class UsersService {
         ).size;
         return {
           ...rest,
-          totalSightings,
-          totalDistinctSightings,
+          count: {
+            totalSightings,
+            totalDistinctSightings,
+          },
         };
       })
       .catch((err) => {
