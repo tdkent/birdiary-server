@@ -80,6 +80,7 @@ export class SightingsService {
           where: { userId },
           orderBy: { date: 'desc' },
           take: TAKE_COUNT,
+          include: { bird: true },
         });
         return { countOfRecords: data.length, data };
       }
@@ -136,7 +137,7 @@ export class SightingsService {
         });
         const data = await this.databaseService.sighting.findMany({
           where: { userId, birdId },
-          include: { location: true },
+          include: { bird: true, location: true },
           orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
           take: TAKE_COUNT,
           skip: TAKE_COUNT * (page - 1),

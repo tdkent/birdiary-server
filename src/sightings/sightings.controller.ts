@@ -3,9 +3,9 @@ import {
   Controller,
   Delete,
   Get,
-  Post,
   Param,
-  Put,
+  Patch,
+  Post,
   Query,
   UseGuards,
   ValidationPipe,
@@ -57,7 +57,7 @@ export class SightingsController {
   }
 
   /** PUT '/sightings/:id' - Update sighting */
-  @Put(':id')
+  @Patch(':id')
   updateSighting(
     @CurrentUser('id') userId: number,
     @Param(new ValidationPipe()) params: SightingIdDto,
