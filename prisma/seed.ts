@@ -17,6 +17,8 @@ async function main() {
       email: TEST_USER_EMAIL,
       password: await hashPassword(TEST_USER_PASSWORD),
       name: 'Tim',
+      zipcode: 94501,
+      address: 'Alameda, CA 94501, USA',
       favoriteBirdId: 116,
     },
   });

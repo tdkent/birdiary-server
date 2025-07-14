@@ -99,7 +99,7 @@ export class UsersService {
       .findUniqueOrThrow({
         where: { id },
         omit: { password: true },
-        include: { sightings: true, bird: true, location: true },
+        include: { sightings: true, bird: true },
       })
       .then((res) => {
         const { sightings, ...rest } = res;
