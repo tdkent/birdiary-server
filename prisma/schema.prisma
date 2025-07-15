@@ -15,8 +15,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name String?
-  locationId Int?
-  location Location? @relation(fields: [locationId], references: [id])
+  zipcode String?
+  address String?
   favoriteBirdId Int?
   bird Bird? @relation(fields: [favoriteBirdId], references: [id])
   sightings Sighting[]
@@ -57,5 +57,4 @@ model Location {
   lat Float
   lng Float
   sightings Sighting[]
-  users User[]
 }

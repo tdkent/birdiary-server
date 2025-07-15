@@ -99,7 +99,7 @@ export class UsersService {
       .findUniqueOrThrow({
         where: { id },
         omit: { password: true },
-        include: { sightings: true, bird: true, location: true },
+        include: { sightings: true, bird: true },
       })
       .then((res) => {
         const { sightings, ...rest } = res;
@@ -127,13 +127,22 @@ export class UsersService {
   }
 
   /** Update user's name, location, favorite bird. */
-  async updateUser(id: number, userId: number, reqBody: UpdateUserProfileDto) {
+  async updateUser(
+    id: number,
+    userId: number,
+    reqBody: UpdateUserProfileDto,
+  ): Promise<Omit<User, 'password'>> {
     if (id !== userId) throw new ForbiddenException();
-    await this.databaseService.user
+    if (
+      (reqBody.zipcode && !reqBody.address) ||
+      (!reqBody.zipcode && reqBody.address)
+    )
+      throw new BadRequestException();
+    return this.databaseService.user
       .update({
         where: { id },
         data: { ...reqBody },
-        select: { id: true },
+        omit: { password: true },
       })
       .catch((err) => {
         console.error(err);
@@ -144,8 +153,6 @@ export class UsersService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
-
-    return { message: 'ok' };
   }
 
   /** Update user's password */
@@ -153,7 +160,7 @@ export class UsersService {
     id: number,
     userId: number,
     reqBody: UpdateUserPasswordDto,
-  ) {
+  ): Promise<Omit<User, 'password'>> {
     if (id !== userId) throw new ForbiddenException();
     const { currentPassword, newPassword } = reqBody;
     try {
@@ -168,12 +175,11 @@ export class UsersService {
       }
 
       const hashNewPassword = await hashPassword(newPassword);
-      await this.databaseService.user.update({
+      return this.databaseService.user.update({
         where: { id },
         data: { password: hashNewPassword },
+        omit: { password: true },
       });
-
-      return { message: 'ok' };
     } catch (err) {
       console.error(err);
       if (err instanceof Prisma.PrismaClientKnownRequestError) {

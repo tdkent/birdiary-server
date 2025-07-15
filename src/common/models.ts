@@ -31,7 +31,8 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   name: string | null;
-  locationId: number | null;
+  zipcode: string | null;
+  address: string | null;
   favoriteBirdId: number | null;
 };
 

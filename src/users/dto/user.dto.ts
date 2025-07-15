@@ -6,6 +6,7 @@ import {
   IsOptional,
   IsString,
   Length,
+  Matches,
   Max,
   Min,
   ValidateIf,
@@ -35,10 +36,14 @@ class UserDto {
   @ValidateIf((_, value) => value !== null)
   readonly name: string;
 
-  @IsInt()
-  @Min(1, { message: ErrorMessages.BadRequest })
+  @IsString()
+  @Matches(/^\d{5}$/, { message: ErrorMessages.BadRequest })
   @ValidateIf((_, value) => value !== null)
-  readonly locationId: number;
+  readonly zipcode: string;
+
+  @IsString()
+  @ValidateIf((_, value) => value !== null)
+  readonly address: string;
 
   @IsInt()
   @Min(1, { message: ErrorMessages.BadRequest })
@@ -64,8 +69,8 @@ export class UserIdDto extends PickType(UserDto, ['id'] as const) {}
 
 export class UpdateUserProfileDto extends PickType(UserDto, [
   'name',
-  'favoriteBirdId',
-  'locationId',
+  'zipcode',
+  'address',
 ] as const) {}
 
 export class UpdateUserPasswordDto {
