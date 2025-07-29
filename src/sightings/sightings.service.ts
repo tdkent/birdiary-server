@@ -75,16 +75,27 @@ export class SightingsService {
     reqQuery: GetSightingsDto,
   ): Promise<ListWithCount<Sighting | Group>> {
     try {
-      if (!Object.keys(reqQuery).length) {
+      const { groupBy, birdId, locationId, dateId, page, sortBy } = reqQuery;
+      if (!groupBy && !birdId && !locationId && !dateId) {
+        const count = await this.databaseService.sighting.count({
+          where: { userId },
+        });
         const data = await this.databaseService.sighting.findMany({
           where: { userId },
-          orderBy: { date: 'desc' },
-          take: TAKE_COUNT,
           include: { bird: true },
+          orderBy:
+            sortBy === 'alphaDesc'
+              ? [{ bird: { commonName: 'desc' } }]
+              : sortBy === 'dateAsc'
+                ? [{ date: 'asc' }, { bird: { commonName: 'asc' } }]
+                : sortBy === 'dateDesc'
+                  ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
+                  : [{ bird: { commonName: 'asc' } }],
+          take: TAKE_COUNT,
+          skip: TAKE_COUNT * (page - 1),
         });
-        return { countOfRecords: data.length, data };
+        return { countOfRecords: count, data };
       }
-      const { groupBy, birdId, locationId, dateId, page, sortBy } = reqQuery;
       if (!page || !sortBy || Object.keys(reqQuery).length !== 3)
         throw new BadRequestException();
       if (groupBy) {
