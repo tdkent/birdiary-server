@@ -87,17 +87,15 @@ export class GetSightingsDto {
   @MaxDate(() => new Date(), { message: ErrorMessages.BadRequest })
   readonly dateId?: Date;
 
-  @IsOptional()
   @IsIn(['alphaAsc', 'alphaDesc', 'count', 'dateAsc', 'dateDesc'], {
     message: ErrorMessages.BadRequest,
   })
-  readonly sortBy?: string;
+  readonly sortBy: string;
 
-  @IsOptional()
   @Type(() => Number)
   @IsInt({ message: ErrorMessages.BadRequest })
   @Min(1, { message: ErrorMessages.BadRequest })
-  readonly page?: number;
+  readonly page: number;
 }
 
 export class SightingIdDto extends PickType(SightingDto, ['id'] as const) {}

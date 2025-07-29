@@ -9,6 +9,7 @@ import {
   Matches,
   Max,
   Min,
+  MinLength,
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
@@ -33,6 +34,7 @@ class UserDto {
   readonly password: string;
 
   @IsString()
+  @MinLength(1)
   @ValidateIf((_, value) => value !== null)
   readonly name: string;
 
@@ -42,6 +44,7 @@ class UserDto {
   readonly zipcode: string;
 
   @IsString()
+  @MinLength(1)
   @ValidateIf((_, value) => value !== null)
   readonly address: string;
 
