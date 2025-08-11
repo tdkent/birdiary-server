@@ -7,6 +7,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { LocationService } from '../locations/locations.service';
+import { BirdService } from '../bird/bird.service';
 import {
   CreateSightingDto,
   GetSightingsDto,
@@ -32,6 +33,7 @@ export class SightingsService {
   constructor(
     private readonly databaseService: DatabaseService,
     private readonly locationService: LocationService,
+    private readonly birdService: BirdService,
   ) {}
 
   /** Create a new sighting */
@@ -205,11 +207,16 @@ export class SightingsService {
 
   /** Get a sighting */
   async getSighting(userId: number, sightingId: number): Promise<Sighting> {
-    return this.databaseService.sighting
+    const sighting = await this.databaseService.sighting
       .findFirstOrThrow({
         where: {
           AND: [{ userId }, { id: sightingId }],
         },
+        include: { location: true },
+      })
+      .then(async (res) => {
+        const birdWithImage = await this.birdService.getBird(res.birdId);
+        return { ...res, bird: birdWithImage };
       })
       .catch((err) => {
         console.error(err);
@@ -220,6 +227,8 @@ export class SightingsService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+
+    return sighting;
   }
 
   /** Update a sighting. */
