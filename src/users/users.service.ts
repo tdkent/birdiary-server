@@ -3,7 +3,6 @@ import {
   BadRequestException,
   InternalServerErrorException,
   NotFoundException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
@@ -83,10 +82,7 @@ export class UsersService {
   }
 
   /** Get user by id. Includes sighting count, omits password. */
-  async getUserById(
-    id: number,
-    userId: number,
-  ): Promise<
+  async getUserById(id: number): Promise<
     Omit<User, 'password'> & {
       count: {
         totalSightings: number;
@@ -94,7 +90,6 @@ export class UsersService {
       };
     }
   > {
-    if (id !== userId) throw new ForbiddenException();
     return this.databaseService.user
       .findUniqueOrThrow({
         where: { id },
@@ -129,10 +124,8 @@ export class UsersService {
   /** Update user's name, location, favorite bird. */
   async updateUser(
     id: number,
-    userId: number,
     reqBody: UpdateUserProfileDto,
   ): Promise<Omit<User, 'password'>> {
-    if (id !== userId) throw new ForbiddenException();
     if (
       (reqBody.zipcode && !reqBody.address) ||
       (!reqBody.zipcode && reqBody.address)
@@ -158,10 +151,8 @@ export class UsersService {
   /** Update user's password */
   async updateUserPassword(
     id: number,
-    userId: number,
     reqBody: UpdateUserPasswordDto,
   ): Promise<Omit<User, 'password'>> {
-    if (id !== userId) throw new ForbiddenException();
     const { currentPassword, newPassword } = reqBody;
     try {
       const { password } = await this.databaseService.user.findUniqueOrThrow({
@@ -195,8 +186,7 @@ export class UsersService {
   }
 
   /** Delete user. Cascades to sightings. */
-  async deleteUser(id: number, userId: number) {
-    if (id !== userId) throw new ForbiddenException();
+  async deleteUser(id: number) {
     return this.databaseService.user
       .delete({
         where: { id },

@@ -68,8 +68,6 @@ export class AuthWithSightingsDto extends AuthDto {
   readonly storageData: CreateSightingDto[];
 }
 
-export class UserIdDto extends PickType(UserDto, ['id'] as const) {}
-
 export class UpdateUserProfileDto extends PickType(UserDto, [
   'name',
   'zipcode',

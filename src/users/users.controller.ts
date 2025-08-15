@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  Param,
   Patch,
   Post,
   UseGuards,
@@ -16,7 +15,6 @@ import {
   AuthWithSightingsDto,
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
-  UserIdDto,
 } from '../users/dto/user.dto';
 import AuthGuard from '../common/guard/auth.guard';
 import CurrentUser from '../common/decorators';
@@ -38,45 +36,37 @@ export class UsersController {
     return this.usersService.signin(reqBody);
   }
 
-  /** GET '/users/:id' - Get user by id */
+  /** PATCH '/users/password' - Update user's password */
   @UseGuards(AuthGuard)
-  @Get(':id')
-  getUserById(
-    @CurrentUser('id') id: number,
-    @Param(new ValidationPipe()) params: UserIdDto,
-  ) {
-    return this.usersService.getUserById(id, params.id);
-  }
-
-  /** PATCH '/users/:id' - Update user */
-  @UseGuards(AuthGuard)
-  @Patch(':id')
-  updateUser(
-    @CurrentUser('id') id: number,
-    @Param(new ValidationPipe()) params: UserIdDto,
-    @Body(ValidationPipe) reqBody: UpdateUserProfileDto,
-  ) {
-    return this.usersService.updateUser(id, params.id, reqBody);
-  }
-
-  /** DELETE '/users/:id' - Delete user */
-  @UseGuards(AuthGuard)
-  @Delete(':id')
-  deleteUser(
-    @CurrentUser('id') id: number,
-    @Param(new ValidationPipe()) params: UserIdDto,
-  ) {
-    return this.usersService.deleteUser(id, params.id);
-  }
-
-  /** PATCH '/users/:id/password' - Update user's password */
-  @UseGuards(AuthGuard)
-  @Patch(':id/password')
+  @Patch('password')
   updateUserPassword(
     @CurrentUser('id') id: number,
-    @Param(new ValidationPipe()) params: UserIdDto,
     @Body(ValidationPipe) reqBody: UpdateUserPasswordDto,
   ) {
-    return this.usersService.updateUserPassword(id, params.id, reqBody);
+    return this.usersService.updateUserPassword(id, reqBody);
+  }
+
+  /** GET '/users/profile' - Get user by id */
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  getUserById(@CurrentUser('id') id: number) {
+    return this.usersService.getUserById(id);
+  }
+
+  /** PATCH '/users/profile' - Update user */
+  @UseGuards(AuthGuard)
+  @Patch('profile')
+  updateUser(
+    @CurrentUser('id') id: number,
+    @Body(ValidationPipe) reqBody: UpdateUserProfileDto,
+  ) {
+    return this.usersService.updateUser(id, reqBody);
+  }
+
+  /** DELETE '/users/profile' - Delete user */
+  @UseGuards(AuthGuard)
+  @Delete('profile')
+  deleteUser(@CurrentUser('id') id: number) {
+    return this.usersService.deleteUser(id);
   }
 }
