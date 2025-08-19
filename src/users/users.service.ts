@@ -3,18 +3,17 @@ import {
   BadRequestException,
   InternalServerErrorException,
   NotFoundException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import {
   AuthDto,
-  AuthWithSightingsDto,
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
 } from '../users/dto/user.dto';
 import { hashPassword, comparePassword } from '../common/helpers';
 import { ErrorMessages, type User } from '../common/models';
+import { CreateSightingDto } from '../sightings/dto/sighting.dto';
 
 @Injectable()
 export class UsersService {
@@ -42,10 +41,8 @@ export class UsersService {
   }
 
   /** Confirm user credentials and send token. */
-  async signin(
-    reqBody: AuthWithSightingsDto,
-  ): Promise<{ id: number; count: number | null }> {
-    const { email, password, storageData } = reqBody;
+  async signin(reqBody: AuthDto): Promise<{ id: number }> {
+    const { email, password } = reqBody;
     try {
       const user = await this.databaseService.user.findUniqueOrThrow({
         where: { email },
@@ -56,18 +53,7 @@ export class UsersService {
         throw new BadRequestException();
       }
 
-      let count = null;
-      if (storageData && storageData.length) {
-        const addUserId = storageData.map((sighting) => {
-          return { userId: user.id, ...sighting };
-        });
-        const addSightings = await this.databaseService.sighting.createMany({
-          data: addUserId,
-        });
-        count = addSightings.count;
-      }
-
-      return { id: user.id, count };
+      return { id: user.id };
     } catch (err) {
       console.error(err);
       if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -83,10 +69,7 @@ export class UsersService {
   }
 
   /** Get user by id. Includes sighting count, omits password. */
-  async getUserById(
-    id: number,
-    userId: number,
-  ): Promise<
+  async getUserById(id: number): Promise<
     Omit<User, 'password'> & {
       count: {
         totalSightings: number;
@@ -94,7 +77,6 @@ export class UsersService {
       };
     }
   > {
-    if (id !== userId) throw new ForbiddenException();
     return this.databaseService.user
       .findUniqueOrThrow({
         where: { id },
@@ -129,10 +111,8 @@ export class UsersService {
   /** Update user's name, location, favorite bird. */
   async updateUser(
     id: number,
-    userId: number,
     reqBody: UpdateUserProfileDto,
   ): Promise<Omit<User, 'password'>> {
-    if (id !== userId) throw new ForbiddenException();
     if (
       (reqBody.zipcode && !reqBody.address) ||
       (!reqBody.zipcode && reqBody.address)
@@ -158,10 +138,8 @@ export class UsersService {
   /** Update user's password */
   async updateUserPassword(
     id: number,
-    userId: number,
     reqBody: UpdateUserPasswordDto,
   ): Promise<Omit<User, 'password'>> {
-    if (id !== userId) throw new ForbiddenException();
     const { currentPassword, newPassword } = reqBody;
     try {
       const { password } = await this.databaseService.user.findUniqueOrThrow({
@@ -195,16 +173,50 @@ export class UsersService {
   }
 
   /** Delete user. Cascades to sightings. */
-  async deleteUser(id: number, userId: number) {
-    if (id !== userId) throw new ForbiddenException();
+  async deleteUser(id: number): Promise<Omit<User, 'password'>> {
     return this.databaseService.user
       .delete({
         where: { id },
+        omit: { password: true },
       })
       .catch((err) => {
         //? Note: Prisma delete bad error: https://github.com/prisma/prisma/issues/4072
         console.error(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+  }
+
+  /** Add sightings from user's browser cache. */
+  async transferStorage(
+    id: number,
+    reqBody: CreateSightingDto[],
+  ): Promise<{ count: number }> {
+    try {
+      let count = null;
+      const addUserId = reqBody.map((sighting) => {
+        return {
+          userId: id,
+          birdId: sighting.birdId,
+          date: sighting.date,
+          description: sighting.description,
+        };
+      });
+      const addSightings = await this.databaseService.sighting.createMany({
+        data: addUserId,
+      });
+      count = addSightings.count;
+      return { count };
+    } catch (err) {
+      console.error(err);
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.UserNotFound);
+        }
+      } else if (err instanceof BadRequestException) {
+        throw new BadRequestException(ErrorMessages.IncorrectPassword);
+      } else {
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      }
+    }
   }
 }

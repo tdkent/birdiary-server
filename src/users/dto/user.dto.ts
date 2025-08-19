@@ -1,9 +1,7 @@
 import { PickType } from '@nestjs/swagger';
 import {
-  IsArray,
   IsEmail,
   IsInt,
-  IsOptional,
   IsString,
   Length,
   Matches,
@@ -11,11 +9,9 @@ import {
   Min,
   MinLength,
   ValidateIf,
-  ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ErrorMessages } from '../../common/models';
-import { CreateSightingDto } from '../../sightings/dto/sighting.dto';
 import { BIRD_COUNT } from '../../common/constants';
 
 class UserDto {
@@ -59,16 +55,6 @@ export class AuthDto extends PickType(UserDto, [
   'email',
   'password',
 ] as const) {}
-
-export class AuthWithSightingsDto extends AuthDto {
-  @IsOptional()
-  @IsArray({ message: ErrorMessages.BadRequest })
-  @ValidateNested({ each: true })
-  @Type(() => CreateSightingDto)
-  readonly storageData: CreateSightingDto[];
-}
-
-export class UserIdDto extends PickType(UserDto, ['id'] as const) {}
 
 export class UpdateUserProfileDto extends PickType(UserDto, [
   'name',

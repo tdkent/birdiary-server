@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  Param,
   Patch,
   Post,
   UseGuards,
@@ -13,17 +12,40 @@ import {
 import { UsersService } from './users.service';
 import {
   AuthDto,
-  AuthWithSightingsDto,
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
-  UserIdDto,
 } from '../users/dto/user.dto';
+import { CreateSightingDto } from '../sightings/dto/sighting.dto';
 import AuthGuard from '../common/guard/auth.guard';
 import CurrentUser from '../common/decorators';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  /** GET '/users' - Get user */
+  @UseGuards(AuthGuard)
+  @Get()
+  getUserById(@CurrentUser('id') id: number) {
+    return this.usersService.getUserById(id);
+  }
+
+  /** PATCH '/users' - Update user */
+  @UseGuards(AuthGuard)
+  @Patch()
+  updateUser(
+    @CurrentUser('id') id: number,
+    @Body(ValidationPipe) reqBody: UpdateUserProfileDto,
+  ) {
+    return this.usersService.updateUser(id, reqBody);
+  }
+
+  /** DELETE '/users' - Delete user */
+  @UseGuards(AuthGuard)
+  @Delete()
+  deleteUser(@CurrentUser('id') id: number) {
+    return this.usersService.deleteUser(id);
+  }
 
   /** POST '/users/signup' - Sign up user */
   @Post('signup')
@@ -34,49 +56,27 @@ export class UsersController {
   /** POST '/users/signin' - Sign in user */
   @Post('signin')
   @HttpCode(200)
-  signin(@Body(ValidationPipe) reqBody: AuthWithSightingsDto) {
+  signin(@Body(ValidationPipe) reqBody: AuthDto) {
     return this.usersService.signin(reqBody);
   }
 
-  /** GET '/users/:id' - Get user by id */
+  /** PATCH '/users/password' - Update user's password */
   @UseGuards(AuthGuard)
-  @Get(':id')
-  getUserById(
-    @CurrentUser('id') id: number,
-    @Param(new ValidationPipe()) params: UserIdDto,
-  ) {
-    return this.usersService.getUserById(id, params.id);
-  }
-
-  /** PATCH '/users/:id' - Update user */
-  @UseGuards(AuthGuard)
-  @Patch(':id')
-  updateUser(
-    @CurrentUser('id') id: number,
-    @Param(new ValidationPipe()) params: UserIdDto,
-    @Body(ValidationPipe) reqBody: UpdateUserProfileDto,
-  ) {
-    return this.usersService.updateUser(id, params.id, reqBody);
-  }
-
-  /** DELETE '/users/:id' - Delete user */
-  @UseGuards(AuthGuard)
-  @Delete(':id')
-  deleteUser(
-    @CurrentUser('id') id: number,
-    @Param(new ValidationPipe()) params: UserIdDto,
-  ) {
-    return this.usersService.deleteUser(id, params.id);
-  }
-
-  /** PATCH '/users/:id/password' - Update user's password */
-  @UseGuards(AuthGuard)
-  @Patch(':id/password')
+  @Patch('password')
   updateUserPassword(
     @CurrentUser('id') id: number,
-    @Param(new ValidationPipe()) params: UserIdDto,
     @Body(ValidationPipe) reqBody: UpdateUserPasswordDto,
   ) {
-    return this.usersService.updateUserPassword(id, params.id, reqBody);
+    return this.usersService.updateUserPassword(id, reqBody);
+  }
+
+  /** POST '/users/transferstorage' - Add sightings data */
+  @UseGuards(AuthGuard)
+  @Post('transferstorage')
+  transferStorage(
+    @CurrentUser('id') id: number,
+    @Body(ValidationPipe) reqBody: CreateSightingDto[],
+  ) {
+    return this.usersService.transferStorage(id, reqBody);
   }
 }
