@@ -173,10 +173,11 @@ export class UsersService {
   }
 
   /** Delete user. Cascades to sightings. */
-  async deleteUser(id: number) {
+  async deleteUser(id: number): Promise<Omit<User, 'password'>> {
     return this.databaseService.user
       .delete({
         where: { id },
+        omit: { password: true },
       })
       .catch((err) => {
         //? Note: Prisma delete bad error: https://github.com/prisma/prisma/issues/4072
@@ -186,7 +187,10 @@ export class UsersService {
   }
 
   /** Add sightings from user's browser cache. */
-  async transferStorage(id: number, reqBody: CreateSightingDto[]) {
+  async transferStorage(
+    id: number,
+    reqBody: CreateSightingDto[],
+  ): Promise<{ count: number }> {
     try {
       let count = null;
       const addUserId = reqBody.map((sighting) => {

@@ -23,6 +23,30 @@ import CurrentUser from '../common/decorators';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  /** GET '/users' - Get user */
+  @UseGuards(AuthGuard)
+  @Get()
+  getUserById(@CurrentUser('id') id: number) {
+    return this.usersService.getUserById(id);
+  }
+
+  /** PATCH '/users' - Update user */
+  @UseGuards(AuthGuard)
+  @Patch()
+  updateUser(
+    @CurrentUser('id') id: number,
+    @Body(ValidationPipe) reqBody: UpdateUserProfileDto,
+  ) {
+    return this.usersService.updateUser(id, reqBody);
+  }
+
+  /** DELETE '/users' - Delete user */
+  @UseGuards(AuthGuard)
+  @Delete()
+  deleteUser(@CurrentUser('id') id: number) {
+    return this.usersService.deleteUser(id);
+  }
+
   /** POST '/users/signup' - Sign up user */
   @Post('signup')
   signup(@Body(ValidationPipe) reqBody: AuthDto) {
@@ -46,31 +70,7 @@ export class UsersController {
     return this.usersService.updateUserPassword(id, reqBody);
   }
 
-  /** GET '/users/profile' - Get user by id */
-  @UseGuards(AuthGuard)
-  @Get('profile')
-  getUserById(@CurrentUser('id') id: number) {
-    return this.usersService.getUserById(id);
-  }
-
-  /** PATCH '/users/profile' - Update user */
-  @UseGuards(AuthGuard)
-  @Patch('profile')
-  updateUser(
-    @CurrentUser('id') id: number,
-    @Body(ValidationPipe) reqBody: UpdateUserProfileDto,
-  ) {
-    return this.usersService.updateUser(id, reqBody);
-  }
-
-  /** DELETE '/users/profile' - Delete user */
-  @UseGuards(AuthGuard)
-  @Delete('profile')
-  deleteUser(@CurrentUser('id') id: number) {
-    return this.usersService.deleteUser(id);
-  }
-
-  /** POST '/users/transfer' - Add sightings data */
+  /** POST '/users/transferstorage' - Add sightings data */
   @UseGuards(AuthGuard)
   @Post('transferstorage')
   transferStorage(
