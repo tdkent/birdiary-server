@@ -12,10 +12,10 @@ import {
 import { UsersService } from './users.service';
 import {
   AuthDto,
-  AuthWithSightingsDto,
   UpdateUserProfileDto,
   UpdateUserPasswordDto,
 } from '../users/dto/user.dto';
+import { CreateSightingDto } from '../sightings/dto/sighting.dto';
 import AuthGuard from '../common/guard/auth.guard';
 import CurrentUser from '../common/decorators';
 
@@ -32,7 +32,7 @@ export class UsersController {
   /** POST '/users/signin' - Sign in user */
   @Post('signin')
   @HttpCode(200)
-  signin(@Body(ValidationPipe) reqBody: AuthWithSightingsDto) {
+  signin(@Body(ValidationPipe) reqBody: AuthDto) {
     return this.usersService.signin(reqBody);
   }
 
@@ -68,5 +68,15 @@ export class UsersController {
   @Delete('profile')
   deleteUser(@CurrentUser('id') id: number) {
     return this.usersService.deleteUser(id);
+  }
+
+  /** POST '/users/transfer' - Add sightings data */
+  @UseGuards(AuthGuard)
+  @Post('transferstorage')
+  transferStorage(
+    @CurrentUser('id') id: number,
+    @Body(ValidationPipe) reqBody: CreateSightingDto[],
+  ) {
+    return this.usersService.transferStorage(id, reqBody);
   }
 }
