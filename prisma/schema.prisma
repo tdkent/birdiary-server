@@ -17,8 +17,10 @@ model User {
   name String?
   zipcode String?
   address String?
+  bio String?
   favoriteBirdId Int?
   bird Bird? @relation(fields: [favoriteBirdId], references: [id])
+  locations Location[]
   sightings Sighting[]
 }
 
@@ -53,8 +55,12 @@ model Sighting {
 
 model Location {
   id Int @id @default(autoincrement())
-  name String @unique
+  userId Int 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name String
   lat Float
   lng Float
   sightings Sighting[]
+
+  @@unique([userId,name])
 }
