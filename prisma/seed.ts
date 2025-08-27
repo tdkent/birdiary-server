@@ -23,20 +23,21 @@ async function main() {
     },
   });
 
-  const locations: Omit<Location, 'id'>[] = Array.from({ length: 25 }, () => ({
+  const locations: Omit<Location, 'id'>[] = Array.from({ length: 20 }, () => ({
     name: `${faker.location.city()}, ${faker.location.state()} ${faker.location.zipCode()}`,
     lat: faker.location.latitude(),
     lng: faker.location.longitude(),
+    userId: 1,
   }));
 
   await prisma.location.createMany({ data: locations });
 
-  const sightings: Omit<Sighting, 'id'>[] = Array.from({ length: 100 }, () => ({
+  const sightings: Omit<Sighting, 'id'>[] = Array.from({ length: 250 }, () => ({
     userId: 1,
     birdId: Math.floor(Math.random() * birds.length) + 1,
-    locationId: Math.floor(Math.random() * 25) + 1,
+    locationId: Math.floor(Math.random() * 20) + 1,
     date: faker.date.past({ years: 5 }),
-    description: faker.lorem.sentences({ min: 1, max: 2 }),
+    description: faker.lorem.sentences({ min: 1, max: 3 }),
   }));
 
   await prisma.sighting.createMany({ data: sightings });

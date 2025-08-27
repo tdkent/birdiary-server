@@ -25,3 +25,4 @@ export class LocationDto {
 
 export class LocationIdDto extends PickType(LocationDto, ['id'] as const) {}
 export class UpsertLocationDto extends OmitType(LocationDto, ['id'] as const) {}
+export class CreateLocationDto extends OmitType(LocationDto, ['id'] as const) {}
