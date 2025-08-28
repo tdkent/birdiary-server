@@ -53,15 +53,29 @@ export class LocationService {
     locationId: number,
     reqBody: UpsertLocationDto,
   ): Promise<Location> {
-    return this.databaseService.location
-      .update({
-        where: { id: locationId, userId },
-        data: reqBody,
-      })
-      .catch((err) => {
-        console.error(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    try {
+      const locationWithNameExists =
+        await this.databaseService.location.findUnique({
+          where: { userId_name: { userId, name: reqBody.name } },
+        });
+
+      if (!locationWithNameExists) {
+        return this.databaseService.location.update({
+          where: { id: locationId },
+          data: { ...reqBody },
+        });
+      }
+
+      await this.databaseService.sighting.updateMany({
+        where: { locationId, userId },
+        data: { locationId: locationWithNameExists.id },
       });
+
+      return locationWithNameExists;
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   /**

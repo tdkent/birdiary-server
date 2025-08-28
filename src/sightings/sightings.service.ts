@@ -45,11 +45,11 @@ export class SightingsService {
     let locationId: { id: number } | null = null;
     try {
       if (location) {
-        const locationExists = await this.locationService.findOrCreate(
+        const upsertLocation = await this.locationService.findOrCreate(
           userId,
           location,
         );
-        locationId = { id: locationExists.id };
+        locationId = { id: upsertLocation.id };
       }
 
       const sighting = await this.databaseService.sighting.create({
