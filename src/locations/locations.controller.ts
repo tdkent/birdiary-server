@@ -18,6 +18,12 @@ import CurrentUser from '../common/decorators';
 export class LocationsController {
   constructor(private readonly locationsService: LocationService) {}
 
+  /** GET 'locations' - Get locations */
+  @Get('')
+  getLocations(@CurrentUser('id') userId: number) {
+    return this.locationsService.getLocations(userId);
+  }
+
   /** GET 'locations/:id' - Get location */
   @Get(':id')
   getLocation(

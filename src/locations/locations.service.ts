@@ -47,6 +47,27 @@ export class LocationService {
       });
   }
 
+  async getLocations(
+    userId: number,
+  ): Promise<(Location & { countOfRecords: number })[]> {
+    return this.databaseService.location
+      .findMany({
+        where: { userId },
+        include: {
+          _count: { select: { sightings: true } },
+        },
+      })
+      .then((res) => {
+        return res.map(({ _count, ...rest }) => {
+          return { countOfRecords: _count.sightings, ...rest };
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+  }
+
   /** Upsert location and update user's related sightings. */
   async updateLocation(
     userId: number,
