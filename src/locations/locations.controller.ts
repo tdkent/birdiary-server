@@ -20,8 +20,11 @@ export class LocationsController {
 
   /** GET 'locations/:id' - Get location */
   @Get(':id')
-  getLocation(@Param(new ValidationPipe()) params: LocationIdDto) {
-    return this.locationsService.getLocation(params.id);
+  getLocation(
+    @CurrentUser('id') userId: number,
+    @Param(new ValidationPipe()) params: LocationIdDto,
+  ) {
+    return this.locationsService.getLocation(userId, params.id);
   }
 
   /** PUT 'locations/:id' - Update location */

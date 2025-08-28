@@ -45,7 +45,11 @@ export class SightingsService {
     let locationId: { id: number } | null = null;
     try {
       if (location) {
-        locationId = await this.locationService.createLocation(location);
+        const upsertLocation = await this.locationService.findOrCreate(
+          userId,
+          location,
+        );
+        locationId = { id: upsertLocation.id };
       }
 
       const sighting = await this.databaseService.sighting.create({
@@ -231,6 +235,15 @@ export class SightingsService {
     return sighting;
   }
 
+  // Check if request includes location to update
+  // If so, check if location needs to be updated
+  // If so, check if userId-name pairing already exists
+  // If so, get the locationId and apply to request body
+  // If location does not exist, create new and apply locationId
+  // Use findOrCreate for both steps?
+  // Do not delete old location if updating means it no longer
+  // has any linked sightings, leave to user as a separate action
+
   /** Update a sighting. */
   async updateSighting(
     userId: number,
@@ -242,7 +255,7 @@ export class SightingsService {
     let locationId: { id: number } | null = null;
     try {
       if (location) {
-        locationId = await this.locationService.createLocation(location);
+        locationId = await this.locationService.findOrCreate(userId, location);
         updateSightingData['locationId'] = locationId.id;
       }
 

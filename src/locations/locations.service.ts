@@ -4,7 +4,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { UpsertLocationDto } from '../locations/dto/location.dto';
+import {
+  CreateLocationDto,
+  UpsertLocationDto,
+} from '../locations/dto/location.dto';
 import { DatabaseService } from '../database/database.service';
 import { ErrorMessages, Location } from '../common/models';
 
@@ -12,15 +15,16 @@ import { ErrorMessages, Location } from '../common/models';
 export class LocationService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  /** Create location using upsert method. */
-  async createLocation(reqBody: UpsertLocationDto) {
+  /** Find or create (upsert) a location. */
+  async findOrCreate(
+    userId: number,
+    location: CreateLocationDto,
+  ): Promise<Location> {
     return this.databaseService.location
       .upsert({
-        where: { name: reqBody.name },
+        where: { userId_name: { userId, name: location.name } },
         update: {},
-        create: {
-          ...reqBody,
-        },
+        create: { userId, ...location },
       })
       .catch((err) => {
         console.error(err);
@@ -29,9 +33,9 @@ export class LocationService {
   }
 
   /** Get location. */
-  async getLocation(id: number): Promise<Location> {
+  async getLocation(userId: number, locationId: number): Promise<Location> {
     return this.databaseService.location
-      .findUniqueOrThrow({ where: { id } })
+      .findUniqueOrThrow({ where: { id: locationId, userId } })
       .catch((err) => {
         console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -50,12 +54,24 @@ export class LocationService {
     reqBody: UpsertLocationDto,
   ): Promise<Location> {
     try {
-      const location = await this.createLocation(reqBody);
+      const locationWithNameExists =
+        await this.databaseService.location.findUnique({
+          where: { userId_name: { userId, name: reqBody.name } },
+        });
+
+      if (!locationWithNameExists) {
+        return this.databaseService.location.update({
+          where: { id: locationId },
+          data: { ...reqBody },
+        });
+      }
+
       await this.databaseService.sighting.updateMany({
-        where: { userId, locationId },
-        data: { locationId: location.id },
+        where: { locationId, userId },
+        data: { locationId: locationWithNameExists.id },
       });
-      return location;
+
+      return locationWithNameExists;
     } catch (err) {
       console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
@@ -66,19 +82,14 @@ export class LocationService {
    * Delete location from user's sightings.
    * Location remains in database.
    */
-  async deleteLocation(
-    userId: number,
-    locationId: number,
-  ): Promise<{ count: number }> {
-    try {
-      const count = await this.databaseService.sighting.updateMany({
-        where: { userId, locationId },
-        data: { locationId: null },
+  async deleteLocation(userId: number, locationId: number): Promise<Location> {
+    return this.databaseService.location
+      .delete({
+        where: { userId, id: locationId },
+      })
+      .catch((err) => {
+        console.error(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
-      return count;
-    } catch (err) {
-      console.error(err);
-      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-    }
   }
 }

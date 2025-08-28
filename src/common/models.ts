@@ -10,6 +10,7 @@ export type Bird = {
 
 export type Location = {
   id: number;
+  userId: number;
   name: string;
   lat: number;
   lng: number;
