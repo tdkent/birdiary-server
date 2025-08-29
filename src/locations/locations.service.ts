@@ -6,10 +6,11 @@ import {
 import { Prisma } from '@prisma/client';
 import {
   CreateLocationDto,
-  UpsertLocationDto,
+  GetLocationsDto,
 } from '../locations/dto/location.dto';
 import { DatabaseService } from '../database/database.service';
-import { ErrorMessages, Location } from '../common/models';
+import { ErrorMessages, ListWithCount, Location } from '../common/models';
+import { TAKE_COUNT } from '../common/constants';
 
 @Injectable()
 export class LocationService {
@@ -49,30 +50,45 @@ export class LocationService {
 
   async getLocations(
     userId: number,
-  ): Promise<(Location & { countOfRecords: number })[]> {
-    return this.databaseService.location
-      .findMany({
+    reqQuery: GetLocationsDto,
+  ): Promise<ListWithCount<Location & { count: number }>> {
+    const { page, sortBy } = reqQuery;
+    try {
+      const count = await this.databaseService.location.count({
+        where: { userId },
+      });
+      const locations = await this.databaseService.location.findMany({
         where: { userId },
         include: {
           _count: { select: { sightings: true } },
         },
-      })
-      .then((res) => {
-        return res.map(({ _count, ...rest }) => {
-          return { countOfRecords: _count.sightings, ...rest };
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+        orderBy:
+          sortBy === 'alphaAsc'
+            ? [{ name: 'asc' }]
+            : sortBy === 'alphaDesc'
+              ? [{ name: 'desc' }]
+              : [{ sightings: { _count: 'desc' } }, { name: 'asc' }],
+        take: TAKE_COUNT,
+        skip: TAKE_COUNT * (page - 1),
       });
+      const updateToListWithCount = {
+        countOfRecords: count,
+        data: locations.map(({ _count, ...rest }) => {
+          return { count: _count.sightings, ...rest };
+        }),
+      };
+      return updateToListWithCount;
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   /** Upsert location and update user's related sightings. */
   async updateLocation(
     userId: number,
     locationId: number,
-    reqBody: UpsertLocationDto,
+    reqBody: CreateLocationDto,
   ): Promise<Location> {
     try {
       const locationWithNameExists =
