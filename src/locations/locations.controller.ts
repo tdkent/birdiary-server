@@ -5,11 +5,16 @@ import {
   Get,
   Param,
   Put,
+  Query,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { LocationService } from './locations.service';
-import { UpsertLocationDto, LocationIdDto } from './dto/location.dto';
+import {
+  CreateLocationDto,
+  GetLocationsDto,
+  LocationIdDto,
+} from './dto/location.dto';
 import AuthGuard from '../common/guard/auth.guard';
 import CurrentUser from '../common/decorators';
 
@@ -17,6 +22,15 @@ import CurrentUser from '../common/decorators';
 @Controller('locations')
 export class LocationsController {
   constructor(private readonly locationsService: LocationService) {}
+
+  /** GET 'locations' - Get locations */
+  @Get('')
+  getLocations(
+    @CurrentUser('id') userId: number,
+    @Query(new ValidationPipe()) reqQuery: GetLocationsDto,
+  ) {
+    return this.locationsService.getLocations(userId, reqQuery);
+  }
 
   /** GET 'locations/:id' - Get location */
   @Get(':id')
@@ -32,7 +46,7 @@ export class LocationsController {
   updateLocation(
     @CurrentUser('id') userId: number,
     @Param(new ValidationPipe()) params: LocationIdDto,
-    @Body(ValidationPipe) reqBody: UpsertLocationDto,
+    @Body(ValidationPipe) reqBody: CreateLocationDto,
   ) {
     return this.locationsService.updateLocation(userId, params.id, reqBody);
   }

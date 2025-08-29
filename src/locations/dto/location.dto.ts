@@ -1,4 +1,4 @@
-import { IsInt, IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsIn, IsInt, IsNumber, IsString, Max, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { OmitType, PickType } from '@nestjs/swagger';
 import { ErrorMessages } from '../../common/models';
@@ -23,6 +23,17 @@ export class LocationDto {
   readonly lng: number;
 }
 
+export class GetLocationsDto {
+  @IsIn(['alphaAsc', 'alphaDesc', 'count'], {
+    message: ErrorMessages.BadRequest,
+  })
+  readonly sortBy: string;
+
+  @Type(() => Number)
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
+  readonly page: number;
+}
+
 export class LocationIdDto extends PickType(LocationDto, ['id'] as const) {}
-export class UpsertLocationDto extends OmitType(LocationDto, ['id'] as const) {}
 export class CreateLocationDto extends OmitType(LocationDto, ['id'] as const) {}
