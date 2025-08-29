@@ -64,7 +64,7 @@ export class CreateSightingDto extends PickType(SightingDto, [
 
 export class GetSightingsDto {
   @IsOptional()
-  @IsIn(['date', 'location', 'lifelist'], { message: ErrorMessages.BadRequest })
+  @IsIn(['date', 'lifelist'], { message: ErrorMessages.BadRequest })
   readonly groupBy?: string;
 
   @IsOptional()

@@ -22,10 +22,8 @@ import {
 import { TAKE_COUNT } from '../common/constants';
 import {
   getCountOfSightingsByDate,
-  getCountOfSightingsByLocation,
   getCountOfSightingsByDistinctBird,
   getSightingsGroupedByDate,
-  getSightingsGroupedByLocation,
 } from '../sightings/sql/sighting.sql';
 
 @Injectable()
@@ -82,6 +80,7 @@ export class SightingsService {
   ): Promise<ListWithCount<Sighting | Group>> {
     try {
       const { groupBy, birdId, locationId, dateId, page, sortBy } = reqQuery;
+      // If no request queries, get all user's sightings
       if (!groupBy && !birdId && !locationId && !dateId) {
         const count = await this.databaseService.sighting.count({
           where: { userId },
@@ -102,9 +101,11 @@ export class SightingsService {
         });
         return { countOfRecords: count, data };
       }
+      // Throw error if request queries are misconfigured
       if (!page || !sortBy || Object.keys(reqQuery).length !== 3)
         throw new BadRequestException();
       if (groupBy) {
+        // Group sightings by date
         if (groupBy === 'date') {
           const [count]: { count: number }[] =
             await this.databaseService.$queryRaw(
@@ -115,16 +116,7 @@ export class SightingsService {
           );
           return { countOfRecords: count.count, data };
         }
-        if (groupBy === 'location') {
-          const [count]: { count: number }[] =
-            await this.databaseService.$queryRaw(
-              getCountOfSightingsByLocation(userId),
-            );
-          const data: Group[] = await this.databaseService.$queryRaw(
-            getSightingsGroupedByLocation(userId, sortBy, page),
-          );
-          return { countOfRecords: count.count, data };
-        }
+        // Get user's life list
         if (groupBy === 'lifelist') {
           const [count]: { count: number }[] =
             await this.databaseService.$queryRaw(
@@ -148,6 +140,7 @@ export class SightingsService {
           return { countOfRecords: count.count, data };
         }
       }
+      // Get sightings by bird
       if (birdId) {
         const count = await this.databaseService.sighting.count({
           where: { userId, birdId },
@@ -161,6 +154,7 @@ export class SightingsService {
         });
         return { countOfRecords: count, data };
       }
+      // Get sightings by location
       if (locationId) {
         const count = await this.databaseService.sighting.count({
           where: { userId, locationId },
@@ -181,6 +175,7 @@ export class SightingsService {
         });
         return { countOfRecords: count, data };
       }
+      // Get sightings by date
       if (dateId) {
         const count = await this.databaseService.sighting.count({
           where: { userId, date: new Date(dateId) },
@@ -235,15 +230,6 @@ export class SightingsService {
     return sighting;
   }
 
-  // Check if request includes location to update
-  // If so, check if location needs to be updated
-  // If so, check if userId-name pairing already exists
-  // If so, get the locationId and apply to request body
-  // If location does not exist, create new and apply locationId
-  // Use findOrCreate for both steps?
-  // Do not delete old location if updating means it no longer
-  // has any linked sightings, leave to user as a separate action
-
   /** Update a sighting. */
   async updateSighting(
     userId: number,
@@ -264,7 +250,7 @@ export class SightingsService {
         data: {
           ...updateSightingData,
         },
-        where: { id: sightingId, userId: userId },
+        where: { id: sightingId, userId },
       });
       if (!res.count) {
         throw new NotFoundException();
