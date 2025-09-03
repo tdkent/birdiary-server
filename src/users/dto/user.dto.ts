@@ -35,6 +35,13 @@ class UserDto {
   readonly name: string;
 
   @IsString()
+  @Length(1, 150, {
+    message: ErrorMessages.BadRequest,
+  })
+  @ValidateIf((_, value) => value !== null)
+  readonly bio: string;
+
+  @IsString()
   @Matches(/^\d{5}$/, { message: ErrorMessages.BadRequest })
   @ValidateIf((_, value) => value !== null)
   readonly zipcode: string;
@@ -57,9 +64,10 @@ export class AuthDto extends PickType(UserDto, [
 ] as const) {}
 
 export class UpdateUserProfileDto extends PickType(UserDto, [
+  'address',
+  'bio',
   'name',
   'zipcode',
-  'address',
 ] as const) {}
 
 export class UpdateUserPasswordDto {
