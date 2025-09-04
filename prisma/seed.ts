@@ -20,6 +20,7 @@ async function main() {
       zipcode: '94501',
       address: 'Alameda, CA 94501, USA',
       favoriteBirdId: 116,
+      bio: faker.lorem.sentence(),
     },
   });
 
@@ -37,7 +38,7 @@ async function main() {
     birdId: Math.floor(Math.random() * birds.length) + 1,
     locationId: Math.floor(Math.random() * 20) + 1,
     date: faker.date.past({ years: 5 }),
-    description: faker.lorem.sentences({ min: 1, max: 3 }),
+    description: faker.lorem.sentence(),
   }));
 
   await prisma.sighting.createMany({ data: sightings });
