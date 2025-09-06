@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -18,6 +19,7 @@ import {
   type Sighting,
   type Group,
   type ListWithCount,
+  Bird,
 } from '../common/models';
 import { TAKE_COUNT } from '../common/constants';
 import {
@@ -205,29 +207,30 @@ export class SightingsService {
   }
 
   /** Get a sighting */
-  async getSighting(userId: number, sightingId: number): Promise<Sighting> {
-    const sighting = await this.databaseService.sighting
-      .findFirstOrThrow({
-        where: {
-          AND: [{ userId }, { id: sightingId }],
-        },
+  async getSighting(
+    userId: number,
+    sightingId: number,
+  ): Promise<Sighting & { bird: Bird }> {
+    try {
+      const sighting = await this.databaseService.sighting.findUniqueOrThrow({
+        where: { id: sightingId },
         include: { location: true },
-      })
-      .then(async (res) => {
-        const birdWithImage = await this.birdService.getBird(res.birdId);
-        return { ...res, bird: birdWithImage };
-      })
-      .catch((err) => {
-        console.error(err);
-        if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          if (err.code === 'P2025') {
-            throw new NotFoundException(ErrorMessages.ResourceNotFound);
-          }
-        }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
-
-    return sighting;
+      if (sighting.userId !== userId) throw new ForbiddenException();
+      const birdWithImage = await this.birdService.getBird(sighting.birdId);
+      return { ...sighting, bird: birdWithImage };
+    } catch (err) {
+      console.error(err);
+      if (err instanceof ForbiddenException) {
+        throw new ForbiddenException(ErrorMessages.AccessForbidden);
+      }
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
+        }
+      }
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   /** Update a sighting. */
@@ -235,29 +238,30 @@ export class SightingsService {
     userId: number,
     sightingId: number,
     reqBody: UpdateSightingDto,
-  ): Promise<{ count: number }> {
+  ): Promise<Sighting> {
     const { location, ...requestData } = reqBody;
     const updateSightingData = requestData;
     let locationId: { id: number } | null = null;
     try {
+      const sighting = await this.databaseService.sighting.findUniqueOrThrow({
+        where: { id: sightingId },
+      });
+      if (sighting.userId !== userId) throw new ForbiddenException();
       if (location) {
         locationId = await this.locationService.findOrCreate(userId, location);
         updateSightingData['locationId'] = locationId.id;
       }
-
-      // updateMany is required when using multiple `where` clauses
-      const res = await this.databaseService.sighting.updateMany({
+      return this.databaseService.sighting.update({
         data: {
           ...updateSightingData,
         },
-        where: { id: sightingId, userId },
+        where: { id: sightingId },
       });
-      if (!res.count) {
-        throw new NotFoundException();
-      }
-      return res;
     } catch (err) {
       console.error(err);
+      if (err instanceof ForbiddenException) {
+        throw new ForbiddenException(ErrorMessages.AccessForbidden);
+      }
       if (err instanceof NotFoundException) {
         throw new NotFoundException(ErrorMessages.ResourceNotFound);
       }
@@ -266,27 +270,26 @@ export class SightingsService {
   }
 
   /** Delete a sighting. */
-  async deleteSighting(
-    userId: number,
-    sightingId: number,
-  ): Promise<{ count: number }> {
-    // deleteMany is required when using multiple `where` clauses
-    return this.databaseService.sighting
-      .deleteMany({
-        where: { id: sightingId, userId: userId },
-      })
-      .then((res) => {
-        if (!res.count) {
-          throw new NotFoundException();
-        }
-        return res;
-      })
-      .catch((err) => {
-        console.error(err);
-        if (err instanceof NotFoundException) {
+  async deleteSighting(userId: number, sightingId: number): Promise<Sighting> {
+    try {
+      const sighting = await this.databaseService.sighting.findUniqueOrThrow({
+        where: { id: sightingId },
+      });
+      if (sighting.userId !== userId) throw new ForbiddenException();
+      return this.databaseService.sighting.delete({
+        where: { id: sightingId },
+      });
+    } catch (err) {
+      console.error(err);
+      if (err instanceof ForbiddenException) {
+        throw new ForbiddenException(ErrorMessages.AccessForbidden);
+      }
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
           throw new NotFoundException(ErrorMessages.ResourceNotFound);
         }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-      });
+      }
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 }
