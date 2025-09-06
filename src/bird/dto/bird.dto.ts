@@ -20,6 +20,5 @@ export class GetBirdsDto {
   @Type(() => Number)
   @IsInt({ message: ErrorMessages.BadRequest })
   @Min(1, { message: ErrorMessages.BadRequest })
-  @Max(34, { message: ErrorMessages.BadRequest })
   readonly page: number;
 }
