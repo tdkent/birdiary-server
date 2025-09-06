@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -35,17 +36,24 @@ export class LocationService {
 
   /** Get location. */
   async getLocation(userId: number, locationId: number): Promise<Location> {
-    return this.databaseService.location
-      .findUniqueOrThrow({ where: { id: locationId, userId } })
-      .catch((err) => {
-        console.error(err);
-        if (err instanceof Prisma.PrismaClientKnownRequestError) {
-          if (err.code === 'P2025') {
-            throw new NotFoundException(ErrorMessages.ResourceNotFound);
-          }
-        }
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    try {
+      const location = await this.databaseService.location.findUniqueOrThrow({
+        where: { id: locationId },
       });
+      if (location.userId !== userId) throw new ForbiddenException();
+      return location;
+    } catch (err) {
+      console.error(err);
+      if (err instanceof ForbiddenException) {
+        throw new ForbiddenException(ErrorMessages.AccessForbidden);
+      }
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
+        }
+      }
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   async getLocations(
@@ -91,42 +99,60 @@ export class LocationService {
     reqBody: CreateLocationDto,
   ): Promise<Location> {
     try {
+      const location = await this.databaseService.location.findUniqueOrThrow({
+        where: { id: locationId },
+      });
+      if (location.userId !== userId) throw new ForbiddenException();
       const locationWithNameExists =
         await this.databaseService.location.findUnique({
           where: { userId_name: { userId, name: reqBody.name } },
         });
-
       if (!locationWithNameExists) {
         return this.databaseService.location.update({
           where: { id: locationId },
           data: { ...reqBody },
         });
       }
-
       await this.databaseService.sighting.updateMany({
         where: { locationId, userId },
         data: { locationId: locationWithNameExists.id },
       });
-
       return locationWithNameExists;
     } catch (err) {
       console.error(err);
+      if (err instanceof ForbiddenException) {
+        throw new ForbiddenException(ErrorMessages.AccessForbidden);
+      }
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
+        }
+      }
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
 
-  /**
-   * Delete location from user's sightings.
-   * Location remains in database.
-   */
+  /** Delete a single location. */
   async deleteLocation(userId: number, locationId: number): Promise<Location> {
-    return this.databaseService.location
-      .delete({
-        where: { userId, id: locationId },
-      })
-      .catch((err) => {
-        console.error(err);
-        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    try {
+      const location = await this.databaseService.location.findUniqueOrThrow({
+        where: { id: locationId },
       });
+      if (location.userId !== userId) throw new ForbiddenException();
+      return this.databaseService.location.delete({
+        where: { id: locationId },
+      });
+    } catch (err) {
+      console.error(err);
+      if (err instanceof ForbiddenException) {
+        throw new ForbiddenException(ErrorMessages.AccessForbidden);
+      }
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
+        }
+      }
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 }
