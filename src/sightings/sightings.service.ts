@@ -81,9 +81,9 @@ export class SightingsService {
     reqQuery: GetSightingsDto,
   ): Promise<ListWithCount<Sighting | Group>> {
     try {
-      const { groupBy, birdId, locationId, dateId, page, sortBy } = reqQuery;
+      const { groupBy, birdId, dateId, page, sortBy } = reqQuery;
       // If no request queries, get all user's sightings
-      if (!groupBy && !birdId && !locationId && !dateId) {
+      if (!groupBy && !birdId && !dateId) {
         const count = await this.databaseService.sighting.count({
           where: { userId },
         });
@@ -151,27 +151,6 @@ export class SightingsService {
           where: { userId, birdId },
           include: { bird: true, location: true },
           orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
-          take: TAKE_COUNT,
-          skip: TAKE_COUNT * (page - 1),
-        });
-        return { countOfRecords: count, data };
-      }
-      // Get sightings by location
-      if (locationId) {
-        const count = await this.databaseService.sighting.count({
-          where: { userId, locationId },
-        });
-        const data = await this.databaseService.sighting.findMany({
-          where: { userId, locationId },
-          include: { bird: true },
-          orderBy:
-            sortBy === 'alphaDesc'
-              ? [{ bird: { commonName: 'desc' } }]
-              : sortBy === 'dateAsc'
-                ? [{ date: 'asc' }, { bird: { commonName: 'asc' } }]
-                : sortBy === 'dateDesc'
-                  ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
-                  : [{ bird: { commonName: 'asc' } }],
           take: TAKE_COUNT,
           skip: TAKE_COUNT * (page - 1),
         });

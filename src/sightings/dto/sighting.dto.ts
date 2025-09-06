@@ -75,12 +75,6 @@ export class GetSightingsDto {
   readonly birdId?: number;
 
   @IsOptional()
-  @Type(() => Number)
-  @IsInt({ message: ErrorMessages.BadRequest })
-  @Min(1, { message: ErrorMessages.BadRequest })
-  readonly locationId?: number;
-
-  @IsOptional()
   @Type(() => Date)
   @IsDate({ message: ErrorMessages.BadRequest })
   @MinDate(new Date('1950-01-01'), { message: ErrorMessages.BadRequest })
