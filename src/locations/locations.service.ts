@@ -4,10 +4,11 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, Sighting } from '@prisma/client';
 import {
   CreateLocationDto,
   GetLocationsDto,
+  GetSightingsByLocationDto,
 } from '../locations/dto/location.dto';
 import { DatabaseService } from '../database/database.service';
 import { ErrorMessages, ListWithCount, Location } from '../common/models';
@@ -88,6 +89,50 @@ export class LocationService {
       return updateToListWithCount;
     } catch (err) {
       console.error(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
+  }
+
+  /** Get sightings by location. */
+  async getSightingsByLocation(
+    userId: number,
+    locationId: number,
+    reqQuery: GetSightingsByLocationDto,
+  ): Promise<ListWithCount<Sighting>> {
+    const { page, sortBy } = reqQuery;
+    try {
+      const location = await this.databaseService.location.findUniqueOrThrow({
+        where: { id: locationId },
+      });
+      if (location.userId !== userId) throw new ForbiddenException();
+      const count = await this.databaseService.sighting.count({
+        where: { locationId },
+      });
+      const data = await this.databaseService.sighting.findMany({
+        where: { locationId },
+        include: { bird: true },
+        orderBy:
+          sortBy === 'alphaDesc'
+            ? [{ bird: { commonName: 'desc' } }]
+            : sortBy === 'dateAsc'
+              ? [{ date: 'asc' }, { bird: { commonName: 'asc' } }]
+              : sortBy === 'dateDesc'
+                ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
+                : [{ bird: { commonName: 'asc' } }],
+        take: TAKE_COUNT,
+        skip: TAKE_COUNT * (page - 1),
+      });
+      return { countOfRecords: count, data };
+    } catch (err) {
+      console.error(err);
+      if (err instanceof ForbiddenException) {
+        throw new ForbiddenException(ErrorMessages.AccessForbidden);
+      }
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          throw new NotFoundException(ErrorMessages.ResourceNotFound);
+        }
+      }
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
   }
