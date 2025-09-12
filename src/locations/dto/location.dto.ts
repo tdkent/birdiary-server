@@ -35,5 +35,17 @@ export class GetLocationsDto {
   readonly page: number;
 }
 
+export class GetSightingsByLocationDto {
+  @IsIn(['alphaAsc', 'alphaDesc', 'dateAsc', 'dateDesc'], {
+    message: ErrorMessages.BadRequest,
+  })
+  readonly sortBy: string;
+
+  @Type(() => Number)
+  @IsInt({ message: ErrorMessages.BadRequest })
+  @Min(1, { message: ErrorMessages.BadRequest })
+  readonly page: number;
+}
+
 export class LocationIdDto extends PickType(LocationDto, ['id'] as const) {}
 export class CreateLocationDto extends OmitType(LocationDto, ['id'] as const) {}

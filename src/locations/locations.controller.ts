@@ -13,6 +13,7 @@ import { LocationService } from './locations.service';
 import {
   CreateLocationDto,
   GetLocationsDto,
+  GetSightingsByLocationDto,
   LocationIdDto,
 } from './dto/location.dto';
 import AuthGuard from '../common/guard/auth.guard';
@@ -58,5 +59,19 @@ export class LocationsController {
     @Param(new ValidationPipe()) params: LocationIdDto,
   ) {
     return this.locationsService.deleteLocation(userId, params.id);
+  }
+
+  /** GET 'locations/:id/sightings' - Get sightings by location */
+  @Get(':id/sightings')
+  getSightingsByLocation(
+    @CurrentUser('id') userId: number,
+    @Param(new ValidationPipe()) params: LocationIdDto,
+    @Query(new ValidationPipe()) reqQuery: GetSightingsByLocationDto,
+  ) {
+    return this.locationsService.getSightingsByLocation(
+      userId,
+      params.id,
+      reqQuery,
+    );
   }
 }
