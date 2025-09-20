@@ -229,6 +229,8 @@ export class SightingsService {
       if (location) {
         locationId = await this.locationService.findOrCreate(userId, location);
         updateSightingData['locationId'] = locationId.id;
+      } else {
+        updateSightingData['locationId'] = null;
       }
       return this.databaseService.sighting.update({
         data: {
