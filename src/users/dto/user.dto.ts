@@ -1,4 +1,5 @@
 import { PickType } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsEmail,
   IsInt,
@@ -10,9 +11,8 @@ import {
   MinLength,
   ValidateIf,
 } from 'class-validator';
-import { Type } from 'class-transformer';
-import { ErrorMessages } from '../../common/models';
 import { BIRD_COUNT } from '../../common/constants';
+import { ErrorMessages } from '../../common/models';
 
 class UserDto {
   @Type(() => Number) // cast id type to use in params DTO

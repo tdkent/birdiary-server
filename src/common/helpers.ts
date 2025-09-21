@@ -1,4 +1,4 @@
-import { hash, compare } from 'bcrypt';
+import { compare, hash } from 'bcrypt';
 import { SALT_ROUNDS } from './constants';
 
 export async function hashPassword(password: string) {

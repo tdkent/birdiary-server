@@ -9,3 +9,4 @@ export const CLOUDINARY_NAME = process.env.CLOUDINARY_NAME;
 export const CLOUDINARY_KEY = process.env.CLOUDINARY_KEY;
 export const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET;
 export const JWT_SESSION_KEY = process.env.SESSION_KEY;
+export const ALLOWED_ORIGINS = process.env.ALLOWED_ORIGINS;

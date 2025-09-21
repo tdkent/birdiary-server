@@ -6,22 +6,22 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { BirdService } from '../bird/bird.service';
+import { TAKE_COUNT } from '../common/constants';
+import {
+  Bird,
+  ErrorMessages,
+  type Group,
+  type ListWithCount,
+  type Sighting,
+} from '../common/models';
 import { DatabaseService } from '../database/database.service';
 import { LocationService } from '../locations/locations.service';
-import { BirdService } from '../bird/bird.service';
 import {
   CreateSightingDto,
   GetSightingsDto,
   UpdateSightingDto,
 } from '../sightings/dto/sighting.dto';
-import {
-  ErrorMessages,
-  type Sighting,
-  type Group,
-  type ListWithCount,
-  Bird,
-} from '../common/models';
-import { TAKE_COUNT } from '../common/constants';
 import {
   getCountOfSightingsByDate,
   getCountOfSightingsByDistinctBird,

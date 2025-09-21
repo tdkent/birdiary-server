@@ -5,14 +5,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, Sighting } from '@prisma/client';
+import { TAKE_COUNT } from '../common/constants';
+import { ErrorMessages, ListWithCount, Location } from '../common/models';
+import { DatabaseService } from '../database/database.service';
 import {
   CreateLocationDto,
   GetLocationsDto,
   GetSightingsByLocationDto,
 } from '../locations/dto/location.dto';
-import { DatabaseService } from '../database/database.service';
-import { ErrorMessages, ListWithCount, Location } from '../common/models';
-import { TAKE_COUNT } from '../common/constants';
 
 @Injectable()
 export class LocationService {
