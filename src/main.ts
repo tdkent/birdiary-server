@@ -1,15 +1,19 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import {
   BadRequestException,
   ValidationError,
   ValidationPipe,
 } from '@nestjs/common';
-import { PORT } from './common/constants';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { ALLOWED_ORIGINS, PORT } from './common/constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors();
+  app.enableCors({
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['DELETE', 'GET', 'PATCH', 'POST', 'PUT'],
+    origin: ALLOWED_ORIGINS.split(','),
+  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
