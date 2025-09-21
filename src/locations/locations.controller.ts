@@ -9,15 +9,15 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { LocationService } from './locations.service';
+import CurrentUser from '../common/decorators';
+import AuthGuard from '../common/guard/auth.guard';
 import {
   CreateLocationDto,
   GetLocationsDto,
   GetSightingsByLocationDto,
   LocationIdDto,
 } from './dto/location.dto';
-import AuthGuard from '../common/guard/auth.guard';
-import CurrentUser from '../common/decorators';
+import { LocationService } from './locations.service';
 
 @UseGuards(AuthGuard)
 @Controller('locations')

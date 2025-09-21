@@ -1,4 +1,5 @@
 import { PickType } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsDate,
   IsIn,
@@ -6,18 +7,17 @@ import {
   IsObject,
   IsOptional,
   IsString,
+  Max,
   MaxDate,
   MaxLength,
   Min,
-  Max,
   MinDate,
   ValidateIf,
   ValidateNested,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { BIRD_COUNT } from '../../common/constants';
 import { ErrorMessages } from '../../common/models';
 import { CreateLocationDto } from '../../locations/dto/location.dto';
-import { BIRD_COUNT } from '../../common/constants';
 
 class SightingDto {
   @Type(() => Number) // cast id type to use in params DTO

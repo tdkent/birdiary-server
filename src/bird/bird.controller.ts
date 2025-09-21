@@ -3,13 +3,13 @@ import {
   Get,
   Param,
   Query,
-  ValidationPipe,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
-import { BirdService } from './bird.service';
-import { BirdIdDto, GetBirdsDto } from './dto/bird.dto';
 import CurrentUser from '../common/decorators';
 import AuthGuard from '../common/guard/auth.guard';
+import { BirdService } from './bird.service';
+import { BirdIdDto, GetBirdsDto } from './dto/bird.dto';
 
 @Controller('birds')
 export class BirdController {

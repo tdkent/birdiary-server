@@ -1,19 +1,19 @@
 import {
-  Injectable,
   BadRequestException,
+  Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { comparePassword, hashPassword } from '../common/helpers';
+import { ErrorMessages, type User } from '../common/models';
 import { DatabaseService } from '../database/database.service';
+import { CreateSightingDto } from '../sightings/dto/sighting.dto';
 import {
   AuthDto,
-  UpdateUserProfileDto,
   UpdateUserPasswordDto,
+  UpdateUserProfileDto,
 } from '../users/dto/user.dto';
-import { hashPassword, comparePassword } from '../common/helpers';
-import { ErrorMessages, type User } from '../common/models';
-import { CreateSightingDto } from '../sightings/dto/sighting.dto';
 
 @Injectable()
 export class UsersService {

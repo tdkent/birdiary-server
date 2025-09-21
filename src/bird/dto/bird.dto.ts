@@ -1,7 +1,7 @@
-import { IsInt, IsOptional, Length, Matches, Min, Max } from 'class-validator';
 import { Type } from 'class-transformer';
-import { ErrorMessages } from '../../common/models';
+import { IsInt, IsOptional, Length, Matches, Max, Min } from 'class-validator';
 import { BIRD_COUNT } from '../../common/constants';
+import { ErrorMessages } from '../../common/models';
 
 export class BirdIdDto {
   @Type(() => Number) // cast id type to use in params DTO

@@ -10,16 +10,16 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { SightingsService } from './sightings.service';
+import CurrentUser from '../common/decorators';
+import AuthGuard from '../common/guard/auth.guard';
 import { LocationService } from '../locations/locations.service';
 import {
   CreateSightingDto,
   GetSightingsDto,
-  UpdateSightingDto,
   SightingIdDto,
+  UpdateSightingDto,
 } from '../sightings/dto/sighting.dto';
-import AuthGuard from '../common/guard/auth.guard';
-import CurrentUser from '../common/decorators';
+import { SightingsService } from './sightings.service';
 
 @UseGuards(AuthGuard)
 @Controller('sightings')

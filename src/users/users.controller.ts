@@ -9,15 +9,15 @@ import {
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
+import CurrentUser from '../common/decorators';
+import AuthGuard from '../common/guard/auth.guard';
+import { CreateSightingDto } from '../sightings/dto/sighting.dto';
 import {
   AuthDto,
-  UpdateUserProfileDto,
   UpdateUserPasswordDto,
+  UpdateUserProfileDto,
 } from '../users/dto/user.dto';
-import { CreateSightingDto } from '../sightings/dto/sighting.dto';
-import AuthGuard from '../common/guard/auth.guard';
-import CurrentUser from '../common/decorators';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {

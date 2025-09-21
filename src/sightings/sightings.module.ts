@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { SightingsService } from './sightings.service';
+import { BirdService } from '../bird/bird.service';
 import { DatabaseService } from '../database/database.service';
 import { LocationService } from '../locations/locations.service';
-import { BirdService } from '../bird/bird.service';
 import { SightingsController } from './sightings.controller';
+import { SightingsService } from './sightings.service';
 
 @Module({
   controllers: [SightingsController],

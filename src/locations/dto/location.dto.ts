@@ -1,6 +1,6 @@
-import { IsIn, IsInt, IsNumber, IsString, Max, Min } from 'class-validator';
-import { Type } from 'class-transformer';
 import { OmitType, PickType } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsIn, IsInt, IsNumber, IsString, Max, Min } from 'class-validator';
 import { ErrorMessages } from '../../common/models';
 
 export class LocationDto {
