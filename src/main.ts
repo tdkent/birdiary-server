@@ -5,14 +5,13 @@ import {
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ALLOWED_ORIGINS, PORT } from './common/constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['DELETE', 'GET', 'PATCH', 'POST', 'PUT'],
-    origin: ALLOWED_ORIGINS.split(','),
+    origin: process.env.ALLOWED_ORIGINS.split(','),
   });
   app.useGlobalPipes(
     new ValidationPipe({
@@ -27,8 +26,8 @@ async function bootstrap() {
     }),
   );
   app.setGlobalPrefix('/api');
-  await app.listen(PORT, () => {
-    console.log('Birdiary API is listening! Port:', PORT);
+  await app.listen(process.env.PORT, () => {
+    console.log('Birdiary API is listening! Port:', process.env.PORT);
   });
 }
 bootstrap();

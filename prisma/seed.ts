@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
 import { birds } from '../db/birds.json';
-import { TEST_USER_EMAIL, TEST_USER_PASSWORD } from '../src/common/constants';
 import { hashPassword } from '../src/common/helpers';
 import type { Bird, Location, Sighting } from '../src/common/models';
 
@@ -14,8 +13,8 @@ async function main() {
 
   await prisma.user.create({
     data: {
-      email: TEST_USER_EMAIL,
-      password: await hashPassword(TEST_USER_PASSWORD),
+      email: process.env.TEST_USER_EMAIL,
+      password: await hashPassword(process.env.TEST_USER_PW),
       name: 'Tim',
       zipcode: '94501',
       address: 'Alameda, CA 94501, USA',
