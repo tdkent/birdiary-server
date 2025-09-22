@@ -5,10 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { jwtVerify } from 'jose';
-import { JWT_SESSION_KEY } from '../constants';
 import { ErrorMessages } from '../models';
-
-const encodedKey = new TextEncoder().encode(JWT_SESSION_KEY);
 
 @Injectable()
 export default class AuthGuard implements CanActivate {
@@ -33,6 +30,8 @@ export default class AuthGuard implements CanActivate {
     if (type !== 'Bearer' || !token) {
       throw new UnauthorizedException(ErrorMessages.InvalidToken);
     }
+
+    const encodedKey = new TextEncoder().encode(process.env.SESSION_KEY);
 
     try {
       const { payload } = await jwtVerify(token, encodedKey, {

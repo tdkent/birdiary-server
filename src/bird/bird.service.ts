@@ -6,13 +6,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { GetBirdsDto } from '../bird/dto/bird.dto';
-import {
-  BIRD_COUNT,
-  CLOUDINARY_KEY,
-  CLOUDINARY_NAME,
-  CLOUDINARY_SECRET,
-  TAKE_COUNT,
-} from '../common/constants';
+import { BIRD_COUNT, TAKE_COUNT } from '../common/constants';
 import {
   Bird,
   CloudinaryError,
@@ -23,9 +17,9 @@ import {
 import { DatabaseService } from '../database/database.service';
 
 cloudinary.config({
-  cloud_name: CLOUDINARY_NAME,
-  api_key: CLOUDINARY_KEY,
-  api_secret: CLOUDINARY_SECRET,
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 @Injectable()
