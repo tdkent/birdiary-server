@@ -103,7 +103,24 @@ export class BirdService {
       });
   }
 
+  /** Get most recently added bird from bird id array. */
   async getBirdOfTheDay(): Promise<Bird> {
+    try {
+      const { birdIds } =
+        await this.databaseService.birdOfTheDay.findUniqueOrThrow({
+          where: { id: 1 },
+          select: { birdIds: true },
+        });
+      const bird = await this.getBird(birdIds[birdIds.length - 1]);
+      return bird;
+    } catch (err) {
+      console.error(err);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
+  }
+
+  /** Add new id to bird of the day array. */
+  async updateBirdOfTheDay(): Promise<number> {
     try {
       const { birdIds } =
         await this.databaseService.birdOfTheDay.findUniqueOrThrow({
@@ -122,16 +139,13 @@ export class BirdService {
       }
 
       updatedBirdIds.push(randomId);
-      updatedBirdIds.sort((a, b) => a - b);
-
-      const bird = await this.getBird(randomId);
 
       await this.databaseService.birdOfTheDay.update({
         where: { id: 1 },
         data: { birdIds: updatedBirdIds },
       });
 
-      return bird;
+      return randomId;
     } catch (err) {
       console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);

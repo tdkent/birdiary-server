@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Param,
+  Put,
   Query,
   UseGuards,
   ValidationPipe,
@@ -29,6 +30,12 @@ export class BirdController {
   @Get('birdoftheday')
   getBirdOfTheDay() {
     return this.birdService.getBirdOfTheDay();
+  }
+
+  /** PUT '/birds/birdoftheday' - Update random bird */
+  @Put('birdoftheday')
+  updateBirdOfTheDay() {
+    return this.birdService.updateBirdOfTheDay();
   }
 
   /** GET '/birds/:id' - Get single bird w/image */
