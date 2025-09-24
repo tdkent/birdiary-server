@@ -41,6 +41,12 @@ model Bird {
   users User[]
 }
 
+model BirdOfTheDay {
+  id Int @id @default(1)
+  birdIds Int[]
+  updatedAt DateTime @updatedAt
+}
+
 model Sighting {
   id Int @id @default(autoincrement())
   userId Int 
