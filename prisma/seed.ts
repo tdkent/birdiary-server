@@ -41,6 +41,7 @@ async function main() {
   }));
 
   await prisma.sighting.createMany({ data: sightings });
+  await prisma.birdOfTheDay.create({ data: { id: 1 } });
 }
 
 main()
