@@ -3,10 +3,12 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
 import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { GetBirdsDto } from '../bird/dto/bird.dto';
 import { BIRD_COUNT, TAKE_COUNT } from '../common/constants';
+import { createBirdOfTheDayIdsArray } from '../common/helpers';
 import {
   Bird,
   CloudinaryError,
@@ -105,21 +107,23 @@ export class BirdService {
 
   /** Get most recently added bird from bird id array. */
   async getBirdOfTheDay(): Promise<Bird> {
-    try {
-      const { birdIds } =
-        await this.databaseService.birdOfTheDay.findUniqueOrThrow({
-          where: { id: 1 },
-          select: { birdIds: true },
-        });
-      const bird = await this.getBird(birdIds[birdIds.length - 1]);
-      return bird;
-    } catch (err) {
-      console.error(err);
-      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
-    }
+    return this.databaseService.birdOfTheDay
+      .findUniqueOrThrow({
+        where: { id: 1 },
+        select: { currBirdId: true, bird: true },
+      })
+      .then(async (res) => {
+        const bird = await this.getBird(res.currBirdId);
+        return bird;
+      })
+      .catch((err) => {
+        console.error(err);
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
   }
 
   /** Add new id to bird of the day array. */
+  @Cron('0 3 * * *') // At 3:00 AM
   async updateBirdOfTheDay(): Promise<number> {
     try {
       const { birdIds } =
@@ -129,23 +133,19 @@ export class BirdService {
         });
 
       let updatedBirdIds = birdIds;
-      if (birdIds.length >= BIRD_COUNT) {
-        updatedBirdIds = [];
+      if (!updatedBirdIds.length) {
+        updatedBirdIds = createBirdOfTheDayIdsArray();
       }
-
-      let randomId = Math.ceil(Math.random() * BIRD_COUNT);
-      while (updatedBirdIds.includes(randomId)) {
-        randomId = Math.ceil(Math.random() * BIRD_COUNT);
-      }
-
-      updatedBirdIds.push(randomId);
+      const randomIdx = Math.ceil(Math.random() * updatedBirdIds.length);
+      const randomBirdId = updatedBirdIds[randomIdx];
+      updatedBirdIds.splice(randomIdx, 1);
 
       await this.databaseService.birdOfTheDay.update({
         where: { id: 1 },
-        data: { birdIds: updatedBirdIds },
+        data: { birdIds: updatedBirdIds, currBirdId: randomBirdId },
       });
 
-      return randomId;
+      return randomBirdId;
     } catch (err) {
       console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);

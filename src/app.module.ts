@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { BirdController } from './bird/bird.controller';
 import { BirdModule } from './bird/bird.module';
 import { BirdService } from './bird/bird.service';
@@ -21,6 +22,7 @@ import { UsersService } from './users/users.service';
     BirdModule,
     SightingsModule,
     LocationsModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [
     UsersController,
