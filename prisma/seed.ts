@@ -1,7 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
 import { birds } from '../db/birds.json';
-import { hashPassword } from '../src/common/helpers';
+import {
+  createBirdOfTheDayIdsArray,
+  hashPassword,
+} from '../src/common/helpers';
 import type { Bird, Location, Sighting } from '../src/common/models';
 
 const prisma = new PrismaClient();
@@ -41,7 +44,15 @@ async function main() {
   }));
 
   await prisma.sighting.createMany({ data: sightings });
-  await prisma.birdOfTheDay.create({ data: { id: 1 } });
+
+  const birdIdsArray = createBirdOfTheDayIdsArray();
+  const randomIdx = Math.ceil(Math.random() * birdIdsArray.length);
+  const randomBirdId = birdIdsArray[randomIdx];
+  birdIdsArray.splice(randomIdx, 1);
+
+  await prisma.birdOfTheDay.create({
+    data: { birdIds: birdIdsArray, currBirdId: randomBirdId },
+  });
 }
 
 main()
