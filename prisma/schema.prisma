@@ -39,11 +39,14 @@ model Bird {
   imgAttribute String?
   sightings Sighting[]
   users User[]
+  birdOfTheDay BirdOfTheDay[]
 }
 
 model BirdOfTheDay {
   id Int @id @default(1)
   birdIds Int[]
+  currBirdId Int 
+  bird Bird @relation(fields: [currBirdId], references: [id])
   updatedAt DateTime @updatedAt
 }
 
