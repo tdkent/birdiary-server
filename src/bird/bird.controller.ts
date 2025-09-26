@@ -32,7 +32,7 @@ export class BirdController {
   }
 
   /** GET '/birds/:id' - Get single bird w/image */
-  @Get(':id')
+  @Get(':id(\\d+)')
   getBird(@Param(new ValidationPipe()) params: BirdIdDto) {
     return this.birdService.getBird(params.id);
   }
