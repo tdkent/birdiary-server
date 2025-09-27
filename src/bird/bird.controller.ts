@@ -25,14 +25,8 @@ export class BirdController {
     return this.birdService.getBirds(id, query);
   }
 
-  /** GET '/birds/birdoftheday' - Get random bird once a day */
-  @Get('birdoftheday')
-  getBirdOfTheDay() {
-    return this.birdService.getBirdOfTheDay();
-  }
-
   /** GET '/birds/:id' - Get single bird w/image */
-  @Get(':id(\\d+)')
+  @Get(':id')
   getBird(@Param(new ValidationPipe()) params: BirdIdDto) {
     return this.birdService.getBird(params.id);
   }
