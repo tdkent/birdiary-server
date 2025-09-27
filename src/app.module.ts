@@ -3,6 +3,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { BirdController } from './bird/bird.controller';
 import { BirdModule } from './bird/bird.module';
 import { BirdService } from './bird/bird.service';
+import { BirdOfTheDayModule } from './birdoftheday/birdoftheday.module';
 import { DatabaseModule } from './database/database.module';
 import { DatabaseService } from './database/database.service';
 import { LocationsController } from './locations/locations.controller';
@@ -23,6 +24,7 @@ import { UsersService } from './users/users.service';
     SightingsModule,
     LocationsModule,
     ScheduleModule.forRoot(),
+    BirdOfTheDayModule,
   ],
   controllers: [
     UsersController,
