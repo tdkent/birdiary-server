@@ -447,7 +447,7 @@ Authorization
 
 Validation
 
-- `:id`: Integer parameter. Must be between 1 and current size of `Bird` table (currently: `838`).
+- `:id`: Integer parameter. Must be between 1 and current size of `Bird` table (currently: `824`).
 
 Response object
 
