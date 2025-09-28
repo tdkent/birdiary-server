@@ -29,7 +29,7 @@ export class BirdOfTheDayService {
   }
 
   /** Add new id to bird of the day array. */
-  @Cron('0 3 * * *') // At 3:00 AM
+  @Cron('0 8 * * *') // At 8:00 AM UTC (1:00 AM PST)
   async updateBirdOfTheDay(): Promise<number> {
     try {
       const { birdIds } =
