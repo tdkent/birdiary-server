@@ -17,7 +17,9 @@ export async function comparePassword(
 /** Create an array of integers 1 - total count of bird species. */
 export function createBirdOfTheDayIdsArray(): number[] {
   const arr = [];
+  const idsWithoutImgs = [156, 179, 422, 649, 768, 777];
   for (let i = 1; i <= BIRD_COUNT; i++) {
+    if (idsWithoutImgs.includes(i)) continue;
     arr.push(i);
   }
   return arr;
