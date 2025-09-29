@@ -7,7 +7,10 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { BirdService } from '../bird/bird.service';
-import { TAKE_COUNT } from '../common/constants';
+import {
+  DETAILS_RESULTS_PER_PAGE,
+  RESULTS_PER_PAGE,
+} from '../common/constants';
 import {
   Bird,
   ErrorMessages,
@@ -98,8 +101,8 @@ export class SightingsService {
                 : sortBy === 'dateDesc'
                   ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
                   : [{ bird: { commonName: 'asc' } }],
-          take: TAKE_COUNT,
-          skip: TAKE_COUNT * (page - 1),
+          take: RESULTS_PER_PAGE,
+          skip: RESULTS_PER_PAGE * (page - 1),
         });
         return { countOfRecords: count, data };
       }
@@ -136,8 +139,8 @@ export class SightingsService {
                   : sortBy === 'dateDesc'
                     ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
                     : [{ bird: { commonName: 'asc' } }],
-            take: TAKE_COUNT,
-            skip: TAKE_COUNT * (page - 1),
+            take: RESULTS_PER_PAGE,
+            skip: RESULTS_PER_PAGE * (page - 1),
           });
           return { countOfRecords: count.count, data };
         }
@@ -151,8 +154,8 @@ export class SightingsService {
           where: { userId, birdId },
           include: { bird: true, location: true },
           orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
-          take: TAKE_COUNT,
-          skip: TAKE_COUNT * (page - 1),
+          take: DETAILS_RESULTS_PER_PAGE,
+          skip: DETAILS_RESULTS_PER_PAGE * (page - 1),
         });
         return { countOfRecords: count, data };
       }
@@ -171,8 +174,8 @@ export class SightingsService {
             sortBy === 'alphaAsc'
               ? { bird: { commonName: 'asc' } }
               : { bird: { commonName: 'desc' } },
-          take: TAKE_COUNT,
-          skip: TAKE_COUNT * (page - 1),
+          take: DETAILS_RESULTS_PER_PAGE,
+          skip: DETAILS_RESULTS_PER_PAGE * (page - 1),
         });
         return { countOfRecords: count, data };
       } else throw new BadRequestException();

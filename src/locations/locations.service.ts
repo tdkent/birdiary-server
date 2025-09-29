@@ -5,7 +5,10 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, Sighting } from '@prisma/client';
-import { TAKE_COUNT } from '../common/constants';
+import {
+  DETAILS_RESULTS_PER_PAGE,
+  RESULTS_PER_PAGE,
+} from '../common/constants';
 import { ErrorMessages, ListWithCount, Location } from '../common/models';
 import { DatabaseService } from '../database/database.service';
 import {
@@ -77,8 +80,8 @@ export class LocationService {
             : sortBy === 'alphaDesc'
               ? [{ name: 'desc' }]
               : [{ sightings: { _count: 'desc' } }, { name: 'asc' }],
-        take: TAKE_COUNT,
-        skip: TAKE_COUNT * (page - 1),
+        take: RESULTS_PER_PAGE,
+        skip: RESULTS_PER_PAGE * (page - 1),
       });
       const updateToListWithCount = {
         countOfRecords: count,
@@ -119,8 +122,8 @@ export class LocationService {
               : sortBy === 'dateDesc'
                 ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
                 : [{ bird: { commonName: 'asc' } }],
-        take: TAKE_COUNT,
-        skip: TAKE_COUNT * (page - 1),
+        take: DETAILS_RESULTS_PER_PAGE,
+        skip: DETAILS_RESULTS_PER_PAGE * (page - 1),
       });
       return { countOfRecords: count, data };
     } catch (err) {
