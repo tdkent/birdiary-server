@@ -6,7 +6,7 @@ import {
 import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { GetBirdsDto } from '../bird/dto/bird.dto';
-import { BIRD_COUNT, TAKE_COUNT } from '../common/constants';
+import { BIRD_COUNT, RESULTS_PER_PAGE } from '../common/constants';
 import {
   Bird,
   CloudinaryError,
@@ -52,8 +52,8 @@ export class BirdService {
               }
             : {}),
         },
-        take: TAKE_COUNT,
-        skip: TAKE_COUNT * (page - 1),
+        take: RESULTS_PER_PAGE,
+        skip: RESULTS_PER_PAGE * (page - 1),
       });
       if (id) {
         const birdsWithCount = birds.map((bird) => {

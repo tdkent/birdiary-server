@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client';
-import { TAKE_COUNT } from '../../common/constants';
+import { RESULTS_PER_PAGE } from '../../common/constants';
 
 export function getCountOfSightingsByDate(userId: number): Prisma.Sql {
   return Prisma.sql`
@@ -44,7 +44,7 @@ export function getSightingsGroupedByDate(
     WHERE "userId" = ${userId}
     GROUP BY date
     ORDER BY ${inputString}
-    LIMIT ${TAKE_COUNT}
-    OFFSET ${TAKE_COUNT * (page - 1)}
+    LIMIT ${RESULTS_PER_PAGE}
+    OFFSET ${RESULTS_PER_PAGE * (page - 1)}
   `;
 }
