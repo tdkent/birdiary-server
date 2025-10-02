@@ -11,6 +11,7 @@ import { DatabaseService } from '../database/database.service';
 import { CreateSightingDto } from '../sightings/dto/sighting.dto';
 import {
   AuthDto,
+  UpdateUserFavoriteBirdDto,
   UpdateUserPasswordDto,
   UpdateUserProfileDto,
 } from '../users/dto/user.dto';
@@ -131,6 +132,19 @@ export class UsersService {
             throw new NotFoundException(ErrorMessages.UserNotFound);
           }
         }
+        throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+      });
+  }
+
+  /** Update user's favorite bird. */
+  async updateUserFavoriteBird(id: number, reqBody: UpdateUserFavoriteBirdDto) {
+    return this.databaseService.user
+      .update({
+        where: { id },
+        data: { favoriteBirdId: reqBody.favoriteBirdId },
+      })
+      .catch((err) => {
+        console.error(err);
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
   }

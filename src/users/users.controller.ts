@@ -14,6 +14,7 @@ import AuthGuard from '../common/guard/auth.guard';
 import { CreateSightingDto } from '../sightings/dto/sighting.dto';
 import {
   AuthDto,
+  UpdateUserFavoriteBirdDto,
   UpdateUserPasswordDto,
   UpdateUserProfileDto,
 } from '../users/dto/user.dto';
@@ -58,6 +59,16 @@ export class UsersController {
   @HttpCode(200)
   signin(@Body(ValidationPipe) reqBody: AuthDto) {
     return this.usersService.signin(reqBody);
+  }
+
+  /** PATCH '/users/favoritebird' - Update user's favorite bird */
+  @UseGuards(AuthGuard)
+  @Patch('favoritebird')
+  updateUserFavoriteBird(
+    @CurrentUser('id') id: number,
+    @Body(ValidationPipe) reqBody: UpdateUserFavoriteBirdDto,
+  ) {
+    return this.usersService.updateUserFavoriteBird(id, reqBody);
   }
 
   /** PATCH '/users/password' - Update user's password */

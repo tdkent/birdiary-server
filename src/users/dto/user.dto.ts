@@ -70,6 +70,10 @@ export class UpdateUserProfileDto extends PickType(UserDto, [
   'zipcode',
 ] as const) {}
 
+export class UpdateUserFavoriteBirdDto extends PickType(UserDto, [
+  'favoriteBirdId',
+] as const) {}
+
 export class UpdateUserPasswordDto {
   @IsString()
   @Length(8, 36, {
