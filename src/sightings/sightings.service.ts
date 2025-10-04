@@ -72,6 +72,12 @@ export class SightingsService {
     }
   }
 
+  async getLifeListCount(userId: number): Promise<{ count: number }[]> {
+    return this.databaseService.$queryRaw(
+      getCountOfSightingsByDistinctBird(userId),
+    );
+  }
+
   /**
    * Get a paginated list of user's sightings.
    * Use optional `groupBy` queries 'date', 'location', 'lifelist' to get grouped data.
@@ -123,10 +129,7 @@ export class SightingsService {
         }
         // Get user's life list
         if (groupBy === 'lifelist') {
-          const [count]: { count: number }[] =
-            await this.databaseService.$queryRaw(
-              getCountOfSightingsByDistinctBird(userId),
-            );
+          const [count] = await this.getLifeListCount(userId);
           const data = await this.databaseService.sighting.findMany({
             where: { userId },
             distinct: ['birdId'],
