@@ -9,6 +9,7 @@ import { comparePassword, hashPassword } from '../common/helpers';
 import { ErrorMessages, type User } from '../common/models';
 import { DatabaseService } from '../database/database.service';
 import { CreateSightingDto } from '../sightings/dto/sighting.dto';
+import { SightingsService } from '../sightings/sightings.service';
 import {
   AuthDto,
   UpdateUserFavoriteBirdDto,
@@ -18,7 +19,10 @@ import {
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly sightingsService: SightingsService,
+  ) {}
 
   /** Create a new user. */
   async signup(reqBody: AuthDto): Promise<{ id: number }> {
@@ -73,8 +77,8 @@ export class UsersService {
   async getUserById(id: number): Promise<
     Omit<User, 'password'> & {
       count: {
-        totalSightings: number;
-        totalDistinctSightings: number;
+        countOfAllSightings: number;
+        countOfLifeListSightings: number;
       };
     }
   > {
@@ -84,17 +88,15 @@ export class UsersService {
         omit: { password: true },
         include: { sightings: true, bird: true },
       })
-      .then((res) => {
+      .then(async (res) => {
         const { sightings, ...rest } = res;
         const totalSightings = sightings.length;
-        const totalDistinctSightings = new Set(
-          sightings.map((sighting) => sighting.id),
-        ).size;
+        const [count] = await this.sightingsService.getLifeListCount(id);
         return {
           ...rest,
           count: {
-            totalSightings,
-            totalDistinctSightings,
+            countOfAllSightings: totalSightings,
+            countOfLifeListSightings: count.count,
           },
         };
       })
