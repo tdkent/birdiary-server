@@ -13,7 +13,7 @@ export function getCountOfSightingsByDate(userId: number): Prisma.Sql {
     `;
 }
 
-export function getCountOfSightingsByDistinctBird(userId: number): Prisma.Sql {
+export function getLifeListCount(userId: number): Prisma.Sql {
   return Prisma.sql`
     SELECT CAST(count(*) as int) as count
     FROM (
@@ -21,6 +21,28 @@ export function getCountOfSightingsByDistinctBird(userId: number): Prisma.Sql {
       FROM "Sighting"
       WHERE "userId" = ${userId}
     )
+  `;
+}
+
+export function getLifeListSightings(
+  userId: number,
+  sortBy: string,
+  page: number,
+): Prisma.Sql {
+  let inputString = Prisma.raw(`"commonName" ASC`);
+  if (sortBy === 'alphaDesc') inputString = Prisma.raw(`"commonName" DESC`);
+  if (sortBy === 'dateAsc') inputString = Prisma.raw(`date ASC`);
+  if (sortBy === 'dateDesc') inputString = Prisma.raw(`date DESC`);
+  return Prisma.sql`
+    SELECT "birdId" AS id, MIN(date) AS date, "commonName"
+    FROM "Sighting"
+    JOIN "Bird"
+    ON "birdId" = "Bird".id
+    WHERE "userId" = ${userId}
+    GROUP BY "birdId", "commonName"
+    ORDER BY ${inputString}
+    LIMIT ${RESULTS_PER_PAGE}
+    OFFSET ${RESULTS_PER_PAGE * (page - 1)}
   `;
 }
 
