@@ -31,6 +31,13 @@ export class UsersController {
     return this.usersService.getUserById(id);
   }
 
+  /** GET '/users/stats' - Get user's sightings statistics. */
+  @UseGuards(AuthGuard)
+  @Get('stats')
+  getUserSightingStats(@CurrentUser('id') id: number) {
+    return this.usersService.getUserSightingStats(id);
+  }
+
   /** PATCH '/users' - Update user */
   @UseGuards(AuthGuard)
   @Patch()

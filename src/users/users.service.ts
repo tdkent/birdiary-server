@@ -16,6 +16,7 @@ import {
   UpdateUserPasswordDto,
   UpdateUserProfileDto,
 } from '../users/dto/user.dto';
+import { getUserSightingStats } from './sql/user.sql';
 
 @Injectable()
 export class UsersService {
@@ -109,6 +110,19 @@ export class UsersService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+  }
+
+  /** Get user's aggregated sighting statistics. */
+  async getUserSightingStats(id: number) {
+    try {
+      const stats = await this.databaseService.$queryRaw(
+        getUserSightingStats(id),
+      );
+      return stats;
+    } catch (error) {
+      console.error(error);
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 
   /** Update user's name, location, favorite bird. */
