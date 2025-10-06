@@ -113,12 +113,19 @@ export class UsersService {
   }
 
   /** Get user's aggregated sighting statistics. */
-  async getUserSightingStats(id: number) {
+  async getUserSightingStats(userId: number) {
     try {
+      const user = await this.databaseService.user.findFirstOrThrow({
+        where: { id: userId },
+        include: { bird: true },
+      });
       const stats = await this.databaseService.$queryRaw(
-        getUserSightingStats(id),
+        getUserSightingStats(userId, user.favoriteBirdId),
       );
-      return stats;
+      return {
+        user,
+        stats,
+      };
     } catch (error) {
       console.error(error);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
