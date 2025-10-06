@@ -14,6 +14,7 @@ import {
 import {
   Bird,
   ErrorMessages,
+  Lifelist,
   type Group,
   type ListWithCount,
   type Sighting,
@@ -27,7 +28,8 @@ import {
 } from '../sightings/dto/sighting.dto';
 import {
   getCountOfSightingsByDate,
-  getCountOfSightingsByDistinctBird,
+  getLifeListCount,
+  getLifeListSightings,
   getSightingsGroupedByDate,
 } from '../sightings/sql/sighting.sql';
 
@@ -82,7 +84,7 @@ export class SightingsService {
   async getSightings(
     userId: number,
     reqQuery: GetSightingsDto,
-  ): Promise<ListWithCount<Sighting | Group>> {
+  ): Promise<ListWithCount<Sighting | Lifelist | Group>> {
     try {
       const { groupBy, birdId, dateId, page, sortBy } = reqQuery;
       // If no request queries, get all user's sightings
@@ -123,26 +125,9 @@ export class SightingsService {
         }
         // Get user's life list
         if (groupBy === 'lifelist') {
-          const [count]: { count: number }[] =
-            await this.databaseService.$queryRaw(
-              getCountOfSightingsByDistinctBird(userId),
-            );
-          const data = await this.databaseService.sighting.findMany({
-            where: { userId },
-            distinct: ['birdId'],
-            include: { bird: true },
-            orderBy:
-              sortBy === 'alphaDesc'
-                ? [{ bird: { commonName: 'desc' } }]
-                : sortBy === 'dateAsc'
-                  ? [{ date: 'asc' }, { bird: { commonName: 'asc' } }]
-                  : sortBy === 'dateDesc'
-                    ? [{ date: 'desc' }, { bird: { commonName: 'asc' } }]
-                    : [{ bird: { commonName: 'asc' } }],
-            take: RESULTS_PER_PAGE,
-            skip: RESULTS_PER_PAGE * (page - 1),
-          });
-          return { countOfRecords: count.count, data };
+          const [{ count }] = await this.getLifeListCount(userId);
+          const data = await this.getLifeListSightings(userId, sortBy, page);
+          return { countOfRecords: count, data };
         }
       }
       // Get sightings by bird
@@ -275,5 +260,23 @@ export class SightingsService {
       }
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
+  }
+
+  /** HELPERS */
+
+  /** Count of user's sightings by distinct bird. */
+  async getLifeListCount(userId: number): Promise<{ count: number }[]> {
+    return this.databaseService.$queryRaw(getLifeListCount(userId));
+  }
+
+  /** List of user's distinct sightings with oldest sighting date. */
+  async getLifeListSightings(
+    userId: number,
+    sortBy: string,
+    page: number,
+  ): Promise<{ birdId: number; date: Date; commonName: string }[]> {
+    return this.databaseService.$queryRaw(
+      getLifeListSightings(userId, sortBy, page),
+    );
   }
 }

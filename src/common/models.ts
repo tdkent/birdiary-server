@@ -96,3 +96,9 @@ export type ListWithCount<T> = {
   countOfRecords: number;
   data: Array<T>;
 };
+
+export type Lifelist = {
+  birdId: number;
+  date: Date;
+  commonName: string;
+};
