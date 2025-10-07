@@ -23,6 +23,7 @@ export type Sighting = {
   locationId: number | null;
   date: Date;
   description: string | null;
+  isNew: boolean;
 };
 
 export type User = {
