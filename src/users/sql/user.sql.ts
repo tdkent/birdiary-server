@@ -5,7 +5,7 @@ export function getUserSightingStats(
   favoriteBirdId: number,
 ): Prisma.Sql {
   return Prisma.sql`
-    -- CTE 1: All sightings
+    -- CTE: All user's sightings
     WITH all_sightings AS (
       SELECT *
       FROM "Sighting"
@@ -14,14 +14,8 @@ export function getUserSightingStats(
       LEFT JOIN "Location" -- Include rows w/null values
       ON "locationId" = "Location".id
       WHERE "Sighting"."userId" = ${userId}
-    ),
-    -- CTE 2: All fav bird sightings
-    fav_sightings AS (
-      SELECT *
-      FROM "Sighting"
-      WHERE "userId" = ${userId}
-      AND "birdId" = ${favoriteBirdId}
     )
+    
     -- Queries
     SELECT
       -- Count all sightings
@@ -48,18 +42,28 @@ export function getUserSightingStats(
         FROM all_sightings
         WHERE rarity = 'Rare'
       ) AS "countOfRareSightings",
+      -- Count of sightings w/o a location
+      (
+        SELECT CAST(COUNT(*) AS int)
+        FROM all_sightings
+        WHERE "locationId" IS NULL
+      ) AS "countOfSightingsWithoutLocation",
       -- Count fav sightings
-      (SELECT CAST(COUNT(*) AS int) FROM fav_sightings) AS "countOfFavBirdSightings",
+      (
+        SELECT CAST(COUNT(*) AS int)
+        FROM all_sightings 
+        WHERE "birdId" = ${favoriteBirdId}
+      ) AS "countOfFavBirdSightings",
       -- Oldest fav sighting
       (
         SELECT MIN(date)
-        FROM fav_sightings
+        FROM all_sightings
         WHERE "birdId" = ${favoriteBirdId}
       ) AS "oldestFavSighting",
       -- Newest fav sighting
       (
         SELECT MAX(date)
-        FROM fav_sightings
+        FROM all_sightings
         WHERE "birdId" = ${favoriteBirdId}
       ) AS "newestFavSighting",
       -- Top 3 most-sighted birds
@@ -89,7 +93,7 @@ export function getUserSightingStats(
         )
       ) AS "topThreeLocations",
       -- Top 3 dates by most sightings
-            (
+      (
         SELECT json_agg(
           json_build_object('date', "date", 'count', count)
           )
@@ -100,6 +104,19 @@ export function getUserSightingStats(
           ORDER BY count DESC
           LIMIT 3
         )
-      ) AS "topThreeDates";
+      ) AS "topThreeDates",
+      -- Top 3 bird families by sightings
+      (
+        SELECT json_agg(
+          json_build_object('family', "family", 'count', count)
+      )
+        FROM (
+          SELECT family, COUNT(*) AS count
+          FROM all_sightings
+          GROUP BY family
+          ORDER BY count DESC
+          LIMIT 3
+        )
+      ) AS "topThreeFamilies";
   `;
 }

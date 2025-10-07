@@ -117,6 +117,7 @@ export class UsersService {
     try {
       const user = await this.databaseService.user.findFirstOrThrow({
         where: { id: userId },
+        omit: { password: true },
         include: { bird: true },
       });
       const stats = await this.databaseService.$queryRaw(
