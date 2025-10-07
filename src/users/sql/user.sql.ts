@@ -24,6 +24,30 @@ export function getUserSightingStats(
       (SELECT MIN(date) FROM all_sightings) AS "oldestSighting",
       -- Newest sighting
       (SELECT MAX(date) FROM all_sightings) AS "newestSighting",
+      -- Count of common rarity sightings
+      (
+        SELECT CAST(COUNT(*) AS int) 
+        FROM all_sightings
+        JOIN "Bird" b
+        ON all_sightings."birdId" = b.id
+        WHERE b.rarity = 'Common'
+      ) AS "countOfCommonSightings",
+      -- Count of uncommon rarity sightings
+      (
+        SELECT CAST(COUNT(*) AS int) 
+        FROM all_sightings
+        JOIN "Bird" b
+        ON all_sightings."birdId" = b.id
+        WHERE b.rarity = 'Uncommon'
+      ) AS "countOfUncommonSightings",
+      -- Count of rare rarity sightings
+      (
+        SELECT CAST(COUNT(*) AS int) 
+        FROM all_sightings
+        JOIN "Bird" b
+        ON all_sightings."birdId" = b.id
+        WHERE b.rarity = 'Rare'
+      ) AS "countOfRareSightings",
       -- Count fav sightings
       (SELECT CAST(COUNT(*) AS int) FROM fav_sightings) AS "countOfFavBirdSightings",
       -- Oldest fav sighting
@@ -32,11 +56,11 @@ export function getUserSightingStats(
         FROM fav_sightings
         WHERE "birdId" = ${favoriteBirdId}
       ) AS "oldestFavSighting",
-      -- Latest fav sighting
+      -- Newest fav sighting
       (
         SELECT MAX(date)
         FROM fav_sightings
         WHERE "birdId" = ${favoriteBirdId}
-      ) AS "newestFavSighting";
+      ) AS "newestFavSighting",
   `;
 }
