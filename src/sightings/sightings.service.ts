@@ -41,7 +41,7 @@ export class SightingsService {
     private readonly birdService: BirdService,
   ) {}
 
-  /** Create a new sighting */
+  /** Create a new sighting and update life list. */
   async createSighting(
     userId: number,
     reqBody: CreateSightingDto,
@@ -57,6 +57,12 @@ export class SightingsService {
         locationId = { id: upsertLocation.id };
       }
 
+      const currLifeList = await this.databaseService.sighting.findFirst({
+        where: { userId, birdId, isNew: { equals: true } },
+      });
+
+      const isNew = !currLifeList || (currLifeList && date < currLifeList.date);
+
       const sighting = await this.databaseService.sighting.create({
         data: {
           userId,
@@ -64,8 +70,16 @@ export class SightingsService {
           date,
           description,
           locationId: locationId?.id || null,
+          isNew,
         },
       });
+
+      if (isNew && currLifeList) {
+        await this.databaseService.sighting.update({
+          where: { id: currLifeList.id },
+          data: { isNew: false },
+        });
+      }
 
       return sighting;
     } catch (err) {
@@ -207,22 +221,110 @@ export class SightingsService {
     reqBody: UpdateSightingDto,
   ): Promise<Sighting> {
     const { location, ...requestData } = reqBody;
-    const updateSightingData = requestData;
+    const updateSighting = requestData;
     let locationId: { id: number } | null = null;
     try {
       const sighting = await this.databaseService.sighting.findUniqueOrThrow({
         where: { id: sightingId },
       });
+
       if (sighting.userId !== userId) throw new ForbiddenException();
+
       if (location) {
         locationId = await this.locationService.findOrCreate(userId, location);
-        updateSightingData['locationId'] = locationId.id;
+        updateSighting['locationId'] = locationId.id;
       } else {
-        updateSightingData['locationId'] = null;
+        updateSighting['locationId'] = null;
       }
+
+      const oldDate = new Date(sighting.date).getTime();
+      const newDate = new Date(updateSighting.date).getTime();
+
+      // Check lifer status if change to date or birdId
+      if (sighting.birdId !== updateSighting.birdId || oldDate !== newDate) {
+        // Get current lifer (or null) for new birdId
+        const currLifeList = await this.databaseService.sighting.findFirst({
+          where: {
+            userId,
+            birdId: updateSighting.birdId,
+            isNew: { equals: true },
+          },
+        });
+
+        // Convert lifer date to number
+        let currLifeListDate: number = null;
+        if (currLifeList)
+          currLifeListDate = new Date(currLifeList.date).getTime();
+
+        // Check if birdId is being updated
+        if (sighting.birdId !== updateSighting.birdId) {
+          // Find and assign new lifer to old birdId
+          const [newLifeList] = await this.databaseService.sighting.findMany({
+            where: { id: { not: sightingId }, birdId: sighting.birdId },
+            orderBy: [{ date: 'asc' }, { id: 'asc' }],
+            take: 1,
+          });
+
+          if (newLifeList) {
+            await this.databaseService.sighting.update({
+              where: { id: newLifeList.id },
+              data: { isNew: true },
+            });
+          }
+
+          // If no lifer for new birdId, make update the new lifer
+          if (!currLifeList) {
+            updateSighting['isNew'] = true;
+          }
+          // Else, assign new lifer if update has earlier date
+          else {
+            if (newDate < currLifeListDate) {
+              await this.databaseService.sighting.update({
+                where: { id: currLifeList.id },
+                data: { isNew: false },
+              });
+              updateSighting['isNew'] = true;
+            }
+          }
+        }
+        // If date is being updated
+        else {
+          // If date is being decreased
+          if (newDate < oldDate) {
+            // If updated sighting is NOT lifer, update if date < lifer date
+            if (currLifeList.id !== sightingId && newDate < currLifeListDate) {
+              await this.databaseService.sighting.update({
+                where: { id: currLifeList.id },
+                data: { isNew: false },
+              });
+              updateSighting['isNew'] = true;
+            }
+          } else {
+            if (currLifeList.id === sightingId) {
+              const [newLifeList] =
+                await this.databaseService.sighting.findMany({
+                  where: { id: { not: sightingId }, birdId: sighting.birdId },
+                  orderBy: [{ date: 'asc' }, { id: 'asc' }],
+                  take: 1,
+                });
+              if (
+                newLifeList &&
+                newDate > new Date(newLifeList.date).getTime()
+              ) {
+                await this.databaseService.sighting.update({
+                  where: { id: newLifeList.id },
+                  data: { isNew: true },
+                });
+                updateSighting['isNew'] = false;
+              }
+            }
+          }
+        }
+      }
+
       return this.databaseService.sighting.update({
         data: {
-          ...updateSightingData,
+          ...updateSighting,
         },
         where: { id: sightingId },
       });
