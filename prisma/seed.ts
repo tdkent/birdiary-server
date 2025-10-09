@@ -1,20 +1,33 @@
 import { faker } from '@faker-js/faker';
 import { PrismaClient } from '@prisma/client';
 import { birds } from '../db/birds.json';
+import { BirdService } from '../src/bird/bird.service';
 import {
   createBirdOfTheDayIdsArray,
   hashPassword,
 } from '../src/common/helpers';
-import type { Bird, Location, Sighting } from '../src/common/models';
+import type { Bird, Location } from '../src/common/models';
+import { DatabaseService } from '../src/database/database.service';
+import { LocationService } from '../src/locations/locations.service';
+import { CreateSightingDto } from '../src/sightings/dto/sighting.dto';
+import { SightingsService } from '../src/sightings/sightings.service';
 
 const prisma = new PrismaClient();
+const databaseService = new DatabaseService();
+const birdService = new BirdService(databaseService);
+const locationService = new LocationService(databaseService);
+const sightingService = new SightingsService(
+  databaseService,
+  locationService,
+  birdService,
+);
 
 async function main() {
   await prisma.bird.createMany({
     data: birds as unknown as Bird,
   });
 
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       email: process.env.TEST_USER_EMAIL,
       password: await hashPassword(process.env.TEST_USER_PW),
@@ -30,20 +43,21 @@ async function main() {
     name: `${faker.location.city()}, ${faker.location.state()} ${faker.location.zipCode()}`,
     lat: faker.location.latitude(),
     lng: faker.location.longitude(),
-    userId: 1,
+    userId: user.id,
   }));
 
   await prisma.location.createMany({ data: locations });
 
-  const sightings: Omit<Sighting, 'id'>[] = Array.from({ length: 250 }, () => ({
-    userId: 1,
+  const sightings: CreateSightingDto[] = Array.from({ length: 250 }, () => ({
     birdId: Math.floor(Math.random() * birds.length) + 1,
-    locationId: Math.floor(Math.random() * 20) + 1,
+    location: locations[Math.floor(Math.random() * 20)],
     date: faker.date.past({ years: 5 }),
     description: faker.lorem.sentence(),
   }));
 
-  await prisma.sighting.createMany({ data: sightings });
+  for (const sighting of sightings) {
+    await sightingService.createSighting(user.id, sighting);
+  }
 
   const birdIdsArray = createBirdOfTheDayIdsArray();
   const randomIdx = Math.ceil(Math.random() * birdIdsArray.length);

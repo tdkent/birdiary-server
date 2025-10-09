@@ -56,7 +56,7 @@ export class SightingsController {
     return this.sightingsService.getSighting(userId, params.id);
   }
 
-  /** PUT '/sightings/:id' - Update sighting */
+  /** PATCH '/sightings/:id' - Update sighting */
   @Patch(':id')
   updateSighting(
     @CurrentUser('id') userId: number,

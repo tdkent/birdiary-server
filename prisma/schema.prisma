@@ -60,6 +60,7 @@ model Sighting {
   location Location? @relation(fields: [locationId], references: [id])
   date DateTime @db.Date
   description String?
+  isNew Boolean @default(false)
 }
 
 model Location {
