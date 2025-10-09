@@ -48,7 +48,7 @@ async function main() {
 
   await prisma.location.createMany({ data: locations });
 
-  const sightings: CreateSightingDto[] = Array.from({ length: 10 }, () => ({
+  const sightings: CreateSightingDto[] = Array.from({ length: 250 }, () => ({
     birdId: Math.floor(Math.random() * birds.length) + 1,
     location: locations[Math.floor(Math.random() * 20)],
     date: faker.date.past({ years: 5 }),
