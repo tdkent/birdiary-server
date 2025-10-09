@@ -61,7 +61,9 @@ export class SightingsService {
         where: { userId, birdId, isNew: { equals: true } },
       });
 
-      const isNew = !currLifeList || (currLifeList && date < currLifeList.date);
+      const isNew =
+        !currLifeList ||
+        new Date(date).getTime() < new Date(currLifeList.date).getTime();
 
       const sighting = await this.databaseService.sighting.create({
         data: {
