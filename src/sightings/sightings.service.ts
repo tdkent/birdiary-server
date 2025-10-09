@@ -349,6 +349,23 @@ export class SightingsService {
         where: { id: sightingId },
       });
       if (sighting.userId !== userId) throw new ForbiddenException();
+
+      // Check for a new lifer to assign to birdId
+      if (sighting.isNew) {
+        const [newLifeList] = await this.databaseService.sighting.findMany({
+          where: { id: { not: sightingId }, birdId: sighting.birdId },
+          orderBy: [{ date: 'asc' }, { id: 'asc' }],
+          take: 1,
+        });
+
+        if (newLifeList) {
+          await this.databaseService.sighting.update({
+            where: { id: newLifeList.id },
+            data: { isNew: true },
+          });
+        }
+      }
+
       return this.databaseService.sighting.delete({
         where: { id: sightingId },
       });
