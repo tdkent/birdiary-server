@@ -63,7 +63,7 @@ export class LocationService {
   async getLocations(
     userId: number,
     reqQuery: GetLocationsDto,
-  ): Promise<ListWithCount<Location & { count: number }>> {
+  ): Promise<ListWithCount<Omit<Location, 'userId'> & { count: number }>> {
     const { page, sortBy } = reqQuery;
     try {
       const count = await this.databaseService.location.count({
@@ -85,8 +85,8 @@ export class LocationService {
       });
       const updateToListWithCount = {
         countOfRecords: count,
-        data: locations.map(({ _count, ...rest }) => {
-          return { count: _count.sightings, ...rest };
+        data: locations.map(({ _count, id, lat, lng, name }) => {
+          return { count: _count.sightings, id, lat, lng, name };
         }),
       };
       return updateToListWithCount;
