@@ -1,12 +1,17 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
-import { GetBirdsDto } from '../bird/dto/bird.dto';
-import { BIRD_COUNT, RESULTS_PER_PAGE } from '../common/constants';
+import { GetBirdsDto, GetSightingsByBirdIdDto } from '../bird/dto/bird.dto';
+import {
+  BIRD_COUNT,
+  DETAILS_RESULTS_PER_PAGE,
+  RESULTS_PER_PAGE,
+} from '../common/constants';
 import {
   Bird,
   CloudinaryError,
@@ -101,5 +106,37 @@ export class BirdService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+  }
+
+  async getSightingsByBirdId(
+    userId: number,
+    reqQuery: GetSightingsByBirdIdDto,
+    birdId: number,
+  ) {
+    const { page, sortBy } = reqQuery;
+    try {
+      const count = await this.databaseService.sighting.count({
+        where: { userId, birdId },
+      });
+      const data = await this.databaseService.bird.findUniqueOrThrow({
+        where: { id: birdId },
+        include: {
+          sightings: {
+            where: { userId },
+            include: { location: true },
+            orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
+            take: DETAILS_RESULTS_PER_PAGE,
+            skip: DETAILS_RESULTS_PER_PAGE * (page - 1),
+          },
+        },
+      });
+      return { countOfRecords: count, data };
+    } catch (error) {
+      console.error(error);
+      if (error instanceof BadRequestException) {
+        throw new BadRequestException(ErrorMessages.BadRequest);
+      }
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 }
