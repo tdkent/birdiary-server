@@ -146,20 +146,6 @@ export class SightingsService {
           return { countOfRecords: count, data };
         }
       }
-      // Get sightings by bird
-      if (birdId) {
-        const count = await this.databaseService.sighting.count({
-          where: { userId, birdId },
-        });
-        const data = await this.databaseService.sighting.findMany({
-          where: { userId, birdId },
-          include: { bird: true, location: true },
-          orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
-          take: DETAILS_RESULTS_PER_PAGE,
-          skip: DETAILS_RESULTS_PER_PAGE * (page - 1),
-        });
-        return { countOfRecords: count, data };
-      }
       // Get sightings by date
       if (dateId) {
         const count = await this.databaseService.sighting.count({
