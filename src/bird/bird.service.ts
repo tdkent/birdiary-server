@@ -130,7 +130,7 @@ export class BirdService {
           },
         },
       });
-      return { countOfRecords: count, data };
+      return { countOfRecords: count, data: data.sightings };
     } catch (error) {
       console.error(error);
       if (error instanceof BadRequestException) {
