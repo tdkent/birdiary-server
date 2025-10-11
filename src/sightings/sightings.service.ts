@@ -91,20 +91,21 @@ export class SightingsService {
   }
 
   /**
-   * Get a paginated list of user's sightings.
-   * Use optional `groupBy` queries 'date', 'location', 'lifelist' to get grouped data.
-   * Use optional `birdId`, `locationId`, `date` queries to get filtered data.
-   * If none of these queries provided, return user's recent sightings.
-   * `page` and `sortBy` queries are required.
+   * Get a paginated lists of user's sightings --
+   * If no queries provided, return's all user's sightings,
+   * groupby=date: return count of sightings grouped by date,
+   * groupby=lifelist: return user's life list sightings,
+   * dateId=:id: return user's sightings by date id.
    */
   async getSightings(
     userId: number,
     reqQuery: GetSightingsDto,
   ): Promise<ListWithCount<Sighting | Lifelist | Group>> {
     try {
-      const { groupBy, birdId, dateId, page, sortBy } = reqQuery;
-      // If no request queries, get all user's sightings
-      if (!groupBy && !birdId && !dateId) {
+      const { groupBy, dateId, page, sortBy } = reqQuery;
+
+      // Get all user's sightings
+      if (!groupBy && !dateId) {
         const count = await this.databaseService.sighting.count({
           where: { userId },
         });
@@ -124,11 +125,12 @@ export class SightingsService {
         });
         return { countOfRecords: count, data };
       }
-      // Throw error if request queries are misconfigured
+
       if (!page || !sortBy || Object.keys(reqQuery).length !== 3)
         throw new BadRequestException();
+
       if (groupBy) {
-        // Group sightings by date
+        // Get user's diary
         if (groupBy === 'date') {
           const [count]: { count: number }[] =
             await this.databaseService.$queryRaw(
@@ -139,6 +141,7 @@ export class SightingsService {
           );
           return { countOfRecords: count.count, data };
         }
+
         // Get user's life list
         if (groupBy === 'lifelist') {
           const [{ count }] = await this.getLifeListCount(userId);
@@ -146,7 +149,8 @@ export class SightingsService {
           return { countOfRecords: count, data };
         }
       }
-      // Get sightings by date
+
+      // Get user's sightings by date id
       if (dateId) {
         const count = await this.databaseService.sighting.count({
           where: { userId, date: new Date(dateId) },
@@ -176,7 +180,7 @@ export class SightingsService {
   }
 
   /** Get a sighting */
-  async getSighting(
+  async getSightingById(
     userId: number,
     sightingId: number,
   ): Promise<Sighting & { bird: Bird }> {

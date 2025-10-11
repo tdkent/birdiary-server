@@ -53,7 +53,7 @@ export class SightingsController {
     @CurrentUser('id') userId: number,
     @Param(new ValidationPipe()) params: SightingIdDto,
   ) {
-    return this.sightingsService.getSighting(userId, params.id);
+    return this.sightingsService.getSightingById(userId, params.id);
   }
 
   /** PATCH '/sightings/:id' - Update sighting */
