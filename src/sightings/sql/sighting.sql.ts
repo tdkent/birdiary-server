@@ -59,10 +59,15 @@ export function getSightingsGroupedByDate(
       CAST(
         REPLACE(
         LEFT(CAST(date AS text), 10), '-', ''
-      ) AS int) AS id,
-      date AS text,
-      CAST(count(*) AS int) AS count
+      ) AS int) AS "dateId",
+      date,
+      CAST(count(*) AS int) AS count,
+      ARRAY_AGG(
+        'id:' || "birdId" || ',' || 'commonName:' || "commonName" || ',' || 'imgUrl:' || 'image_public_id'
+        ) as "sightings"
     FROM "Sighting"
+    JOIN "Bird"
+    ON "Sighting"."birdId" = "Bird".id
     WHERE "userId" = ${userId}
     GROUP BY date
     ORDER BY ${inputString}
