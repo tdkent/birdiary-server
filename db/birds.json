@@ -1712,7 +1712,9 @@
       "rarity": "Rare",
       "description": "A small dark petrel with a bounding flight, often seen over tropical waters.",
       "imgAttribute": null,
-      "id": 156
+      "id": 156,
+      "imgPublicId": null,
+      "imgSecureUrl": null
     },
     {
       "commonName": "Burrowing Owl",
@@ -1963,7 +1965,9 @@
       "rarity": "Uncommon",
       "description": "A unique crossbill species adapted to feed on lodgepole pine cones in Idaho.",
       "imgAttribute": null,
-      "id": 179
+      "id": 179,
+      "imgPublicId": null,
+      "imgSecureUrl": null
     },
     {
       "commonName": "Cassin's Auklet",
@@ -4634,7 +4638,9 @@
       "rarity": "Uncommon",
       "description": "A tiny seabird with dark plumage, known for its fast, low flight over water.",
       "imgAttribute": null,
-      "id": 422
+      "id": 422,
+      "imgPublicId": null,
+      "imgSecureUrl": null
     },
     {
       "commonName": "Least Tern",
@@ -7129,7 +7135,9 @@
       "rarity": "Uncommon",
       "description": "A small seabird with black-and-white plumage, nesting on offshore islands.",
       "imgAttribute": null,
-      "id": 649
+      "id": 649,
+      "imgPublicId": null,
+      "imgSecureUrl": null
     },
     {
       "commonName": "Seaside Sparrow",
@@ -8436,7 +8444,9 @@
       "rarity": "Common",
       "description": "A black woodpecker with a striking white head.",
       "imgAttribute": null,
-      "id": 768
+      "id": 768,
+      "imgPublicId": null,
+      "imgSecureUrl": null
     },
     {
       "commonName": "White-necked Petrel",
@@ -8533,7 +8543,9 @@
       "rarity": "Common",
       "description": "A fast-flying bird with black-and-white plumage.",
       "imgAttribute": null,
-      "id": 777
+      "id": 777,
+      "imgPublicId": null,
+      "imgSecureUrl": null
     },
     {
       "commonName": "White-tipped Dove",
