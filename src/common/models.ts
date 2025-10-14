@@ -5,6 +5,8 @@ export type Bird = {
   family: string;
   rarity: 'Common' | 'Uncommon' | 'Rare';
   description: string;
+  imgPublicId: string | null;
+  imgSecureUrl: string | null;
   imgAttribute: string | null;
 };
 
