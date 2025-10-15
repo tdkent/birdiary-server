@@ -12,13 +12,7 @@ import {
   DETAILS_RESULTS_PER_PAGE,
   RESULTS_PER_PAGE,
 } from '../common/constants';
-import {
-  Bird,
-  CloudinaryError,
-  CloudinaryResponse,
-  ErrorMessages,
-  ListWithCount,
-} from '../common/models';
+import { Bird, ErrorMessages, ListWithCount } from '../common/models';
 import { DatabaseService } from '../database/database.service';
 
 cloudinary.config({
@@ -78,25 +72,6 @@ export class BirdService {
   async getBird(id: number): Promise<Bird> {
     return this.databaseService.bird
       .findUnique({ where: { id } })
-      .then(async (bird) => {
-        // if bird has an image, fetch from cloudinary
-        if (bird.imgAttribute) {
-          const img = (await cloudinary.api
-            .resources_by_asset_folder(bird.commonName)
-            .then((cloudinary) => {
-              const imageData = cloudinary as unknown as CloudinaryResponse;
-              return imageData.resources[0].secure_url;
-            })
-            .catch((err) => {
-              const {
-                error: { message, http_code },
-              } = err as CloudinaryError;
-              console.error('Cloudinary error: ', http_code, message);
-            })) as CloudinaryResponse | void;
-          return { ...bird, imgUrl: img };
-        }
-        return bird;
-      })
       .catch((err) => {
         console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
