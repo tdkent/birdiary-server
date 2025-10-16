@@ -56,18 +56,10 @@ export function getSightingsGroupedByDate(
   if (sortBy === 'dateAsc') inputString = Prisma.raw(`date ASC`);
   return Prisma.sql`
     SELECT
-      CAST(
-        REPLACE(
-        LEFT(CAST(date AS text), 10), '-', ''
-      ) AS int) AS "dateId",
+      CAST(REPLACE(LEFT(CAST(date AS text), 10), '-', '') AS int) AS "dateId",
       date,
       CAST(count(*) AS int) AS count,
-      ARRAY_AGG(
-        'id:' || "Sighting".id || 
-        ',birdId:' || "Bird".id || 
-        ',commonName:' || "commonName" || 
-        ',imgSecureUrl:' || "imgSecureUrl"
-        ) as "sightings"
+      ARRAY_AGG("Sighting".id || ',' || "commonName" || ',' || "imgSecureUrl") as "sightings"
     FROM "Sighting"
     JOIN "Bird"
     ON "Sighting"."birdId" = "Bird".id
