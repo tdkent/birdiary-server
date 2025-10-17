@@ -59,7 +59,7 @@ export function getSightingsGroupedByDate(
       CAST(REPLACE(LEFT(CAST(date AS text), 10), '-', '') AS int) AS "dateId",
       date,
       CAST(count(*) AS int) AS count,
-      ARRAY_AGG("Sighting".id || ',' || "commonName" || ',' || "imgSecureUrl") as "sightings"
+      ARRAY_AGG("Sighting".id || ',' || "commonName" || ',' || COALESCE("imgSecureUrl", 'null')) as "sightings"
     FROM "Sighting"
     JOIN "Bird"
     ON "Sighting"."birdId" = "Bird".id
