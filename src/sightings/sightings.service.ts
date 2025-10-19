@@ -12,10 +12,10 @@ import {
   RESULTS_PER_PAGE,
 } from '../common/constants';
 import {
-  Bird,
+  type Bird,
   ErrorMessages,
-  Lifelist,
   type Group,
+  type Lifelist,
   type ListWithCount,
   type Sighting,
 } from '../common/models';
@@ -385,7 +385,7 @@ export class SightingsService {
     userId: number,
     sortBy: string,
     page: number,
-  ): Promise<{ birdId: number; date: Date; commonName: string }[]> {
+  ): Promise<Lifelist[]> {
     return this.databaseService.$queryRaw(
       getLifeListSightings(userId, sortBy, page),
     );

@@ -34,12 +34,17 @@ export function getLifeListSightings(
   if (sortBy === 'dateAsc') inputString = Prisma.raw(`date ASC`);
   if (sortBy === 'dateDesc') inputString = Prisma.raw(`date DESC`);
   return Prisma.sql`
-    SELECT "birdId" AS id, MIN(date) AS date, "commonName"
+    SELECT 
+      "birdId" AS id, 
+      MIN(date) AS date,
+      "commonName",
+      "imgSecureUrl",
+      CAST(COUNT(*) AS int) AS count
     FROM "Sighting"
     JOIN "Bird"
     ON "birdId" = "Bird".id
     WHERE "userId" = ${userId}
-    GROUP BY "birdId", "commonName"
+    GROUP BY "birdId", "commonName", "imgSecureUrl"
     ORDER BY ${inputString}
     LIMIT ${RESULTS_PER_PAGE}
     OFFSET ${RESULTS_PER_PAGE * (page - 1)}
@@ -56,7 +61,7 @@ export function getSightingsGroupedByDate(
   if (sortBy === 'dateAsc') inputString = Prisma.raw(`date ASC`);
   return Prisma.sql`
     SELECT
-      CAST(REPLACE(LEFT(CAST(date AS text), 10), '-', '') AS int) AS "dateId",
+      CAST(REPLACE(LEFT(CAST(date AS text), 10), '-', '') AS int) AS id,
       date,
       CAST(count(*) AS int) AS count,
       ARRAY_AGG("Sighting".id || ',' || "commonName" || ',' || COALESCE("imgSecureUrl", 'null')) as "sightings"

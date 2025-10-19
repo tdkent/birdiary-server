@@ -101,7 +101,9 @@ export type ListWithCount<T> = {
 };
 
 export type Lifelist = {
-  birdId: number;
+  id: number;
   date: Date;
   commonName: string;
+  imgSecureUrl: string;
+  count: number;
 };
