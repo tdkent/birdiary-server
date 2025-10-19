@@ -1,3 +1,4 @@
+/** Db models */
 export type Bird = {
   id: number;
   commonName: string;
@@ -41,41 +42,35 @@ export type User = {
   favoriteBirdId: number | null;
 };
 
-export type CloudinaryResponse = {
-  resources: [
-    {
-      asset_id: string;
-      public_id: string;
-      format: string;
-      version: number;
-      resource_type: string;
-      type: string;
-      created_at: string;
-      bytes: number;
-      width: number;
-      height: number;
-      asset_folder: string;
-      display_name: string;
-      url: string;
-      secure_url: string;
-    },
-  ];
-  total_count: number;
-  next_cursor: null;
-  rate_limit_allowed: number;
-  rate_limit_reset_at: Date;
-  rate_limit_remaining: number;
+/** Query models */
+export type Diary = {
+  id: number;
+  date: string;
+  count: number;
+  sightings: string[];
 };
 
-export type CloudinaryError = {
-  request_options: object;
-  query_params: string;
-  error: {
-    message: string;
-    http_code: number;
-  };
+export type Lifelist = {
+  id: number;
+  date: Date;
+  commonName: string;
+  imgSecureUrl: string;
+  count: number;
 };
 
+export type Locations = {
+  id: number;
+  name: string;
+  count: number;
+  sightings: string[];
+};
+
+export type ListWithCount<T> = {
+  countOfRecords: number;
+  data: Array<T>;
+};
+
+/** Enums */
 export enum ErrorMessages {
   DefaultServer = 'The server encountered an error.',
   ResourceNotFound = 'Resource not found.',
@@ -88,23 +83,3 @@ export enum ErrorMessages {
   InvalidPassword = 'Not a valid password.',
   InvalidEmail = 'Not a valid email.',
 }
-
-export type Diary = {
-  id: number;
-  date: string;
-  count: number;
-  sightings: string[];
-};
-
-export type ListWithCount<T> = {
-  countOfRecords: number;
-  data: Array<T>;
-};
-
-export type Lifelist = {
-  id: number;
-  date: Date;
-  commonName: string;
-  imgSecureUrl: string;
-  count: number;
-};

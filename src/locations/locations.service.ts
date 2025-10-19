@@ -5,17 +5,20 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma, Sighting } from '@prisma/client';
+import { DETAILS_RESULTS_PER_PAGE } from '../common/constants';
 import {
-  DETAILS_RESULTS_PER_PAGE,
-  RESULTS_PER_PAGE,
-} from '../common/constants';
-import { ErrorMessages, ListWithCount, Location } from '../common/models';
+  ErrorMessages,
+  type ListWithCount,
+  type Location,
+  type Locations,
+} from '../common/models';
 import { DatabaseService } from '../database/database.service';
 import {
   CreateLocationDto,
   GetLocationsDto,
   GetSightingsByLocationDto,
 } from '../locations/dto/location.dto';
+import { getLocationsWithSightings } from './sql/locations.sql';
 
 @Injectable()
 export class LocationService {
@@ -63,33 +66,18 @@ export class LocationService {
   async getLocations(
     userId: number,
     reqQuery: GetLocationsDto,
-  ): Promise<ListWithCount<Omit<Location, 'userId'> & { count: number }>> {
+  ): Promise<ListWithCount<Locations>> {
     const { page, sortBy } = reqQuery;
     try {
       const count = await this.databaseService.location.count({
         where: { userId },
       });
-      const locations = await this.databaseService.location.findMany({
-        where: { userId },
-        include: {
-          _count: { select: { sightings: true } },
-        },
-        orderBy:
-          sortBy === 'alphaAsc'
-            ? [{ name: 'asc' }]
-            : sortBy === 'alphaDesc'
-              ? [{ name: 'desc' }]
-              : [{ sightings: { _count: 'desc' } }, { name: 'asc' }],
-        take: RESULTS_PER_PAGE,
-        skip: RESULTS_PER_PAGE * (page - 1),
-      });
-      const updateToListWithCount = {
-        countOfRecords: count,
-        data: locations.map(({ _count, id, lat, lng, name }) => {
-          return { count: _count.sightings, id, lat, lng, name };
-        }),
-      };
-      return updateToListWithCount;
+      const locations = await this.getLocationsWithSightings(
+        userId,
+        sortBy,
+        page,
+      );
+      return { countOfRecords: count, data: locations };
     } catch (err) {
       console.error(err);
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
@@ -202,5 +190,18 @@ export class LocationService {
       }
       throw new InternalServerErrorException(ErrorMessages.DefaultServer);
     }
+  }
+
+  /** HELPERS */
+
+  /** List of user's distinct sightings with oldest sighting date. */
+  async getLocationsWithSightings(
+    userId: number,
+    sortBy: string,
+    page: number,
+  ): Promise<Locations[]> {
+    return this.databaseService.$queryRaw(
+      getLocationsWithSightings(userId, sortBy, page),
+    );
   }
 }
