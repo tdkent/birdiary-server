@@ -89,10 +89,11 @@ export enum ErrorMessages {
   InvalidEmail = 'Not a valid email.',
 }
 
-export type Group = {
+export type Diary = {
   id: number;
-  text: string;
+  date: string;
   count: number;
+  sightings: string[];
 };
 
 export type ListWithCount<T> = {

@@ -12,9 +12,9 @@ import {
   RESULTS_PER_PAGE,
 } from '../common/constants';
 import {
-  type Bird,
   ErrorMessages,
-  type Group,
+  type Bird,
+  type Diary,
   type Lifelist,
   type ListWithCount,
   type Sighting,
@@ -100,7 +100,7 @@ export class SightingsService {
   async getSightings(
     userId: number,
     reqQuery: GetSightingsDto,
-  ): Promise<ListWithCount<Sighting | Lifelist | Group>> {
+  ): Promise<ListWithCount<Sighting | Lifelist | Diary>> {
     try {
       const { groupBy, dateId, page, sortBy } = reqQuery;
 
@@ -136,7 +136,7 @@ export class SightingsService {
             await this.databaseService.$queryRaw(
               getCountOfSightingsByDate(userId),
             );
-          const data: Group[] = await this.databaseService.$queryRaw(
+          const data: Diary[] = await this.databaseService.$queryRaw(
             getSightingsGroupedByDate(userId, sortBy, page),
           );
           return { countOfRecords: count.count, data };
