@@ -36,6 +36,8 @@ model Bird {
   family String
   rarity Rarity 
   description String
+  imgPublicId String?
+  imgSecureUrl String?
   imgAttribute String?
   sightings Sighting[]
   users User[]

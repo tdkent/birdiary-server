@@ -1,19 +1,18 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
-import { GetBirdsDto } from '../bird/dto/bird.dto';
-import { BIRD_COUNT, RESULTS_PER_PAGE } from '../common/constants';
+import { GetBirdsDto, GetSightingsByBirdIdDto } from '../bird/dto/bird.dto';
 import {
-  Bird,
-  CloudinaryError,
-  CloudinaryResponse,
-  ErrorMessages,
-  ListWithCount,
-} from '../common/models';
+  BIRD_COUNT,
+  DETAILS_RESULTS_PER_PAGE,
+  RESULTS_PER_PAGE,
+} from '../common/constants';
+import { Bird, ErrorMessages, ListWithCount } from '../common/models';
 import { DatabaseService } from '../database/database.service';
 
 cloudinary.config({
@@ -73,25 +72,6 @@ export class BirdService {
   async getBird(id: number): Promise<Bird> {
     return this.databaseService.bird
       .findUnique({ where: { id } })
-      .then(async (bird) => {
-        // if bird has an image, fetch from cloudinary
-        if (bird.imgAttribute) {
-          const img = (await cloudinary.api
-            .resources_by_asset_folder(bird.commonName)
-            .then((cloudinary) => {
-              const imageData = cloudinary as unknown as CloudinaryResponse;
-              return imageData.resources[0].secure_url;
-            })
-            .catch((err) => {
-              const {
-                error: { message, http_code },
-              } = err as CloudinaryError;
-              console.error('Cloudinary error: ', http_code, message);
-            })) as CloudinaryResponse | void;
-          return { ...bird, imgUrl: img };
-        }
-        return bird;
-      })
       .catch((err) => {
         console.error(err);
         if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -101,5 +81,37 @@ export class BirdService {
         }
         throw new InternalServerErrorException(ErrorMessages.DefaultServer);
       });
+  }
+
+  async getSightingsByBirdId(
+    userId: number,
+    reqQuery: GetSightingsByBirdIdDto,
+    birdId: number,
+  ) {
+    const { page, sortBy } = reqQuery;
+    try {
+      const count = await this.databaseService.sighting.count({
+        where: { userId, birdId },
+      });
+      const data = await this.databaseService.bird.findUniqueOrThrow({
+        where: { id: birdId },
+        include: {
+          sightings: {
+            where: { userId },
+            include: { location: true },
+            orderBy: sortBy === 'dateAsc' ? { date: 'asc' } : { date: 'desc' },
+            take: DETAILS_RESULTS_PER_PAGE,
+            skip: DETAILS_RESULTS_PER_PAGE * (page - 1),
+          },
+        },
+      });
+      return { countOfRecords: count, data: data.sightings };
+    } catch (error) {
+      console.error(error);
+      if (error instanceof BadRequestException) {
+        throw new BadRequestException(ErrorMessages.BadRequest);
+      }
+      throw new InternalServerErrorException(ErrorMessages.DefaultServer);
+    }
   }
 }
