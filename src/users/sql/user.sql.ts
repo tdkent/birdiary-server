@@ -24,6 +24,19 @@ export function getUserSightingStats(
       (SELECT MIN(date) FROM all_sightings) AS "oldestSighting",
       -- Newest sighting
       (SELECT MAX(date) FROM all_sightings) AS "newestSighting",
+      -- Newest life list sighting
+      (
+        SELECT json_agg(
+          json_build_object('birdId', "birdId", 'commonName', "commonName", 'date', date)
+        )
+        FROM (
+          SELECT *
+          FROM all_sightings
+          WHERE "isNew" = true
+          ORDER BY date DESC
+          LIMIT 1
+        )
+      ) AS "newestLifeListSighting",
       -- Count of common rarity sightings
       (
         SELECT CAST(COUNT(*) AS int) 
