@@ -7,7 +7,16 @@ export function getUserSightingStats(
   return Prisma.sql`
     -- CTE: All user's sightings
     WITH all_sightings AS (
-      SELECT *
+      SELECT
+        "Sighting".id AS "sightingId",
+        "birdId",
+        "commonName",
+        date,
+        "isNew",
+        rarity,
+        family,
+        "locationId",
+        name
       FROM "Sighting"
       JOIN "Bird"
       ON "birdId" = "Bird".id
@@ -27,13 +36,17 @@ export function getUserSightingStats(
       -- Newest life list sighting
       (
         SELECT json_agg(
-          json_build_object('birdId', "birdId", 'commonName', "commonName", 'date', date)
+          json_build_object(
+            'sightingId', "sightingId", 'birdId', "birdId", 'commonName', "commonName", 'date', date
+            )
         )
         FROM (
           SELECT *
           FROM all_sightings
           WHERE "isNew" = true
-          ORDER BY date DESC
+          ORDER BY
+            date DESC,
+            "sightingId" DESC
           LIMIT 1
         )
       ) AS "newestLifeListSighting",
