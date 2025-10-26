@@ -65,6 +65,11 @@ export type Locations = {
   sightings: string[];
 };
 
+export type Stats = {
+  newestLifeListSighting: object[];
+  [key: string]: number | string | object[]; // index signature (other props not relevant)
+};
+
 export type ListWithCount<T> = {
   countOfRecords: number;
   data: Array<T>;

@@ -29,6 +29,10 @@ export function getUserSightingStats(
     SELECT
       -- Count all sightings
       (SELECT CAST(COUNT(*) AS int) FROM all_sightings) AS "countOfAllSightings",
+      -- Count life list sightings
+      (SELECT CAST(count(*) as int)
+        FROM (SELECT DISTINCT "birdId" FROM all_sightings)
+      ) AS "countOfLifeListSightings",
       -- Oldest sighting
       (SELECT MIN(date) FROM all_sightings) AS "oldestSighting",
       -- Newest sighting
@@ -92,7 +96,7 @@ export function getUserSightingStats(
         FROM all_sightings
         WHERE "birdId" = ${favoriteBirdId}
       ) AS "newestFavSighting",
-      -- Top 3 most-sighted birds
+      -- Top 5 most-sighted birds
       (
         SELECT json_agg(
           json_build_object('birdId', "birdId", 'commonName', "commonName", 'count', count)
@@ -102,10 +106,10 @@ export function getUserSightingStats(
           FROM all_sightings
           GROUP BY "birdId", "commonName"
           ORDER BY count DESC, "commonName"
-          LIMIT 3
+          LIMIT 5
         )
       ) AS "topThreeBirds",
-      -- Top 3 locations by most sightings
+      -- Top 5 locations by most sightings
       (
         SELECT json_agg(
           json_build_object('locationId', "locationId", 'name', name, 'count', count)
@@ -115,10 +119,10 @@ export function getUserSightingStats(
           FROM all_sightings
           GROUP BY "locationId", "name"
           ORDER BY count DESC, "name"
-          LIMIT 3
+          LIMIT 5
         )
       ) AS "topThreeLocations",
-      -- Top 3 dates by most sightings
+      -- Top 5 dates by most sightings
       (
         SELECT json_agg(
           json_build_object('date', "date", 'count', count)
@@ -128,10 +132,10 @@ export function getUserSightingStats(
           FROM all_sightings
           GROUP BY date
           ORDER BY count DESC
-          LIMIT 3
+          LIMIT 5
         )
       ) AS "topThreeDates",
-      -- Top 3 bird families by sightings
+      -- Top 5 bird families by sightings
       (
         SELECT json_agg(
           json_build_object('family', "family", 'count', count)
@@ -141,7 +145,7 @@ export function getUserSightingStats(
           FROM all_sightings
           GROUP BY family
           ORDER BY count DESC
-          LIMIT 3
+          LIMIT 5
         )
       ) AS "topThreeFamilies";
   `;
