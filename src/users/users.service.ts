@@ -127,7 +127,9 @@ export class UsersService {
         user,
         stats: {
           ...stats,
-          newestLifeListSighting: stats.newestLifeListSighting[0],
+          newestLifeListSighting: stats.newestLifeListSighting
+            ? stats.newestLifeListSighting[0]
+            : null,
         },
       };
     } catch (error) {
