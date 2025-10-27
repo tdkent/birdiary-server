@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { comparePassword, hashPassword } from '../common/helpers';
-import { ErrorMessages, type User } from '../common/models';
+import { ErrorMessages, Stats, type User } from '../common/models';
 import { DatabaseService } from '../database/database.service';
 import { CreateSightingDto } from '../sightings/dto/sighting.dto';
 import { SightingsService } from '../sightings/sightings.service';
@@ -120,12 +120,17 @@ export class UsersService {
         omit: { password: true },
         include: { bird: true },
       });
-      const stats = await this.databaseService.$queryRaw(
+      const [stats]: Stats[] = await this.databaseService.$queryRaw(
         getUserSightingStats(userId, user.favoriteBirdId),
       );
       return {
         user,
-        stats,
+        stats: {
+          ...stats,
+          newestLifeListSighting: stats.newestLifeListSighting
+            ? stats.newestLifeListSighting[0]
+            : null,
+        },
       };
     } catch (error) {
       console.error(error);
