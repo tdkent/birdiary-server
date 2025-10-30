@@ -240,7 +240,7 @@ export class UsersService {
         return {
           userId: id,
           birdId: sighting.birdId,
-          date: sighting.date,
+          date: new Date(sighting.date),
           description: sighting.description,
         };
       });
