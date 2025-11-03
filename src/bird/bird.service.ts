@@ -35,13 +35,13 @@ export class BirdService {
     try {
       let countOfRecords = BIRD_COUNT;
       if (search) {
-        const count: number = await this.databaseService.$queryRaw(
+        const count: { count: number }[] = await this.databaseService.$queryRaw(
           getSearchCount(search),
         );
         const searchResults: Bird[] = await this.databaseService.$queryRaw(
           getBirdsBySearchTerm(search, page),
         );
-        return { countOfRecords: count, data: searchResults };
+        return { countOfRecords: count[0].count, data: searchResults };
       }
       if (startsWith) {
         countOfRecords = await this.databaseService.bird.count({
