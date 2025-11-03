@@ -14,6 +14,7 @@ import {
 } from '../common/constants';
 import { Bird, ErrorMessages, ListWithCount } from '../common/models';
 import { DatabaseService } from '../database/database.service';
+import { getBirdsBySearchTerm } from './sql/bird.sql';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -29,10 +30,19 @@ export class BirdService {
    * Get paginated list of all birds or all by first letter.
    * Include sighting count if token present.
    */
-  async getBirds(id: number, query: GetBirdsDto): Promise<ListWithCount<Bird>> {
-    const { startsWith, page } = query;
+  async getBirds(
+    id: number,
+    query: GetBirdsDto,
+  ): Promise<ListWithCount<Bird> | string> {
+    const { search, startsWith, page } = query;
     try {
       let countOfRecords = BIRD_COUNT;
+      if (search) {
+        const searchResults: Bird[] = await this.databaseService.$queryRaw(
+          getBirdsBySearchTerm(search, page),
+        );
+        return { countOfRecords: searchResults.length, data: searchResults };
+      }
       if (startsWith) {
         countOfRecords = await this.databaseService.bird.count({
           where: { commonName: { startsWith } },
