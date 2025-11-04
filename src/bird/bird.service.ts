@@ -14,6 +14,7 @@ import {
 } from '../common/constants';
 import { Bird, ErrorMessages, ListWithCount } from '../common/models';
 import { DatabaseService } from '../database/database.service';
+import { getBirdsBySearchTerm, getSearchCount } from './sql/bird.sql';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -30,9 +31,18 @@ export class BirdService {
    * Include sighting count if token present.
    */
   async getBirds(id: number, query: GetBirdsDto): Promise<ListWithCount<Bird>> {
-    const { startsWith, page } = query;
+    const { search, startsWith, page } = query;
     try {
       let countOfRecords = BIRD_COUNT;
+      if (search) {
+        const count: { count: number }[] = await this.databaseService.$queryRaw(
+          getSearchCount(search),
+        );
+        const searchResults: Bird[] = await this.databaseService.$queryRaw(
+          getBirdsBySearchTerm(search, page, id),
+        );
+        return { countOfRecords: count[0].count, data: searchResults };
+      }
       if (startsWith) {
         countOfRecords = await this.databaseService.bird.count({
           where: { commonName: { startsWith } },
