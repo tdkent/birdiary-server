@@ -13,9 +13,20 @@ export function getSearchCount(searchTerm: string): Prisma.Sql {
 export function getBirdsBySearchTerm(
   searchTerm: string,
   page: number,
+  id: number | null,
 ): Prisma.Sql {
+  const userId = id || null;
   return Prisma.sql`
-    SELECT *
+    SELECT
+      *,
+      CASE
+        WHEN CAST(${userId} AS int) IS NOT NULL THEN (
+          SELECT CAST(COUNT(*) AS int)
+          FROM "Sighting"
+          WHERE "birdId" = "Bird".id
+          AND "userId" = ${userId}
+          )
+        ELSE 0 END AS count
     FROM "Bird"
     WHERE "commonName" ILIKE CONCAT('%', ${searchTerm}, '%')
     OR family ILIKE CONCAT('%', ${searchTerm}, '%')

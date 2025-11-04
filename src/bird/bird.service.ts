@@ -39,7 +39,7 @@ export class BirdService {
           getSearchCount(search),
         );
         const searchResults: Bird[] = await this.databaseService.$queryRaw(
-          getBirdsBySearchTerm(search, page),
+          getBirdsBySearchTerm(search, page, id),
         );
         return { countOfRecords: count[0].count, data: searchResults };
       }
