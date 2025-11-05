@@ -13,14 +13,14 @@ export function getLocationsWithSightings(
     SELECT
       "Location".id,
       name,
-      CAST(count(*) AS int) AS count,
+      CAST(count("Sighting".id) AS int) AS count,
       ARRAY_AGG(
         "Sighting".id || ',' || "commonName" || ',' || COALESCE("imgSecureUrl", null)
-        ) AS "sightings"
+        ) FILTER (WHERE "Sighting".id IS NOT NULL) AS sightings
     FROM "Location"
-    JOIN "Sighting"
+    LEFT JOIN "Sighting"
     ON "Location"."id" = "Sighting"."locationId"
-    JOIN "Bird"
+    LEFT JOIN "Bird"
     ON "Sighting"."birdId" = "Bird".id
     WHERE "Location"."userId" = ${userId}
     GROUP BY "Location".id
