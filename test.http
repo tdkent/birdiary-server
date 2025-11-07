@@ -1,0 +1,102 @@
+###=========================================================
+### Birdiary REST Client Requests Docs & Testing
+###=========================================================
+
+
+############################################################
+
+### Users
+###=========================================================
+
+# GET /users
+# Get a single user.
+
+GET {{baseUrl}}/users
+Authorization: Bearer {{jwt}}
+
+###=========================================================
+
+# PATCH /users
+# Update a single user.
+
+PATCH {{baseUrl}}/users
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+  "address": "Alameda, CA 94501, USA",
+  "bio": "Lorem ipsum...",
+  "name": "Test User",
+  "zipcode": "94501"
+}
+
+###=========================================================
+
+# DELETE /users
+# Delete a single user.
+
+DELETE {{baseUrl}}/users
+Authorization: Bearer {{jwt}}
+
+###=========================================================
+
+# POST /users/signup
+# Create a new user.
+
+POST {{baseUrl}}/users/signup
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###=========================================================
+
+# POST /users/signin
+# Authenticate user's credentials.
+
+POST {{baseUrl}}/users/signin
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###=========================================================
+
+# PATCH /users/favoritebird
+# Update user's favorite bird.
+
+PATCH {{baseUrl}}/users/favoritebird
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+  "favoriteBirdId": 1
+}
+
+###=========================================================
+
+# PATCH /users/password
+# Update user's password.
+
+PATCH {{baseUrl}}/users/password
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+{
+  "currentPassword": "{{password}}",
+  "newPassword": "new-password"
+}
+
+###=========================================================
+
+# POST /users/transferstorage
+# Add sightings data from user's browser to db.
+
+POST {{baseUrl}}/users/transferstorage
+Authorization: Bearer {{jwt}}
+
+# Note: Need to update with request body
