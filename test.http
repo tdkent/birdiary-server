@@ -2,7 +2,8 @@
 ### Birdiary REST Client Requests Docs & Testing
 ###=========================================================
 
-
+############################################################
+############################################################
 ############################################################
 
 ### Users
@@ -100,3 +101,53 @@ POST {{baseUrl}}/users/transferstorage
 Authorization: Bearer {{jwt}}
 
 # Note: Need to update with request body
+
+############################################################
+############################################################
+############################################################
+
+### Birds
+###=========================================================
+
+# GET /birds
+# Get list of birds. Attach token to include sightings count.
+
+# Query Parameters:
+#   page (number, required) - required for pagination
+#   search (string, optional) - filter by search string (overrides startsWith)
+#   startsWith (char, optional) - filter by first letter of common name
+
+GET {{baseUrl}}/birds?page=1&search=jay
+Authorization: Bearer {{jwt}}
+
+###=========================================================
+
+# GET /birds/:id
+# Get a single bird with image.
+
+GET {{baseUrl}}/birds/112
+
+###=========================================================
+
+# GET /birds/:id/sightings
+# Get single bird with user's sightings.
+
+# Query Parameters:
+#   page (number, required) - required for pagination
+#   sortBy (string, required) - 'dateAsc', 'dateDesc'
+
+GET {{baseUrl}}/birds/112/sightings?page=1&sortBy=dateDesc
+Authorization: Bearer {{jwt}}
+
+############################################################
+############################################################
+############################################################
+
+### Bird of the Day
+###=========================================================
+
+# GET /birdoftheday
+# Get bird of the day.
+
+GET {{baseUrl}}/birdoftheday
+
