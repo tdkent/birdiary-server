@@ -6,7 +6,7 @@
 ############################################################
 ############################################################
 
-### Users
+### USERS
 ###=========================================================
 
 # GET /users
@@ -38,6 +38,15 @@ Content-Type: application/json
 
 DELETE {{baseUrl}}/users
 Authorization: Bearer {{jwt}}
+
+###=========================================================
+
+# GET /users/stats
+# Get a single user's sighting statistics.
+
+GET {{baseUrl}}/users/stats
+Authorization: Bearer {{jwt}}
+
 
 ###=========================================================
 
@@ -75,7 +84,7 @@ Authorization: Bearer {{jwt}}
 Content-Type: application/json
 
 {
-  "favoriteBirdId": 1
+  "favoriteBirdId": 112
 }
 
 ###=========================================================
@@ -89,7 +98,7 @@ Content-Type: application/json
 
 {
   "currentPassword": "{{password}}",
-  "newPassword": "new-password"
+  "newPassword": "{{updatePassword}}"
 }
 
 ###=========================================================
@@ -106,7 +115,7 @@ Authorization: Bearer {{jwt}}
 ############################################################
 ############################################################
 
-### Birds
+### BIRDS
 ###=========================================================
 
 # GET /birds
@@ -130,7 +139,7 @@ GET {{baseUrl}}/birds/112
 ###=========================================================
 
 # GET /birds/:id/sightings
-# Get single bird with user's sightings.
+# Get user's sightings by single bird.
 
 # Query Parameters:
 #   page (number, required) - required for pagination
@@ -151,3 +160,115 @@ Authorization: Bearer {{jwt}}
 
 GET {{baseUrl}}/birdoftheday
 
+############################################################
+############################################################
+############################################################
+
+### LOCATIONS
+###=========================================================
+
+# GET /locations
+# Get user's locations.
+
+# Query Parameters:
+#   page (number, required) - required for pagination
+#   sortBy (string, required) - 'alphaAsc', 'alphaDesc', 'count'
+
+GET {{baseUrl}}/locations?page=1&sortBy=alphaAsc
+Authorization: Bearer {{jwt}}
+
+###=========================================================
+
+# GET /locations/:id
+# Get a single location.
+
+GET {{baseUrl}}/locations/1
+Authorization: Bearer {{jwt}}
+
+###=========================================================
+
+# PUT /locations/:id
+# Upserts a single location.
+
+PUT {{baseUrl}}/locations/1
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+# Note: need to add request body
+
+###=========================================================
+
+# DELETE /locations/:id
+# Delete a single location and remove from related sightings.
+
+DELETE {{baseUrl}}/locations/1
+Authorization: Bearer {{jwt}}
+
+###=========================================================
+
+# GET /locations/:id/sightings
+# Get user's sightings by single location.
+
+# Query Parameters:
+#   page (number, required) - required for pagination
+#   sortBy (string, required) - 'alphaAsc', 'alphaDesc', 'dateAsc', 'dateDesc'
+
+GET {{baseUrl}}/locations/1/sightings?page=1&sortBy=alphaAsc
+Authorization: Bearer {{jwt}}
+
+############################################################
+############################################################
+############################################################
+
+### SIGHTINGS
+###=========================================================
+
+# POST /sightings
+# Create a new sighting.
+
+POST {{baseUrl}}/sightings
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+# Need to add request body
+
+###=========================================================
+
+# GET /sightings
+# Get user's sightings.
+
+# Query Parameters:
+#   page (number, required) - required for pagination
+#   sortBy (string, required) - 'alphaAsc', 'alphaDesc', 'count', 'dateAsc', 'dateDesc'
+
+# Need to add additional query parameters
+
+GET {{baseUrl}}/sightings?page=1&sortBy=dateDesc
+Authorization: Bearer {{jwt}}
+
+###=========================================================
+
+# GET /sightings/:id
+# Get a single sighting.
+
+GET {{baseUrl}}/sightings/1
+Authorization: Bearer {{jwt}}
+
+###=========================================================
+
+# PATCH /sightings/:id
+# Update a single sighting.
+
+PATCH {{baseUrl}}/sightings/1
+Authorization: Bearer {{jwt}}
+Content-Type: application/json
+
+# Need to add request body
+
+###=========================================================
+
+# DELETE /sightings/:id
+# Delete a single sighting.
+
+DELETE {{baseUrl}}/sightings/1
+Authorization: Bearer {{jwt}}
